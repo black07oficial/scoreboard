@@ -1,0 +1,11 @@
+{
+    "liveServer.settings.port": 5501,
+    "sqltools.connections": [
+        {
+            "driver": "SQLite",
+            "name": "teste",
+            "database": "${workspaceFolder:codigo-fonte}/scoreboard.sqlite"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

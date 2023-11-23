@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard - Ecran Público</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="../resources/css/custom.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+        crossorigin="anonymous"></script>
+
+    <!-- Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
+        integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        @font-face {
+            font-family: 'Digital Display';
+            src: url('../resources/fonts/digital_display.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Digital Dismay';
+            src: url('../resources/fonts/digital_dismay.otf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Gobold';
+            src: url('../resources/fonts/gobold_bold.otf') format('truetype');
+        }
+
+        html {
+            overflow: hidden;
+            font-family: Gobold;
+        }
+
+        body {
+            background-color: black !important;
+            overflow: hidden;
+        }
+
+        #painel-superior {
+            background-color: black;
+            min-height: 100px;
+        }
+
+        .icone-time {
+            height: 70px;
+            margin-top: 12px;
+        }
+
+        .cronometro {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 68px;
+            line-height: 68px;
+            color: red;
+            margin-top: 32px;
+        }
+
+        .faltas-time {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 62px;
+            line-height: 62px;
+            color: orange;
+            margin-top: 36px;
+        }
+
+        #camisa {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 168px;
+            line-height: 98px;
+            color: yellow;
+            margin-top: 34px;
+        }
+
+        .clipboard {
+            top: 0px;
+            left: 10px;
+            right: 10px;
+            bottom: 0px;
+            background-color: #AB9032;
+            background-size: cover;
+            background-position: center center;
+        }
+
+        #img-jogador-foto {
+            /* margin-left: 10px; */
+            border-radius: 5% 5% 0px 0px;
+            height: 100%;
+            width: 100%;
+        }
+
+        #sessao-jogador-foto {
+            border-radius: 12px;
+            height: fit-content;
+            width: 600px;
+            padding: 12px;
+        }
+
+        #img-cfg-equipes-logo {
+            height: 250px;
+            width: auto;
+        }
+
+        #nome {
+            margin-top: 15px;
+            font-size: 58px;
+            line-height: 48px;
+            font-family: Gobold;
+            color: white;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .lateral-div {
+            height: 100vh;
+            /* width: 800px; */
+        }
+
+        #posicao {
+            margin-top: 15px;
+            font-size: 48px;
+            line-height: 28px;
+            font-family: Gobold;
+            color: orange;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* @media (max-width: 1200px) {
+            #nome {
+                margin-top: 15px;
+                font-size: 45px;
+                line-height: 35px;
+                color: white;
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+
+            .lateral-div {
+                height: 100vh;
+                width: 650px;
+            }
+
+            #sessao-jogador-foto {
+                border-radius: 12px;
+                overflow: hidden;
+                height: fit-content;
+                width: 600px;
+                padding: 12px;
+            }
+
+            #camisa {
+                font-family: 'Digital Dismay', sans-serif;
+                font-size: 138px;
+                line-height: 68px;
+                color: yellow;
+                margin-top: 34px;
+            }
+        } */
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-8 d-flex justify-content-center">
+
+                <div id="box" class="box">
+                    <!-- <div class="clipboard" style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);"> -->
+                    <div class="d-flex justify-content-center lateral-div align-items-center">
+                        <div id="sessao-jogador-foto" class="d-flex justify-content-center align-items-center">
+                            <img id="img-jogador-foto" alt="Imagem" style="background-color: white;" />
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </div>
+
+            </div>
+            <div class="col-4 d-flex justify-content-center align-items-center">
+                <div class="container-fluid" style="width: 100%; margin-top: -30px; margin-left: -40px;">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start">
+                            <span id="logo-sessao">
+                                <img id="img-cfg-equipes-logo" alt="Imagem" />
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start">
+                            <span id="camisa">00</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start">
+                            <div id="nome" class="d-flex justify-content-start flex-column">-</br>-</div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-12 d-flex justify-content-start">
+                            <span id="posicao" style="white-space: nowrap;">Treinador</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function proportionSet(prop, min) {
+            const windowWidth = 720;
+            const windowHeight = 520;
+            const referenceWidth = 1024;
+            const referenceHeight = 768;
+            let proportion1 = windowWidth / referenceWidth;
+            if (windowWidth > 1200 || windowHeight > 800) {
+                proportion1 = windowWidth / (referenceWidth + referenceWidth - 1350);
+            }
+            var widthIncreaseCount = Math.floor((windowWidth - 1200) / 100);
+            var heightIncreaseCount = Math.floor((windowHeight - 800) / 100);
+            var totalReduction = (widthIncreaseCount + heightIncreaseCount) * 9.5;
+            // Se a largura for significativamente maior que a altura, reduza a proporção
+            if (windowWidth > windowHeight * 1.2) {
+                totalReduction += (windowWidth - windowHeight) / 100;
+            }
+            if (totalReduction > 0) {
+                proportion1 -= (totalReduction / 100);
+            }
+            let proportion2 = windowHeight / referenceHeight - 0.4;
+
+            let result = prop * proportion1 * proportion2;
+            result = Math.max(result, min);
+            return result;
+        }
+        function adjustStyles() {
+            const windowWidth = 720;
+            const windowHeight = 520;
+            const sessaoJogadorFoto = document.querySelector("#sessao-jogador-foto");
+            const logoFoto = document.querySelector("#img-cfg-equipes-logo");
+            const camisa = document.querySelector("#camisa");
+            const nome = document.querySelector("#nome");
+            const posicao = document.querySelector("#posicao");
+            let marginTopCamisa = proportionSet(40, 12);
+            let marginTopNome = proportionSet(20, 7.5);
+            if (windowWidth > 2000) {
+                marginTopCamisa = proportionSet(60, 12);
+                marginTopNome = proportionSet(30, 7.5);
+            }
+            let sessaoJogadorFotoSize = proportionSet(500, 380);
+            let logoFotoSize = proportionSet(200, 100);
+            let camisaSize = proportionSet(138, 100);
+            let nomeSize = proportionSet(50, 43);
+            let posicaoSize = proportionSet(48, 25);
+            sessaoJogadorFoto.style.width = sessaoJogadorFotoSize + "px";
+            sessaoJogadorFoto.style.height = sessaoJogadorFotoSize + "px";
+            logoFoto.style.height = logoFotoSize + "px";
+            camisa.style.fontSize = camisaSize + "px";
+            camisa.style.marginTop = marginTopCamisa + "px";
+            nome.style.marginTop = marginTopNome + "px";
+            nome.style.fontSize = nomeSize + "px";
+            nome.style.lineHeight = nomeSize + "px";
+            posicao.style.fontSize = posicaoSize + "px";
+            posicao.style.lineHeight = (posicaoSize - 20) + "px";
+            // alert(logoFotoSize);
+        }
+
+        function adjustZoom() {
+            const baseWidth = 720;
+            const baseHeight = 520;
+            const aspectRatio = window.innerWidth / window.innerHeight;
+            const baseAspectRatio = baseWidth / baseHeight;
+            let scale
+            if (aspectRatio < baseAspectRatio) {
+                scale = window.innerWidth / baseWidth;
+                document.body.style.width = '100%';
+            } else {
+                scale = window.innerHeight / baseHeight;
+                document.body.style.width = (100 / (aspectRatio * 0.7)) + '%'; // Ajuste o valor 0.5 conforme necessário
+            }
+            document.body.style.zoom = scale;
+            document.body.style.height = (window.innerHeight / scale) + 'px';
+            document.body.style.display = "flex";
+            document.querySelector("html").style.display = "flex";
+            document.querySelector("html").style.justifyContent = "center";
+            document.body.style.alignItems = "center";
+        }
+
+
+        // Chama a função de ajuste de zoom quando o DOM estiver pronto
+        document.addEventListener("DOMContentLoaded", function () {
+            adjustZoom();
+            adjustStyles();
+        });
+
+        // Chama a função de ajuste de zoom sempre que a janela for redimensionada
+        window.addEventListener("resize", function () {
+            adjustZoom();
+        });
+        // Chama a função de ajuste de estilos quando o DOM estiver pronto
+        const { ipcRenderer } = require('electron');
+
+        // ipcRenderer.on('updateCronometro', function (event, time){
+        //     document.querySelector(".cronometro").innerHTML = time;
+        // });
+
+    </script>
+
+    <!-- Configurações: Variáveis -->
+    <script>
+        const sqlite3 = require('sqlite3').verbose();
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    </script>
+
+    <!-- Configurações: Equipe -->
+    <script>
+
+        var configEquipaTime;
+        async function getConfigEquipaTime(id) {
+            var db = new sqlite3.Database('./scoreboard.sqlite');
+            _ = await db.serialize(() => {
+                db.all("SELECT * FROM config_equipas_times where id =" + id, (err, rows) => {
+                    if (err) {
+                        console.error(err.message);
+                    }
+                    console.log(rows);
+                    configEquipaTime = rows;
+                    loadConfigEquipaTime(id);
+                });
+            });
+            db.close();
+        }
+
+        function loadConfigEquipaTime(equipeId) {
+            document.querySelector("#img-cfg-equipes-logo").setAttribute('src', configEquipaTime[0]["logo_caminho"]);
+        }
+
+    </script>
+
+    <!-- Configuracoes: Equipas/Jogadores -->
+    <script>
+
+        var configEquipaJogadores;
+        var config;
+        async function getConfigEquipaTimeJogadores(timeId) {
+            var db = new sqlite3.Database('./scoreboard.sqlite');
+            _ = await db.serialize(() => {
+                db.all("SELECT * FROM config_jogo_setup where id = 1", (err, rows) => {
+                    if (err) {
+                        console.error(err.message);
+                    }
+                    console.log(rows);
+                    config = rows;
+                });
+            });
+            _ = await db.serialize(() => {
+                db.all("SELECT * FROM config_equipas_times_jogadores where time_id =" + timeId, (err, rows) => {
+                    if (err) {
+                        console.error(err.message);
+                    }
+                    console.log(rows);
+                    configEquipaJogadores = rows;
+                    loadConfigEquipaTimeJogadores(timeId);
+                });
+            });
+            db.close();
+        }
+        ipcRenderer.send('reload');
+        async function loadConfigEquipaTimeJogadores(equipeId) {
+
+            while (true) {
+
+                for (let i = 0; i < configEquipaJogadores.length; i++) {
+
+                    let jogadorAtual = configEquipaJogadores[i];
+
+                    id = jogadorAtual['id'];
+                    time_id = jogadorAtual['time_id'];
+                    foto_caminho = jogadorAtual['foto_caminho'];
+                    camisa = jogadorAtual['camisa'];
+                    nome = jogadorAtual['nome'];
+                    posicao = jogadorAtual['posicao'];
+
+                    let index = i + 1;
+
+                    posicao = posicao.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+                    nome = nome.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+                    let nomeFormatado = "";
+                    let partesNome = nome.split(" ");
+                    if (partesNome.length > 1) {
+                        nomeFormatado = partesNome[0] + "<div style='margin-top: 5px;'>" + partesNome[1] + "</div>";
+                    } else {
+                        nomeFormatado = nome;
+                    }
+
+                    let camisaTemp = posicao.toString().toUpperCase().trim();
+                    camisa = camisa.toString().padStart(2, "0");
+                    if (
+                        camisa.substring(0, 2) == '00' ||
+                        camisa == '' ||
+                        camisa == null ||
+                        camisa == undefined
+                    ) {
+                        document.querySelector('#camisa').style.display = 'none';
+                    } else {
+                        document.querySelector('#camisa').style.display = 'block';
+                    }
+                    document.querySelector('#img-jogador-foto').setAttribute("src", foto_caminho);
+                    document.querySelector('#camisa').innerHTML = camisa;
+                    document.querySelector('#nome').innerHTML = nomeFormatado;
+                    document.querySelector('#posicao').innerHTML = posicao;
+                    tempoSlide = 3 * 1000;
+                    if (config[0].slide_tempo) {
+                        tempoSlide = config[0].slide_tempo * 1000;
+                    }
+                    await sleep(tempoSlide);
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+    <!-- Configuracoes: Cores -->
+    <script>
+        ipcRenderer.on('reloadAll', (event, args) => {
+            getConfigEquipaTime("2");
+            getConfigEquipaTimeJogadores("2");
+            getConfigCores();
+        })
+        var configCores;
+        async function getConfigCores() {
+            var db = new sqlite3.Database('./scoreboard.sqlite');
+            _ = await db.serialize(() => {
+                db.all("SELECT * FROM config_cores", (err, rows) => {
+                    if (err) {
+                        console.error(err.message);
+                    }
+                    configCores = rows;
+                    setConfigCores();
+                });
+            });
+            db.close();
+        }
+
+        function setConfigCores() {
+
+            console.log(configCores);
+
+            ccores_background = configCores[0]["background"] ? configCores[0]["background"] : "";
+            ccores_number_background = configCores[0]["number_background"] ? configCores[0]["number_background"] : "";
+            ccores_text_borders = configCores[0]["text_borders"] ? configCores[0]["text_borders"] : "";
+            ccores_team1_name = configCores[0]["team1_name"] ? configCores[0]["team1_name"] : "";
+            ccores_team2_name = configCores[0]["team2_name"] ? configCores[0]["team2_name"] : "";
+            ccores_main_clock = configCores[0]["main_clock"] ? configCores[0]["main_clock"] : "";
+            ccores_shot_clock = configCores[0]["shot_clock"] ? configCores[0]["shot_clock"] : "";
+            ccores_shot_clock_expiration_border = configCores[0]["shot_clock_expiration_border"] ? configCores[0]["shot_clock_expiration_border"] : "";
+            ccores_scores = configCores[0]["scores"] ? configCores[0]["scores"] : "";
+            ccores_period = configCores[0]["period"] ? configCores[0]["period"] : "";
+            ccores_shots_on_goal = configCores[0]["shots_on_goal"] ? configCores[0]["shots_on_goal"] : "";
+            ccores_fouls = configCores[0]["fouls"] ? configCores[0]["fouls"] : "";
+            ccores_penalty_player = configCores[0]["penalty_player"] ? configCores[0]["penalty_player"] : "";
+            ccores_penalty_time = configCores[0]["penalty_time"] ? configCores[0]["penalty_time"] : "";
+            ccores_display_screen_active_field = configCores[0]["display_screen_active_field"] ? configCores[0]["display_screen_active_field"] : "";
+
+            // document.querySelector("body").style.backgroundColor = ccores_background;
+
+            // document.querySelector(".cronometro").style.color = ccores_main_clock;            
+
+            // document.querySelector(".time-01 span.gols").style.color = ccores_scores;
+            // document.querySelector(".time-02 span.gols").style.color = ccores_scores;
+
+            // document.querySelector(".time-01 span.faltas").style.color = ccores_fouls;
+            // document.querySelector(".time-02 span.faltas").style.color = ccores_fouls;
+
+        }
+
+    </script>
+
+    <!-- Configuração: Inicio -->
+    <script>
+        function StartConfigEquipes() {
+            getConfigEquipaTime("2");
+        }
+        function StartConfigCores() {
+            getConfigCores();
+        }
+        function StartConfigEquipesJogadores() {
+            getConfigEquipaTimeJogadores("2");
+        }
+        window.onload = function () {
+            StartConfigEquipes();
+            StartConfigCores();
+            StartConfigEquipesJogadores();
+        }
+    </script>
+
+</body>
+
+</html>

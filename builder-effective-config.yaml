@@ -1,0 +1,18 @@
+directories:
+  output: ''
+  buildResources: build
+appId: com.gorilasoftware.scoreboad
+productName: Scoreboard
+files:
+  - filter:
+      - main.js
+      - index.html
+      - preload.js
+      - assets/**/*
+win:
+  target: nsis
+mac:
+  target: dmg
+linux:
+  target: AppImage
+electronVersion: 23.2.1

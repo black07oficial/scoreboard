@@ -1,0 +1,1437 @@
+<!doctype html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard - Ecran Público</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="../resources/css/custom.css">
+    <link rel="stylesheet" href="../resources/css/font.css">
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+        crossorigin="anonymous"></script>
+
+    <!-- Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
+        integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="../resources/js/jquery-3.6.4.slim.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'Digital Display';
+            src: url('../resources/fonts/digital_display.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Gobold';
+            src: url('../resources/fonts/gobold_bold.otf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Digital Dismay';
+            src: url('../resources/fonts/digital_dismay.otf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Destiny';
+            src: url('../resources/fonts/Destiny.ttf') format('truetype');
+        }
+
+        html {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .destiny {
+            font-family: 'Destiny' !important;
+        }
+
+        .gobold-bold {
+            font-family: 'Gobold' !important;
+        }
+
+        body {
+            background-color: #202020;
+            /* overflow: hidden; */
+            display: flex;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            /* transform: scale(0.75);
+            transform-origin: 0 0; */
+        }
+
+        ::-webkit-scrollbar {
+            width: 0.5em;
+            height: 0.5em;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #88888800;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #f1f1f100;
+        }
+
+        #painel-superior {
+            background-color: black;
+            min-height: 100px;
+        }
+
+
+        .icone-time {
+            height: 140px;
+        }
+
+        .cronometro {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 110px;
+            line-height: 70px;
+            color: red;
+            margin-bottom: 0px;
+        }
+
+        .painel-cronometro {
+            min-height: 120px;
+            background-color: black;
+            text-align: center;
+            padding-top: 60px;
+            -webkit-border-bottom-right-radius: 10px;
+            -webkit-border-bottom-left-radius: 10px;
+            -moz-border-radius-bottomright: 10px;
+            -moz-border-radius-bottomleft: 10px;
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .painel-tempo-ataque {
+            background-color: rgb(0, 0, 0);
+            text-align: center;
+            position: absolute;
+            padding: 7px;
+            margin-top: 40px;
+            border-radius: 10px;
+            width: 100px;
+        }
+
+        .tempo-ataque {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 80px;
+            line-height: 60px;
+            color: #93C13D;
+            margin-bottom: 0px;
+        }
+
+        .painel-pontuacao-time-01 {
+            background-color: black;
+            height: 160px;
+            padding-top: 12px;
+            width: 100%;
+            padding-right: 5px;
+            -webkit-border-top-right-radius: 10px;
+            -webkit-border-bottom-right-radius: 10px;
+            -moz-border-radius-topright: 10px;
+            -moz-border-radius-bottomright: 10px;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .painel-pontuacao-time-02 {
+            background-color: black;
+            padding-top: 12px;
+            padding-left: 12px;
+            height: 160px;
+            width: 100%;
+            -webkit-border-top-left-radius: 10px;
+            -webkit-border-bottom-left-radius: 10px;
+            -moz-border-radius-topleft: 10px;
+            -moz-border-radius-bottomleft: 10px;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .pontuacao {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 150px;
+            line-height: 130px;
+            color: #E95023;
+        }
+
+        .exclusoes-tabela {
+            margin-top: -12px !important;
+        }
+
+        .periodo-painel {
+            margin-top: 64px;
+        }
+
+        .painel-faltas-time-01 {
+            /* background-color: rgb(255, 6, 6); */
+            background-color: rgb(0, 0, 0);
+            /* background-color: rgb(255, 6, 6); */
+            text-align: center;
+            padding: 2px;
+            border-radius: 5px;
+            margin-top: 70px;
+            height: 80px;
+            width: 80px;
+            /* margin-left: -25px; */
+            /* margin-right: -700px; */
+        }
+
+        .painel-faltas-time-02 {
+            /* background-color: rgb(255, 6, 6); */
+            background-color: rgb(0, 0, 0);
+            /* background-color: rgb(255, 6, 6); */
+            text-align: center;
+            padding: 2px;
+            border-radius: 5px;
+            margin-top: 70px;
+            height: 80px;
+            width: 80px;
+            /* margin-left: 40px; */
+            /* margin-right: -700px; */
+        }
+
+        .painel-exclusoes-time-01 {
+            overflow-y: auto;
+            background-color: black;
+            padding-right: 22px;
+            margin-top: 18px;
+            /* margin-top: -39px !important; */
+            /* height: 100em; */
+            height: 130px;
+            -webkit-border-top-right-radius: 10px;
+            -webkit-border-bottom-right-radius: 10px;
+            -moz-border-radius-topright: 10px;
+            -moz-border-radius-bottomright: 10px;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .painel-exclusoes-time-02 {
+            margin-top: 18px;
+            background-color: black;
+            height: 130px;
+            /* margin-right: -8px; */
+            /* height: 100em; */
+            padding-left: 22px;
+            /* margin-top: -39px !important; */
+            overflow-y: auto;
+            -webkit-border-top-left-radius: 10px;
+            -webkit-border-bottom-left-radius: 10px;
+            -moz-border-radius-topleft: 10px;
+            -moz-border-radius-bottomleft: 10px;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .painel-anuncio {
+            border-radius: 10px;
+            height: 120px;
+            /* background-color: white; */
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .painel-anuncio img {
+            width: 90%;
+            height: 90%;
+        }
+
+        .faltas {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 80px;
+            line-height: 80px;
+            font-weight: 100;
+            /* color: rgb(255, 230, 0); */
+        }
+
+        .player-number {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 50px;
+            line-height: 40px;
+            color: white;
+        }
+
+        .player-hour {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 50px;
+            line-height: 40px;
+            color: red;
+        }
+
+        .painel-periodo {
+            margin-left: 5px;
+            margin-right: 5px;
+            padding-top: 60px;
+            color: white;
+        }
+
+        .periodo {
+            font-family: 'Digital Display', sans-serif;
+            font-size: 78px;
+            line-height: 0px;
+        }
+
+        .informacoes-time {
+            color: white;
+        }
+
+        .informacoes-time p {
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        #label-periodo {
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: -55px;
+            margin-bottom: 10px;
+        }
+
+        .desconto-ativo {
+            -webkit-border-top-right-radius: 10px;
+            -webkit-border-bottom-right-radius: 10px;
+            -moz-border-radius-topright: 10px;
+            -moz-border-radius-bottomright: 10px;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            background-color: #39AA49;
+            padding: 12px;
+            height: 207px;
+            margin-bottom: 5px;
+        }
+
+        .desconto-ativo-black {
+            -webkit-border-top-right-radius: 10px;
+            -webkit-border-bottom-right-radius: 10px;
+            -moz-border-radius-topright: 10px;
+            -moz-border-radius-bottomright: 10px;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            background-color: #000000;
+            padding: 12px;
+            height: 207px;
+            margin-bottom: 5px;
+        }
+
+        .desconto-ativo-2 {
+            -webkit-border-top-left-radius: 10px;
+            -webkit-border-bottom-left-radius: 10px;
+            -moz-border-radius-topleft: 10px;
+            -moz-border-radius-bottomleft: 10px;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            background-color: #39AA49;
+            padding: 12px;
+            height: 207px;
+            margin-bottom: 5px;
+        }
+
+        .desconto-ativo-black-2 {
+            -webkit-border-top-left-radius: 10px;
+            -webkit-border-bottom-left-radius: 10px;
+            -moz-border-radius-topleft: 10px;
+            -moz-border-radius-bottomleft: 10px;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            background-color: #000000;
+            padding: 12px;
+            height: 207px;
+            margin-bottom: 5px;
+        }
+
+        .falta-destaque {
+            /* background-color: red !important; */
+        }
+
+        #edit-cfg-equipes-t1-nome {
+            font-size: 27px;
+            text-align: center;
+        }
+
+        #edit-cfg-equipes-t2-nome {
+            font-size: 27px;
+            text-align: center;
+        }
+
+        .lista-azul {
+            background-color: #148cd1;
+            height: 20px;
+            margin-top: 5px;
+            width: 60px;
+        }
+
+        .cronometro {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 120px;
+            line-height: 70px;
+            color: red;
+            margin-bottom: 0px;
+        }
+
+        .faltas {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 100px;
+            line-height: 100px;
+            margin-left: 2px;
+            font-weight: 100;
+            /* color: rgb(255, 230, 0); */
+        }
+
+        .painel-faltas-time-01 {
+            background-color: rgb(0, 0, 0);
+            text-align: center;
+            padding: 2px;
+            border-radius: 5px;
+            margin-top: 56px;
+            height: 100px;
+            width: 100px;
+        }
+
+        .painel-faltas-time-02 {
+            background-color: rgb(0, 0, 0);
+            text-align: center;
+            padding: 2px;
+            border-radius: 5px;
+            margin-top: 56px;
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="" style="width: 100%;">
+        <div class="d-flex"
+            style="margin-right: calc(-.5 * var(--bs-gutter-x)); margin-left: calc(-.5 * var(--bs-gutter-x));">
+            <div id="painel-info-time-01" class=" text-center informacoes-time desconto-ativo-black"
+                style="width:33.33333333%">
+                <img id="img-cfg-equipes-t1-logo" class="icone-time" alt="Imagem" />
+                <p id="edit-cfg-equipes-t1-nome" class="gobold-bold"></p>
+            </div>
+            <div class="" style="width: 33.33333333%; margin-right: 7px; margin-left: 7px;">
+                <div class="painel-cronometro">
+                    <span class="cronometro">00:00</span>
+                </div>
+                <div class="d-flex justify-content-center" id="ataque">
+                    <div class="painel-tempo-ataque">
+                        <span class="tempo-ataque">00</span>
+                    </div>
+                </div>
+            </div>
+            <div id="painel-info-time-02" class=" text-center informacoes-time desconto-ativo-black-2"
+                style="width:33.33333333%">
+                <img id="img-cfg-equipes-t2-logo" class="icone-time" alt="Imagem" />
+                <p id="edit-cfg-equipes-t2-nome" class="gobold-bold"></p>
+            </div>
+        </div>
+        <div class="d-flex faltas-tabela" style="">
+            <div style="width:33.33333333%;padding-left: 0px;">
+                <table style="width: 100%;" style="height: 100%;">
+                    <tbody>
+                        <tr>
+                            <td width="90%">
+                                <div class="painel-pontuacao-time-01 d-flex justify-content-end" style="gap:10px;">
+                                    <div style="display: flex; flex-direction: column; ">
+                                        <div class="d-flex d-none lst-margin" id="time-1-1">
+                                            <div class="lista-azul"></div>
+                                        </div>
+                                        <div class="d-flex d-none lst-margin" id="time-1-2">
+                                            <div class="lista-azul"></div>
+                                        </div>
+                                        <div class="d-flex d-none lst-margin" id="time-1-3">
+                                            <div class="lista-azul"></div>
+                                        </div>
+                                    </div>
+                                    <span class="pontuacao" style="margin-right: 10px;">00</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-center" style="width:33.33333333%; margin-right: 7px; margin-left: 7px;">
+                <div class="d-flex justify-content-center align-items-center" style="width:100%">
+                    <div class="d-flex flex-row justify-content-between" style="width: 100%;">
+                        <div class="d-flex justify-content-start">
+                            <div class="painel-faltas-time-01">
+                                <span class="faltas">00</span>
+                            </div>
+                        </div>
+                        <div class="painel-periodo d-flex justify-content-center">
+                            <div class="periodo-painel">
+                                <div id="label-periodo" class="cobold-bold">Periodo</div>
+                                </br>
+                                <div id="value-periodo" class="periodo" style="text-align: center;">1</div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <div class="painel-faltas-time-02">
+                                <span class="faltas">00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="col-4 d-flex justify-content-start">
+                            <div style="height: 150px;">
+                                <div class="painel-faltas-time-01">
+                                    <span class="faltas">00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 painel-periodo d-flex justify-content-center">
+                            <div style="height:200px">
+                                <div id="label-periodo" class="cobold-bold">Periodo</div>
+                                </br>
+                                <div id="value-periodo" class="periodo" style="text-align: center;">1</div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex justify-content-end">
+                            <div style="height: 150px;">
+                                <div class="painel-faltas-time-02">
+                                    <span class="faltas">00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div style="width:33.33333333%;padding-right: 0px; ">
+                <table style="width: 100%;">
+                    <tbody>
+                        <tr>
+                            <td width="90%">
+                                <div class="painel-pontuacao-time-02 d-flex justify-content-start" style="gap:3px;">
+                                    <span class="pontuacao" style="margin-left: 10px;">00</span>
+                                    <div style="display: flex; flex-direction: column;">
+                                        <div class="d-flex d-none lst-margin" id="time-2-1">
+                                            <div class="lista-azul"></div>
+                                        </div>
+                                        <div class="d-flex d-none lst-margin" id="time-2-2">
+                                            <div class="lista-azul"></div>
+                                        </div>
+                                        <div class="d-flex d-none lst-margin" id="time-2-3">
+                                            <div class="lista-azul"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="d-flex exclusoes-tabela"
+            style="margin-right: calc(-.5 * var(--bs-gutter-x)); margin-left: calc(-.5 * var(--bs-gutter-x));">
+            <div style="width:33.33333333%;padding-left: 0px;">
+                <div class="painel-exclusoes-time-01 d-flex justify-content-start">
+                    <table style="width: 100%; padding-top: 0px;">
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="d-flex" style="align-items: center; width:33.33333333%; margin-right: 7px; margin-left: 7px;">
+                <div class="painel-anuncio d-flex justify-content-center w-100">
+                    <img />
+                </div>
+            </div>
+            <div style="padding-right: 0px;width:33.33333333%">
+                <div class="painel-exclusoes-time-02 d-flex justify-content-start" style="overflow-y: auto;">
+                    <table style="width: 100%; padding-top: 0px;">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function proportionSet(prop, min) {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const referenceWidth = 1024;
+            const referenceHeight = 768;
+            let proportion1 = windowWidth / referenceWidth;
+            if (windowWidth > 1200 || windowHeight > 800) {
+                proportion1 = windowWidth / (referenceWidth + referenceWidth - 1350);
+            }
+            var widthIncreaseCount = Math.floor((windowWidth - 1200) / 100);
+            var heightIncreaseCount = Math.floor((windowHeight - 800) / 100);
+            var totalReduction = (widthIncreaseCount + heightIncreaseCount) * 9.5;
+            // Se a largura for significativamente maior que a altura, reduza a proporção
+            if (windowWidth > windowHeight * 1.2) {
+                totalReduction += (windowWidth - windowHeight) / 100;
+            }
+            if (totalReduction > 0) {
+                proportion1 -= (totalReduction / 100);
+            }
+            let proportion2 = windowHeight / referenceHeight - 0.4;
+
+            let result = prop * proportion1 * proportion2;
+            result = Math.max(result, min);
+            return result;
+        }
+        function propWSet(prop, min) {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const referenceWidth = 1024;
+            const referenceHeight = 768;
+            let proportion1 = windowWidth / referenceWidth;
+            if (windowWidth > 1200 || windowHeight > 800) {
+                proportion1 = windowWidth / (referenceWidth + referenceWidth - 1350);
+            }
+            var widthIncreaseCount = Math.floor((windowWidth - 1200) / 100);
+            var heightIncreaseCount = Math.floor((windowHeight - 800) / 100);
+            var totalReduction = (widthIncreaseCount + heightIncreaseCount) * 9.5;
+            // Se a largura for significativamente maior que a altura, reduza a proporção
+            if (windowWidth > windowHeight * 1.2) {
+                totalReduction += (windowWidth - windowHeight) / 100;
+            }
+            if (totalReduction > 0) {
+                proportion1 -= (totalReduction / 100);
+            }
+            let proportion2 = windowHeight / referenceHeight - 0.4;
+
+            let result = prop * proportion1 * proportion2;
+            result = Math.max(result, min);
+            return result;
+        }
+        function adjustStyles() {
+            const listaAzul = document.querySelectorAll(".lista-azul");
+            const marginLista = document.querySelectorAll(".lst-margin");
+            const playerNumber = document.querySelectorAll(".player-number");
+            const playerHour = document.querySelectorAll(".player-hour");
+            const painelAnuncio = document.querySelector(".painel-anuncio");
+            const faltas = document.querySelectorAll(".faltas");
+            const periodo = document.querySelector(".periodo");
+            const labelPeriodo = document.querySelector("#label-periodo");
+            const pontuacao = document.querySelectorAll(".pontuacao");
+            const painelPontuacao = document.querySelector(".painel-pontuacao-time-01");
+            const painelPontuacao2 = document.querySelector(".painel-pontuacao-time-02");
+            const painelfaltas1 = document.querySelector(".painel-faltas-time-01");
+            const painelfaltas2 = document.querySelector(".painel-faltas-time-02");
+            const painelTempoAtq = document.querySelector(".painel-tempo-ataque");
+            const tempoAtq = document.querySelector(".tempo-ataque");
+            const iconeTime = document.querySelectorAll(".icone-time")
+            const equipeT1 = document.querySelector("#edit-cfg-equipes-t1-nome")
+            const equipeT2 = document.querySelector("#edit-cfg-equipes-t2-nome")
+            const cronometroTime = document.querySelector(".cronometro")
+            const painelTempoExc1 = document.querySelector(".painel-exclusoes-time-01");
+            const painelTempoExc2 = document.querySelector(".painel-exclusoes-time-02");
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const referenceWidth = 1024;
+            const referenceHeight = 768;
+            let proportion = windowWidth / referenceWidth;
+            if (windowWidth > 2308) {
+                proportion = windowWidth / (referenceWidth + referenceWidth - 800);
+            }
+            const proportion2 = windowHeight / referenceHeight - 0.4;
+            let marginTop = proportionSet(10, 8);
+            let playerHN = proportionSet(70, 60);
+            let listaAzulW = proportionSet(150, 80);
+            let listaAzulH = proportionSet(30, 18);
+            let iconeTimeSize = proportionSet(130, 100);
+            let equipeSize = proportionSet(45, 30);
+            let cronometroTimeSize = proportionSet(100, 100);
+            let painelTempoSize = proportionSet(160, 100);
+            let tempoSize = proportionSet(80, 60);
+            let painelSize = proportionSet(100, 60);
+            let periodoSize = proportionSet(68, 60);
+            let labelPeriodoSize = proportionSet(22, 11)
+            let labMargin = proportionSet(8, 5);
+            let painelWSize = propWSet(110, 70);
+            let painelAnuncioS = proportionSet(150, 120);
+            let painelExclusao = proportionSet(160, 160);
+            let faltasSize = proportionSet(100, 60);
+            let painelPontSize = proportionSet(180, 140);
+            let pontuacaoSize = proportionSet(180, 130);
+            let diferenca = windowWidth - windowHeight;
+            if (windowHeight > windowWidth ||
+                diferenca < windowHeight * 0.6
+            ) {
+                // console.log(diferenca)
+                // console.log(windowHeight * 0.3)
+                marginTop = proportionSet(7, 8);
+                playerHN = proportionSet(55, 60);
+                listaAzulW = proportionSet(60, 80);
+                listaAzulH = proportionSet(15, 18);
+                iconeTimeSize = proportionSet(90, 100);
+                equipeSize = proportionSet(25, 30);
+                cronometroTimeSize = proportionSet(70, 100);
+                painelTempoSize = proportionSet(80, 100);
+                tempoSize = proportionSet(50, 60);
+                painelSize = proportionSet(70, 60);
+                periodoSize = proportionSet(50, 60);
+                labelPeriodoSize = proportionSet(15, 11)
+                labMargin = proportionSet(8, 5);
+                painelWSize = propWSet(70, 70);
+                painelAnuncioS = proportionSet(150, 120);
+                painelExclusao = proportionSet(160, 160);
+                faltasSize = proportionSet(65, 60);
+                painelPontSize = proportionSet(130, 140);
+                pontuacaoSize = proportionSet(120, 130);
+            }
+            painelTempoAtq.style.marginTop = marginTop + "px";
+            document.querySelector("#label-periodo").style.marginBottom = labMargin + "px";
+            marginLista.forEach((item) => {
+                item.style.marginTop = marginTop + "px";
+            })
+            listaAzul.forEach((item) => {
+                item.style.width = listaAzulW + "px";
+                item.style.height = listaAzulH + "px";
+            })
+            playerNumber.forEach((item) => {
+                item.style.fontSize = playerHN + "px";
+            })
+            playerHour.forEach((item) => {
+                item.style.fontSize = playerHN + "px";
+            })
+            painelAnuncio.style.height = painelAnuncioS + "px";
+            painelTempoExc1.style.height = painelExclusao + "px";
+            painelTempoExc2.style.height = painelExclusao + "px";
+            painelPontuacao.style.height = painelPontSize + "px";
+            pontuacao.forEach((item) => {
+                item.style.fontSize = pontuacaoSize + "px";
+                item.style.lineHeight = (pontuacaoSize - 20) + "px";
+            })
+            periodo.style.fontSize = periodoSize + "px";
+            labelPeriodo.style.fontSize = labelPeriodoSize + "px";
+            painelPontuacao2.style.height = painelPontSize + "px";
+            cronometroTime.style.fontSize = cronometroTimeSize + "px";
+            painelfaltas1.style.width = painelWSize + "px";
+            painelfaltas1.style.height = painelSize + "px";
+            painelfaltas2.style.width = painelWSize + "px";
+            painelfaltas2.style.height = painelSize + "px";
+            painelTempoAtq.style.width = painelTempoSize + "px";
+            tempoAtq.style.fontSize = tempoSize + "px";
+            // tempoAtq.style.lineHeight = (tempoSize - 20) + "px";
+            // if (windowWidth < 1024 || windowWidth < 768) {
+            tempoAtq.style.lineHeight = (tempoSize) + "px";
+            // }
+            equipeT1.style.fontSize = equipeSize + "px";
+            equipeT2.style.fontSize = equipeSize + "px";
+            cronometroTime.style.lineHeight = (cronometroTimeSize - 10) + "px";
+            iconeTime.forEach((item) => {
+                item.style.height = iconeTimeSize + "px";
+            });
+            faltas.forEach((item) => {
+                item.style.fontSize = faltasSize + "px";
+                item.style.lineHeight = (faltasSize) + "px";
+                if (windowWidth < 1228 || windowWidth < 768) {
+                    item.style.lineHeight = (faltasSize) + "px";
+                }
+            });
+        }
+
+        // Chama a função de ajuste de zoom quando o DOM estiver pronto
+        document.addEventListener("DOMContentLoaded", function () {
+            // adjustStyles();
+        });
+
+        // Chama a função de ajuste de zoom sempre que a janela for redimensionada
+        let widthWindowPad = 720;
+        let heightWindowPad = 520;
+        document.body.style.zoom = 1;
+        let oldWindowWidth = widthWindowPad;
+        let oldWindowHeight = heightWindowPad;
+        function calculateScale(width) {
+            const widthIncrement = 1000;
+            const scaleIncrement = 1;
+            const maxScale = 10; // Define a escala máxima
+
+            const widthDiff = width - widthWindowPad;
+            let scaleFactor = Math.max(1 + (Math.floor(widthDiff / widthIncrement) * scaleIncrement), 1);
+            scaleFactor = Math.min(scaleFactor, maxScale); // Limita a escala ao máximo definido
+            // // console.log(scaleFactor);
+            return scaleFactor;
+        }
+
+        function adjustZoom() {
+            const baseWidth = 720;
+            const baseHeight = 520;
+            const aspectRatio = window.innerWidth / window.innerHeight;
+            const baseAspectRatio = baseWidth / baseHeight;
+            let scale
+            var cronometroElements = document.getElementsByClassName('cronometro');
+            var faltasElements = document.getElementsByClassName('faltas');
+            var painelFaltasTime02Elements = document.getElementsByClassName('painel-faltas-time-02');
+            var painelFaltasTime01Elements = document.getElementsByClassName('painel-faltas-time-01');
+            var periodo = document.getElementsByClassName('periodo');
+            var periodoPainel = document.getElementsByClassName('periodo-painel');
+            function applyStyles(elements, styles) {
+                for (var i = 0; i < elements.length; i++) {
+                    for (var style in styles) {
+                        elements[i].style[style] = styles[style];
+                    }
+                }
+            }
+            if (aspectRatio < baseAspectRatio) {
+                scale = window.innerWidth / baseWidth;
+                document.body.style.width = '100%';
+                cronometroStyles = {
+                    fontFamily: 'Digital Dismay, sans-serif',
+                    fontSize: '110px',
+                    lineHeight: '70px',
+                    marginLeft: '2px',
+                    color: 'red',
+                    marginBottom: '0px'
+                };
+
+                faltasStyles = {
+                    fontFamily: 'Digital Dismay, sans-serif',
+                    fontSize: '80px',
+                    lineHeight: '80px',
+                    fontWeight: '100',
+                    marginLeft: '4px',
+                };
+                periodoStyles = {
+                    fontSize: "78px",
+                    lineHeight: "0px"
+                }
+                periodoPainelStyles = {
+                    marginTop: "64px"
+                }
+                painelFaltasStyles = {
+                    backgroundColor: 'rgb(0, 0, 0)',
+                    textAlign: 'center',
+                    padding: '2px',
+                    borderRadius: '5px',
+                    marginTop: '70px',
+                    height: '80px',
+                    width: '80px'
+                };
+                applyStyles(cronometroElements, cronometroStyles);
+                applyStyles(faltasElements, faltasStyles);
+                applyStyles(painelFaltasTime02Elements, painelFaltasStyles);
+                applyStyles(painelFaltasTime01Elements, painelFaltasStyles);
+                applyStyles(periodo, periodoStyles);
+                applyStyles(periodoPainel, periodoPainelStyles);
+            } else {
+                cronometroStyles = {
+                    fontFamily: 'Digital Dismay, sans-serif',
+                    fontSize: '150px',
+                    lineHeight: '70px',
+                    color: 'red',
+                    marginLeft: '7px',
+                    marginBottom: '0px'
+                };
+                periodoStyles = {
+                    fontSize: "100px",
+                    lineHeight: "0px"
+                }
+                periodoPainelStyles = {
+                    marginTop: "54px"
+                }
+                faltasStyles = {
+                    fontFamily: 'Digital Dismay, sans-serif',
+                    fontSize: '100px',
+                    lineHeight: '100px',
+                    marginLeft: '4px',
+                    fontWeight: '100'
+                };
+
+                painelFaltasStyles = {
+                    backgroundColor: 'rgb(0, 0, 0)',
+                    textAlign: 'center',
+                    padding: '2px',
+                    borderRadius: '5px',
+                    marginTop: '60px',
+                    height: '100px',
+                    width: '100px'
+                };
+                if (100 / (aspectRatio * 0.5) < 112.6) {
+                    applyStyles(cronometroElements, cronometroStyles);
+                    applyStyles(faltasElements, faltasStyles);
+                    applyStyles(painelFaltasTime02Elements, painelFaltasStyles);
+                    applyStyles(painelFaltasTime01Elements, painelFaltasStyles);
+                    applyStyles(periodo, periodoStyles);
+                    applyStyles(periodoPainel, periodoPainelStyles);
+                } else {
+                    cronometroStyles = {
+                        fontFamily: 'Digital Dismay, sans-serif',
+                        fontSize: '110px',
+                        lineHeight: '70px',
+                        marginLeft: '7px',
+                        color: 'red',
+                        marginBottom: '0px'
+                    };
+
+                    faltasStyles = {
+                        fontFamily: 'Digital Dismay, sans-serif',
+                        fontSize: '80px',
+                        lineHeight: '80px',
+                        marginLeft: '4px',
+                        fontWeight: '100'
+                    };
+                    periodoStyles = {
+                        fontSize: "78px",
+                        lineHeight: "0px"
+                    }
+                    periodoPainelStyles = {
+                        marginTop: "64px"
+                    }
+                    painelFaltasStyles = {
+                        backgroundColor: 'rgb(0, 0, 0)',
+                        textAlign: 'center',
+                        padding: '2px',
+                        borderRadius: '5px',
+                        marginTop: '70px',
+                        height: '80px',
+                        width: '80px'
+                    };
+                    applyStyles(cronometroElements, cronometroStyles);
+                    applyStyles(faltasElements, faltasStyles);
+                    applyStyles(painelFaltasTime02Elements, painelFaltasStyles);
+                    applyStyles(painelFaltasTime01Elements, painelFaltasStyles);
+                    applyStyles(periodo, periodoStyles);
+                    applyStyles(periodoPainel, periodoPainelStyles);
+                }
+
+                scale = window.innerHeight / baseHeight;
+                document.body.style.width = (100 / (aspectRatio * 0.5)) + '%'; // Ajuste o valor 0.5 conforme necessário
+            }
+
+
+            // Função para aplicar estilos a uma lista de elementos
+
+            document.body.style.zoom = scale;
+            document.body.style.height = (window.innerHeight / scale) + 'px';
+            document.body.style.alignItems = "center";
+        }
+
+
+        // Chama a função de ajuste de zoom quando o DOM estiver pronto
+        document.addEventListener("DOMContentLoaded", function () {
+            adjustZoom();
+            ipcRenderer.send('reload');
+        });
+
+        // Chama a função de ajuste de zoom sempre que a janela for redimensionada
+        window.addEventListener("resize", function () {
+
+            widthWindowPad = 720;
+            heightWindowPad = 520;
+            document.body.style.zoom = 1;
+            oldWindowWidth = widthWindowPad;
+            oldWindowHeight = heightWindowPad;
+            adjustZoom();
+        });
+        let carregouInfoPartida = false;
+
+        const { ipcRenderer } = require('electron');
+        ipcRenderer.on('updatesFromControl', function (event, arg) {
+            // // console.log(arg);
+
+            switch (arg['inputOrigin']) {
+                case "#input-periodo":
+                    document.querySelector(".periodo").innerHTML = arg['pontuacao'];
+                    break;
+                case "#input-gols-time-01":
+                    document.querySelector(".painel-pontuacao-time-01 span.pontuacao").innerHTML = arg['pontuacaoFormatada'];
+                    break;
+                case "#input-faltas-time-01":
+                    var faltasAtual1 = parseInt(document.querySelector(".painel-faltas-time-01 span.faltas").innerHTML);
+                    var faltasNovas1 = parseInt(arg['pontuacaoFormatada']);
+                    let diferenca1 = faltasNovas1 - 9;
+                    diferenca1 = diferenca1 % 5;
+
+                    const element1 = document.querySelector(".painel-faltas-time-01 span.faltas");
+                    // if (faltasNovas1 % 5 === 0 && faltasNovas1 > 0) {
+                    if (faltasNovas1 === 9 || (faltasNovas1 >= 9 && diferenca1 === 0)) {
+                        // alert("faltas");
+                        document.querySelector(".painel-faltas-time-01").style.backgroundColor = "red";
+                    } else {
+                        document.querySelector(".painel-faltas-time-01").style.backgroundColor = "black";
+                    }
+
+                    element1.innerHTML = arg['pontuacaoFormatada'];
+                    break;
+                case "#input-tempo-ataque":
+                    if (arg['pontuacaoFormatada'] < 10) {
+                        // if (ccores_shot_clock_expiration_border)
+                        document.querySelector(".painel-tempo-ataque").style.backgroundColor = ccores_shot_clock_expiration_border;
+                        document.querySelector(".painel-tempo-ataque span.tempo-ataque").style.color = "white";
+                    }
+                    else {
+                        document.querySelector(".painel-tempo-ataque").style.backgroundColor = "black";
+                        // if (ccores_shot_clock)
+                        document.querySelector(".painel-tempo-ataque span.tempo-ataque").style.color = ccores_shot_clock;
+                    }
+                    document.querySelector(".painel-tempo-ataque span.tempo-ataque").innerHTML = arg['pontuacaoFormatada'].toString().replace('.', ':');
+                    break;
+                case "#input-gols-time-02":
+                    document.querySelector(".painel-pontuacao-time-02 span.pontuacao").innerHTML = arg['pontuacaoFormatada'];
+                    break;
+                case "#input-faltas-time-02":
+                    var faltasAtual2 = parseInt(document.querySelector(".painel-faltas-time-02 span.faltas").innerHTML);
+                    var faltasNovas2 = parseInt(arg['pontuacaoFormatada']);
+                    let diferenca2 = faltasNovas2 - 9;
+                    diferenca2 = diferenca2 % 5;
+
+                    const element2 = document.querySelector(".painel-faltas-time-02 span.faltas");
+
+                    if (faltasNovas2 === 9 || (faltasNovas2 >= 9 && diferenca2 === 0)) {
+                        // if (faltasNovas2 % 5 === 0 && faltasNovas2 > 0) {
+                        document.querySelector(".painel-faltas-time-02").style.backgroundColor = "red";
+                    } else {
+                        document.querySelector(".painel-faltas-time-02").style.backgroundColor = "black";
+                    }
+
+                    element2.innerHTML = arg['pontuacaoFormatada'];
+                    break;
+                default:
+                // code block
+            }
+
+        });
+
+        ipcRenderer.on('updateCronometro', function (event, time) {
+            document.querySelector(".painel-cronometro span.cronometro").innerHTML = time
+        });
+        ipcRenderer.on('atualizaDesconto', function (event, data) {
+            for (var i = 1; i <= 3; i++) {
+                document.getElementById('time-1-' + i).classList.add("d-none");
+                document.getElementById('time-2-' + i).classList.add("d-none");
+            }
+            if (data.time_1 > 0) {
+                for (var i = 1; i <= data.time_1; i++) {
+                    document.getElementById('time-1-' + i).classList.remove("d-none");
+                }
+            }
+            if (data.time_2 > 0) {
+                for (var i = 1; i <= data.time_2; i++) {
+                    document.getElementById('time-2-' + i).classList.remove("d-none");
+                }
+            }
+        })
+        ipcRenderer.on('setDescontoPainel', function (event, data) {
+            var painelId = data['origem'] === "btn-desconto-equipe1" ? "#painel-info-time-01" : "#painel-info-time-02";
+            const element = document.getElementById(painelId.replace("#", ""));
+            if (element.classList.contains("desconto-ativo")) {
+                element.classList.remove("desconto-ativo");
+                element.classList.add("desconto-ativo-black");
+                if (painelId === "#painel-info-time-02") {
+                    element.classList.remove("desconto-ativo-2");
+                    element.classList.add("desconto-ativo-black-2");
+                }
+            } else {
+                element.classList.remove("desconto-ativo-black");
+                element.classList.add("desconto-ativo");
+                if (painelId === "#painel-info-time-02") {
+                    element.classList.remove("desconto-ativo-black-2");
+                    element.classList.add("desconto-ativo-2");
+                }
+            }
+        });
+
+        ipcRenderer.on('loadInformacoesPartida', function (event, arg) {
+            if (carregouInfoPartida) {
+                return;
+            }
+            document.querySelector(".painel-pontuacao-time-01 span.pontuacao").innerHTML = arg['time01']['gols'];
+            document.querySelector(".painel-faltas-time-01 span.faltas").innerHTML = arg['time01']['faltas'];
+            document.querySelector(".painel-pontuacao-time-02 span.pontuacao").innerHTML = arg['time02']['gols'];
+            document.querySelector(".painel-faltas-time-02 span.faltas").innerHTML = arg['time02']['faltas'];
+            // document.querySelector(".periodo").innerHTML = arg['cronometro'];
+
+            document.querySelector(".periodo").innerHTML = arg['periodo'];
+            document.querySelector(".painel-tempo-ataque span.tempo-ataque").innerHTML = arg['ataque'];
+            carregouInfoPartida = true;
+        });
+
+        ipcRenderer.on('addNovaExclusao', function (event, arg) {
+            // console.log(arg);
+            // return;
+
+            var tabela = arg['tabela'] === "lista-time-1" ? ".painel-exclusoes-time-01 table" : ".painel-exclusoes-time-02 table";
+
+            apagarLinhas(tabela);
+            for (let i = 0; i < arg['lista'].length; i++) {
+
+                let excAtual = arg['lista'][i]['exclusoes'];
+                if (excAtual['tabela'] != arg['tabela']) {
+                    continue;
+                }
+
+                id = excAtual['rowId'];
+                jogador = excAtual['jogador'];
+                tempo = excAtual['tempo'];
+
+                addRow(id, jogador, tempo, tabela);
+                // adjustStyles();
+            }
+
+        });
+
+
+        function apagarLinhas(tableName) {
+
+            const table = document.querySelector(tableName); // seleciona a tabela
+            let rowCount = table.rows; // conta quantas linhas há na tabela
+
+            if (typeof rowCount === 'undefined') {
+                return;
+            }
+
+            rowCount = rowCount.length;
+            while (rowCount > 0) { // enquanto ainda houver linhas na tabela
+                table.deleteRow(rowCount - 1); // remove a última linha
+                rowCount--; // atualiza a contagem de linhas restantes
+            }
+
+        }
+
+        function addRow(id, jogador, tempo, tabela) {
+            const table = document.querySelector(tabela);
+            const rows = table.querySelectorAll("tr");
+            const maxRows = 2;
+
+            // se ainda não tiver 3 linhas, adiciona uma nova no final
+            if (rows.length < maxRows) {
+                const newRow = createRow(id, jogador, tempo, tabela);
+                table.querySelector("tbody").appendChild(newRow);
+            } else {
+                // se já tiver 3 linhas, remove a primeira e adiciona uma nova no final
+                const firstRow = rows[0];
+                const newRow = createRow(id, jogador, tempo, tabela);
+                table.querySelector("tbody").appendChild(newRow);
+                table.querySelector("tbody").removeChild(firstRow);
+                // adjustStyles();
+            }
+        }
+
+        function createRow(id, jogador, tempo, tabela) {
+
+            if (tabela === ".painel-exclusoes-time-01 table") {
+                const row = document.createElement("tr");
+                row.id = id;
+                const cell1 = document.createElement("td");
+                cell1.style.textAlign = "end";
+                const span2 = document.createElement("span");
+                span2.classList.add("player-number");
+                if (ccores_penalty_player) {
+                    span2.style.color = ccores_penalty_player;
+                }
+                span2.textContent = jogador;
+                const span1 = document.createElement("span");
+                span1.classList.add("player-hour");
+                if (ccores_penalty_time) {
+                    span1.style.color = ccores_penalty_time;
+                }
+                span1.style.marginLeft = '15px';
+                span1.textContent = tempo;
+
+                cell1.appendChild(span2);
+                cell1.appendChild(span1);
+                row.appendChild(cell1);
+                // adjustStyles();
+
+
+                return row;
+            } else {
+
+                const row = document.createElement("tr");
+                row.id = id;
+
+                const cell2 = document.createElement("td");
+                cell2.style.textAlign = "end";
+                cell2.style.paddingRight = "10px";
+                cell2.style.width = "50px";
+                const span2 = document.createElement("span");
+                span2.classList.add("player-number");
+                if (ccores_penalty_player) {
+                    span2.style.color = ccores_penalty_player;
+                }
+                span2.textContent = jogador + ' ';
+
+                cell2.appendChild(span2);
+                row.appendChild(cell2);
+
+                const cell1 = document.createElement("td");
+                cell1.style.textAlign = "start";
+                const span1 = document.createElement("span");
+                span1.classList.add("player-hour");
+                span1.style.color = ccores_penalty_time;
+
+                span1.textContent = tempo;
+
+                cell1.appendChild(span1);
+                row.appendChild(cell1);
+                // adjustStyles();
+                return row;
+            }
+
+        }
+
+        // function atualizaFaltas(campoFaltas, pontuacao){
+        //     var faltasAtual = parseInt(document.querySelector(campoFaltas).innerHTML);
+        //     var faltasNovas = parseInt(pontuacao);
+        //     let diferenca = faltasNovas - 9;
+        //     diferenca = diferenca % 5;
+
+        //     if(faltasNovas === 9 || (faltasNovas >= 9 && diferenca === 0)){
+        //         document.querySelector(campoFaltas.replace(' span.faltas')).classList.add("falta-destaque");
+        //     }else{
+        //         document.querySelector(campoFaltas.replace(' span.faltas')).classList.remove("falta-destaque");
+        //     }
+
+        //     document.querySelector(campoFaltas).innerHTML = pontuacao;
+        // }
+
+        window.onload = function () {
+            if (!carregouInfoPartida) {
+                ipcRenderer.send("solicitaAtualizacoes", null);
+            }
+        }
+
+    </script>
+
+    <!-- Configurações: Variáveis -->
+    <script>
+        const sqlite3 = require('sqlite3').verbose();
+    </script>
+
+    <!-- Configuracoes: Equipas/Geral -->
+    <script>
+        var configEquipaGeral;
+        ipcRenderer.on('reloadAll', (event, args) => {
+            getConfigEquipaGeral();
+            getConfigSetup()
+            getConfigEquipaTime("1");
+            getConfigEquipaTime("2");
+            getConfigCores();
+        })
+        async function getConfigEquipaGeral() {
+            var db = new sqlite3.Database('./scoreboard.sqlite');
+            _ = await db.serialize(() => {
+                db.all("SELECT * FROM config_equipas_geral where id = 1", (err, rows) => {
+                    if (err) {
+                        console.error(err.message);
+                    }
+                    // console.log(rows);
+                    configEquipaGeral = rows;
+                    loadConfigEquipaGeral();
+                });
+            });
+            db.close();
+        }
+
+        function loadConfigEquipaGeral() {
+            document.querySelector('.painel-anuncio img').setAttribute('src', configEquipaGeral[0]["logo_caminho"]);
+        }
+
+    </script>
+
+    <!-- Configurações: Equipe times-->
+    <script>
+
+        var configEquipaTime01;
+        var configEquipaTime02;
+        async function getConfigEquipaTime(id) {
+            var db = new sqlite3.Database('./scoreboard.sqlite');
+            _ = await db.serialize(() => {
+                db.all("SELECT * FROM config_equipas_times where id =" + id, (err, rows) => {
+                    if (err) {
+                        console.error(err.message);
+                    }
+                    // console.log(rows);
+                    // configuration = rows;
+                    if (id === "1") {
+                        configEquipaTime01 = rows;
+                    } else {
+                        configEquipaTime02 = rows;
+                    }
+                    loadConfigEquipaTime(id);
+                });
+            });
+            db.close();
+        }
+
+        function loadConfigEquipaTime(equipeId) {
+            var configuration = equipeId === "1" ? configEquipaTime01 : configEquipaTime02;
+
+            document.querySelector("#img-cfg-equipes-t" + equipeId + "-logo").setAttribute('src', configuration[0]["logo_caminho"]);
+            document.querySelector("#edit-cfg-equipes-t" + equipeId + "-nome").innerHTML = configuration[0]["nome"];
+        }
+
+    </script>
+
+    <!-- Configuracoes: Jogo Setup -->
+    <script>
+
+        var configSetup;
+        async function getConfigSetup() {
+            var db = new sqlite3.Database('./scoreboard.sqlite');
+            _ = await db.serialize(() => {
+                db.all("SELECT * FROM config_jogo_setup", (err, rows) => {
+                    if (err) {
+                        console.error(err.message);
+                    }
+                    configSetup = rows;
+                    setConfigSetup();
+                });
+            });
+            db.close();
+        }
+
+        function setConfigSetup() {
+
+            // console.log(configSetup);
+
+            tempo_ataque = configSetup[0]["tempo_ataque"] ? configSetup[0]["tempo_ataque"] : 0;
+            mostrar_ataque = configSetup[0]["mostrar_ataque"];
+            config_setup_tempo_jogo = configSetup[0]["tempo_jogo"];
+            setInterval(() => {
+                if (mostrar_ataque == 0) {
+                    document.querySelector("#ataque").classList.add("d-none");
+                } else {
+                    document.querySelector("#ataque").classList.remove("d-none");
+                }
+            }, 100)
+            config_setup_duracao_jogo_min = configSetup[0]["duracao_jogo_minutos"];
+            config_setup_duracao_jogo_seg = configSetup[0]["duracao_jogo_segundos"];
+
+            config_setup_desconto_min = configSetup[0]["desconto_tempo_minutos"];
+            config_setup_desconto_seg = configSetup[0]["desconto_tempo_segundos"];
+
+            var buzinaIniciar = configSetup[0]["toque_buzinar_iniciar"] === 1 ? true : false;
+            config_setup_buzinar_iniciar = buzinaIniciar;
+
+            var buzinaFaltar = configSetup[0]["toque_buzinar_final"] === 1 ? true : false;
+            config_setup_buzinar_faltar = buzinaFaltar;
+
+            var mostrarEcran = configSetup[0]["mostrar_ecran"];
+            if (mostrarEcran === "T") {
+                config_setup_mostrar_ecran_tempo = true;
+                config_setup_mostrar_ecran_logo = false;
+            } else {
+                config_setup_mostrar_ecran_tempo = false;
+                config_setup_mostrar_ecran_logo = true;
+            }
+
+            config_setup_faltar_min = configSetup[0]["tempo_final_minutos"];
+            config_setup_faltar_seg = configSetup[0]["tempo_final_segundos"];
+
+        }
+
+    </script>
+
+    <!-- Configuracoes: Cores -->
+    <script>
+
+        var configCores;
+        async function getConfigCores() {
+            var db = new sqlite3.Database('./scoreboard.sqlite');
+            _ = await db.serialize(() => {
+                db.all("SELECT * FROM config_cores", (err, rows) => {
+                    if (err) {
+                        console.error(err.message);
+                    }
+                    configCores = rows;
+                    setConfigCores();
+                });
+            });
+            db.close();
+        }
+
+        function setConfigCores() {
+
+            // console.log(configCores);
+
+            ccores_background = configCores[0]["background"] ? configCores[0]["background"] : "";
+            ccores_number_background = configCores[0]["number_background"] ? configCores[0]["number_background"] : "";
+            ccores_text_borders = configCores[0]["text_borders"] ? configCores[0]["text_borders"] : "";
+            ccores_team1_name = configCores[0]["team1_name"] ? configCores[0]["team1_name"] : "";
+            ccores_team2_name = configCores[0]["team2_name"] ? configCores[0]["team2_name"] : "";
+            ccores_main_clock = configCores[0]["main_clock"] ? configCores[0]["main_clock"] : "";
+            ccores_shot_clock = configCores[0]["shot_clock"] ? configCores[0]["shot_clock"] : "";
+            ccores_shot_clock_expiration_border = configCores[0]["shot_clock_expiration_border"] ? configCores[0]["shot_clock_expiration_border"] : "";
+            ccores_scores = configCores[0]["scores"] ? configCores[0]["scores"] : "";
+            ccores_period = configCores[0]["period"] ? configCores[0]["period"] : "";
+            ccores_shots_on_goal = configCores[0]["shots_on_goal"] ? configCores[0]["shots_on_goal"] : "";
+            ccores_fouls = configCores[0]["fouls"] ? configCores[0]["fouls"] : "";
+            ccores_penalty_player = configCores[0]["penalty_player"] ? configCores[0]["penalty_player"] : "";
+            ccores_penalty_time = configCores[0]["penalty_time"] ? configCores[0]["penalty_time"] : "";
+            ccores_display_screen_active_field = configCores[0]["display_screen_active_field"] ? configCores[0]["display_screen_active_field"] : "";
+
+            document.querySelector("body").style.backgroundColor = ccores_background;
+
+            document.querySelector("body").style.color = ccores_text_borders;
+            document.querySelector("#label-periodo").style.color = ccores_text_borders;
+
+            document.querySelector("#edit-cfg-equipes-t1-nome").style.color = ccores_team1_name;
+            document.querySelector("#edit-cfg-equipes-t2-nome").style.color = ccores_team2_name;
+
+            document.querySelector(".cronometro").style.color = ccores_main_clock;
+            document.querySelector(".tempo-ataque").style.color = ccores_shot_clock;
+
+            // document.querySelector(".painel-tempo-ataque").style.backgroundColor = ccores_shot_clock_expiration_border;            
+            document.querySelector(".painel-pontuacao-time-01 span.pontuacao").style.color = ccores_scores;
+            document.querySelector(".painel-pontuacao-time-02 span.pontuacao").style.color = ccores_scores;
+
+            document.querySelector("#value-periodo").style.color = ccores_period;
+            document.querySelector(".painel-faltas-time-01 span.faltas").style.color = ccores_fouls;
+            document.querySelector(".painel-faltas-time-02 span.faltas").style.color = ccores_fouls;
+
+            // document.querySelector(".painel-anuncio").style.backgroundColor = ccores_display_screen_active_field;
+
+        }
+
+    </script>
+
+    <!-- Configuração: Inicio -->
+    <script>
+        function StartConfigEquipesGeral() {
+            getConfigEquipaGeral();
+        }
+        function StartConfigEquipes() {
+            getConfigEquipaTime("1");
+            getConfigEquipaTime("2");
+        }
+        function StartConfigSetup() {
+            getConfigSetup();
+        }
+        function StartConfigCores() {
+            getConfigCores();
+        }
+        window.onload = function () {
+            StartConfigEquipesGeral();
+            StartConfigEquipes();
+            StartConfigSetup();
+            StartConfigCores();
+        }
+    </script>
+
+</body>
+
+</html>
