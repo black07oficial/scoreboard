@@ -859,7 +859,14 @@ ipcMain.on('salvarArquivo', async (event, arg) => {
     console.log(newFilePath);
   });
 });
-
+ipcMain.on('validPassword', async (event, arg) => {
+  console.log(arg)
+  if (arg === 'Scoreboard@2310') {
+    configWindow.webContents.send('validPassword', true);
+  } else {
+    configWindow.webContents.send('validPassword', false);
+  }
+})
 ipcMain.on('verificarArquivo', async (event, arg) => {
   const filePath = arg['path'];
   const fileExtension = path.extname(filePath);

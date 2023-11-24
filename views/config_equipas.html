@@ -33,6 +33,10 @@
 
     <!-- Configuration Css -->
     <link rel="stylesheet" href="../resources/css/configuration.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <style>
         html {
             height: 100%;
@@ -46,7 +50,7 @@
 
         body {
             /* overflow: hidden; */
-            font-family: 'Gobold Regular';
+            font-family: 'Gobold';
             margin: 0;
             padding: 0;
             width: 100% !important;
@@ -513,6 +517,7 @@
 
     <!-- Definição de Variaveis -->
     <script>
+        // window.$ = window.jQuery = require('jquery');
         setInterval(function () {
             if (document.querySelector('#config_setup-tempo-slide').value < 1) {
                 document.querySelector('#config_setup-tempo-slide').value = 1;
@@ -1081,7 +1086,43 @@
         }
 
         document.querySelector('.panel-logo-central').addEventListener('click', function () {
-            document.querySelector('#modal-selecionar-logo-central input').click();
+
+            var jquery = $.confirm({
+                title: 'Atenção!',
+                content: 'Por favor, selecione a senha de administrador para alterar a imagem.' + `
+                    <div class="form-group">
+                        <input type="password" placeholder="Senha" class="pass form-control" required />
+                    </div>`,
+                type: 'red',
+                buttons: {
+                    cancel: {
+                        text: 'Cancelar',
+                        btnClass: 'btn-danger',
+                    },
+                    confirm: {
+                        text: 'Confirmar',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            var alerta = null;
+                            const pass = document.querySelector('.pass').value
+                            ipcRenderer.send('validPassword', pass);
+                            ipcRenderer.on('validPassword', (event, valid) => {
+                                ipcRenderer.removeAllListeners('validPassword');
+                                if (valid) {
+                                    document.querySelector('#modal-selecionar-logo-central input').click();
+                                } else {
+                                    alerta = $.alert({
+                                        title: 'Erro',
+                                        content: 'Senha Incorreta',
+                                    })
+                                }
+                            })
+                        },
+                    },
+
+                }
+            });
+
         });
         file_center = document.querySelector('#modal-selecionar-logo-central input');
         document.querySelector('#modal-selecionar-logo-central input').addEventListener('change', function (event) {

@@ -34,6 +34,11 @@
     <link rel="stylesheet" href="../resources/css/configuration.css">
 
     <style>
+        @font-face {
+            font-family: 'Gobold';
+            src: url('../resources/fonts/gobold_bold.otf') format('truetype');
+        }
+
         html {
             height: 100%;
             width: 100%;
@@ -46,7 +51,7 @@
 
         body {
             /* overflow: hidden; */
-            font-family: 'Gobold Regular';
+            font-family: 'Gobold';
             margin: 0;
             padding: 0;
             width: 100% !important;
@@ -840,7 +845,7 @@
         }
 
         function retornar() {
-          if (confirm("Você tem certeza que deseja reiniciar tudo?\n\n" +
+            if (confirm("Você tem certeza que deseja reiniciar tudo?\n\n" +
                 "Clique em OK para salvar as alterações e reiniciar.\n" +
                 "Clique em Cancelar caso não deseje reiniciar.")) {
                 ipcRenderer.send("closeWindowConfig", true);
