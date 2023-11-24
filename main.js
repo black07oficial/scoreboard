@@ -91,7 +91,7 @@ async function createWindowImport() {
     height: 400,
     minWidth: 400,
     minHeight: 400,
-    icon: path.join(__dirname, 'resources/images/icon.ico'),
+    icon: path.join(__dirname, 'resources/images/icon.png'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -132,7 +132,7 @@ async function createWindow() {
   // const displays = screen.getAllDisplays();
   // console.log(displays);
   // console.log(`file:${path.join(__dirname, 'views', 'index.html')}`);
-  // console.log(path.join(__dirname, 'resources/images/icon.ico'));
+  // console.log(path.join(__dirname, 'resources/images/icon.png'));
   firstWindow = new BrowserWindow({
     width: configMonitor[1].width,
     height: configMonitor[1].height,
@@ -141,7 +141,7 @@ async function createWindow() {
     minWidth: 1224,
     minHeight: 768,
     fullscreen: configMonitor[1].fullscreen == 0 ? false : true,
-    icon: path.join(__dirname, 'resources/images/icon.ico'),
+    icon: path.join(__dirname, 'resources/images/icon.png'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -198,7 +198,7 @@ function createSecondWindow(route) {
     minHeight: 525,
     closable: true,
     fullscreen: configMonitor[0].fullscreen == 0 ? false : true,
-    icon: path.join(__dirname, 'resources/images/icon.ico'),
+    icon: path.join(__dirname, 'resources/images/icon.png'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -222,7 +222,7 @@ function createConfigWindow(route) {
     minWidth: 720,
     minHeight: 520,
     closable: false,
-    icon: path.join(__dirname, 'resources/images/icon.ico'),
+    icon: path.join(__dirname, 'resources/images/icon.png'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -274,7 +274,7 @@ function createThirdWindow(route) {
     minHeight: configMonitor[2].min_height,
     closable: true,
     fullscreen: configMonitor[2].fullscreen == 0 ? false : true,
-    icon: path.join(__dirname, 'resources/images/icon.ico'),
+    icon: path.join(__dirname, 'resources/images/icon.png'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -300,7 +300,7 @@ function createFourthWindow() {
     minHeight: 300,
     closable: true,
     fullscreen: configMonitor[3].fullscreen == 0 ? false : true,
-    icon: path.join(__dirname, 'resources/images/icon.ico'),
+    icon: path.join(__dirname, 'resources/images/icon.png'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -325,7 +325,7 @@ function createFifthWindow() {
     minHeight: configMonitor[4].min_height,
     closable: true,
     fullscreen: configMonitor[4].fullscreen == 0 ? false : true,
-    icon: path.join(__dirname, 'resources/images/icon.ico'),
+    icon: path.join(__dirname, 'resources/images/icon.png'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

@@ -32,11 +32,16 @@
 
     <!-- Configuration Css -->
     <link rel="stylesheet" href="../resources/css/configuration.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <style>
-         @font-face {
-      font-family: 'Gobold';
-      src: url('../resources/fonts/gobold_bold.otf') format('truetype');
-    }
+        @font-face {
+            font-family: 'Gobold';
+            src: url('../resources/fonts/gobold_bold.otf') format('truetype');
+        }
+
         html {
             height: 100%;
             width: 100%;
@@ -611,6 +616,53 @@
     <script>
         const sqlite3 = require('sqlite3').verbose();
         const { ipcRenderer } = require('electron');
+        $('#mostrar_ataque').on('click', function () {
+            var jquery = $.confirm({
+                title: 'Atenção!',
+                content: 'Por favor, selecione a senha de administrador para alterar a imagem.' + `
+                <div style="padding: 4px;">
+                    <div class="form-group mt-2">
+                        <input type="password" placeholder="Senha" class="pass form-control" required />
+                    </div>
+                </div>`,
+                type: 'red',
+                buttons: {
+                    cancel: {
+                        text: 'Cancelar',
+                        btnClass: 'btn-danger',
+                        action: function () {
+                            $('#mostrar_ataque').prop('checked', !$('#mostrar_ataque').is(':checked'));
+                        }
+                    },
+                    confirm: {
+                        text: 'Confirmar',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            var alerta = null;
+                            const pass = document.querySelector('.pass').value
+                            ipcRenderer.send('validPassword', pass);
+                            ipcRenderer.on('validPassword', (event, valid) => {
+                                ipcRenderer.removeAllListeners('validPassword');
+                                if (valid) {
+                                    return;
+                                } else {
+                                    debugger
+                                    alerta = $.alert({
+                                        title: 'Atenção!',
+                                        content: 'Senha Incorreta',
+                                    })
+                                    $('#mostrar_ataque').prop('checked', !$('#mostrar_ataque').is(':checked'));
+                                }
+                            })
+                        },
+                    },
+
+                }
+            });
+
+
+        })
+
         document.addEventListener('keydown', function (event) {
             if (event.keyCode === 116) {
                 // O código 116 corresponde à tecla F5
@@ -713,7 +765,6 @@
             oldWindowHeight = heightWindowPad;
             adjustZoom();
         });
-
     </script>
 
     <!-- Funções auxiliares -->
@@ -969,7 +1020,7 @@
         }
 
         function retornar() {
-          if (confirm("Você tem certeza que deseja reiniciar tudo?\n\n" +
+            if (confirm("Você tem certeza que deseja reiniciar tudo?\n\n" +
                 "Clique em OK para salvar as alterações e reiniciar.\n" +
                 "Clique em Cancelar caso não deseje reiniciar.")) {
                 ipcRenderer.send("closeWindowConfig", true);
