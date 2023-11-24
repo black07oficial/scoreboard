@@ -860,7 +860,6 @@ ipcMain.on('salvarArquivo', async (event, arg) => {
   });
 });
 ipcMain.on('validPassword', async (event, arg) => {
-  console.log(arg)
   if (arg === 'Scoreboard@2310') {
     configWindow.webContents.send('validPassword', true);
   } else {
