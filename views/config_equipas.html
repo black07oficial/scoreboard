@@ -1090,9 +1090,11 @@
             var jquery = $.confirm({
                 title: 'Atenção!',
                 content: 'Por favor, selecione a senha de administrador para alterar a imagem.' + `
-                    <div class="form-group">
+                <div style="padding: 4px;">
+                    <div class="form-group mt-2">
                         <input type="password" placeholder="Senha" class="pass form-control" required />
-                    </div>`,
+                    </div>
+                </div>`,
                 type: 'red',
                 buttons: {
                     cancel: {
