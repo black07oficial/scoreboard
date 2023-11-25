@@ -707,7 +707,7 @@
 
                     reader.readAsDataURL(arquivoSelecionado);
                 } else {
-                    alert('Por favor, selecione uma imagem válida.');
+                    ipcRenderer.send('send-alert', 'Por favor, selecione uma imagem válida.');
                     fileInput.value = ''; // Limpar o campo de entrada de arquivo
                     dimensoes.textContent = '';
                 }
@@ -808,7 +808,7 @@
             _ = await db.run(query,
                 function (err) {
                     if (err) {
-                        alert("Falha ao salvar configurações, tente novamente.");
+                        ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                         console.error(err);
                         return;
                     }
@@ -841,7 +841,7 @@
             _ = await db.run(query,
                 function (err) {
                     if (err) {
-                        alert("Falha ao salvar configurações, tente novamente.");
+                        ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                         console.error(err);
                         return;
                     }
@@ -912,7 +912,7 @@
             _ = await db.run(query,
                 function (err) {
                     if (err) {
-                        alert("Falha ao salvar configurações, tente novamente.");
+                        ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                         console.error(err);
                         return;
                     }
@@ -951,7 +951,7 @@
                 _ = await db.run(query,
                     function (err) {
                         if (err) {
-                            alert("Falha ao salvar configurações, tente novamente.");
+                            ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                             console.error(err);
                             return;
                         }
@@ -988,7 +988,7 @@
             _ = await db.run(query,
                 function (err) {
                     if (err) {
-                        alert("Falha ao salvar configurações, tente novamente.");
+                        ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                         console.error(err);
                         return;
                     }
@@ -1073,11 +1073,11 @@
             _ = await db.run(query,
                 function (err) {
                     if (err) {
-                        alert("Falha ao salvar configurações, tente novamente.");
+                        ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                         console.error(err);
                         return;
                     }
-                    alert('Imagem importada com sucesso!');
+                    ipcRenderer.send('send-alert', 'Imagem importada com sucesso!');
                     getConfigEquipaGeral();
                 });
 
@@ -1144,8 +1144,8 @@
                         img.onload = function () {
                             largura = img.width;
                             altura = img.height;
-                            if (largura > 547 || altura > 547) {
-                                alert("Não pode carregar uma imagem maior que 547x547");
+                            if (largura > 1140 || altura > 620) {
+                                ipcRenderer.send('send-alert', 'Não pode carregar uma imagem maior que 1140x620');;
                                 file_center.value = '';
                                 return;
                             } else {
@@ -1154,14 +1154,15 @@
                                     var newPathFile = "C:/scoreboard/resources/assets/images/temp/config_equipas_geral/";
                                     newPathFile += file.type === 'image/jpeg' ? "logo.jpg" : "logo.png";
                                     var body = {
-                                        imagePrefixo: 'logo',
+                                        imagePrefixo: 'logo' + file.type === 'image/jpeg' ? "logo.jpg" : "logo.png",
                                         path: file.path,
                                         newPath: 'images/temp/config_equipas_geral'
                                     };
                                     ipcRenderer.send('salvarArquivo', body);
                                     saveConfigEquipasGeral(newPathFile);
                                 } else {
-                                    alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                                    // alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                                    ipcRenderer.send('send-alert', 'Por favor, selecione um arquivo de imagem .jpg ou .png');
                                 }
                             }
                         };
@@ -1169,7 +1170,8 @@
 
                     reader.readAsDataURL(arquivoSelecionado);
                 } else {
-                    alert('Por favor, selecione uma imagem válida.');
+                    // alert('Por favor, selecione uma imagem válida.');
+                    ipcRenderer.send('send-alert', 'Por favor, selecione uma imagem válida.');
                     fileInput.value = ''; // Limpar o campo de entrada de arquivo
                     dimensoes.textContent = '';
                 }
@@ -1238,7 +1240,8 @@
                             largura = img.width;
                             altura = img.height;
                             if (largura > 547 || altura > 547) {
-                                alert("Não pode carregar uma imagem maior que 547x547");
+                                // alert("Não pode carregar uma imagem maior que 547x547");
+                                ipcRenderer.send('send-alert', 'Não pode carregar uma imagem maior que 547x547');
                                 file_1.value = '';
                                 return
                             } else {
@@ -1257,7 +1260,8 @@
                                     ipcRenderer.send('salvarArquivo', body);
                                     return;
                                 } else {
-                                    alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                                    // alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                                    ipcRenderer.send('send-alert', 'Por favor, selecione um arquivo de imagem .jpg ou .png');
                                 }
                             }
                         }
@@ -1265,7 +1269,8 @@
 
                     reader.readAsDataURL(arquivoSelecionado);
                 } else {
-                    alert('Por favor, selecione uma imagem válida.');
+                    // alert('Por favor, selecione uma imagem válida.');
+                    ipcRenderer.send('send-alert', 'Por favor, selecione uma imagem válida.');
                     fileInput.value = ''; // Limpar o campo de entrada de arquivo
                     dimensoes.textContent = '';
                 }
@@ -1296,7 +1301,8 @@
                             largura = img.width;
                             altura = img.height;
                             if (largura > 547 || altura > 547) {
-                                alert("Não pode carregar uma imagem maior que 547x547");
+                                // alert("Não pode carregar uma imagem maior que 547x547");
+                                ipcRenderer.send('send-alert', 'Não pode carregar uma imagem maior que 547x547');
                                 file_1.value = '';
                                 return
                             } else {
@@ -1315,7 +1321,8 @@
                                     ipcRenderer.send('salvarArquivo', body);
                                     return;
                                 } else {
-                                    alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                                    // alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                                    ipcRenderer.send('send-alert', 'Por favor, selecione um arquivo de imagem .jpg ou .png');
                                 }
                             }
                         }
@@ -1323,7 +1330,8 @@
 
                     reader.readAsDataURL(arquivoSelecionado);
                 } else {
-                    alert('Por favor, selecione uma imagem válida.');
+                    // alert('Por favor, selecione uma imagem válida.');
+                    ipcRenderer.send('send-alert', 'Por favor, selecione uma imagem válida.');
                     fileInput.value = ''; // Limpar o campo de entrada de arquivo
                     dimensoes.textContent = '';
                 }
@@ -1395,7 +1403,8 @@
                 const newRow = createRow(id, time_id, foto_caminho, camisa, nome, posicao, tabela);
                 table.querySelector("tbody").appendChild(newRow);
             } else {
-                alert("Total máximo de 17 jogados atingido!");
+                // alert("Total máximo de 17 jogados atingido!");
+                ipcRenderer.send('send-alert', 'Total máximo de 17 jogados atingido!');
             }
         }
 
@@ -1516,13 +1525,14 @@
                 newPathFile += origemModalJogador === "time01" ? "time_01/" : "time_02/";
                 newPathFile += file.name;
                 var body = {
-                    imagePrefixo: file.name.toString().replace('.png', '').replace('.jpg', ''),
+                    imagePrefixo: file.name.toString(),
                     path: file.path,
                     newPath: 'images/temp/config_equipas_times_jogadores/' + ((origemModalJogador === "time01") ? "time_01" : "time_02")
                 };
                 ipcRenderer.send('salvarArquivo', body);
             } else {
-                alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                // alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                ipcRenderer.send('send-alert', 'Por favor, selecione um arquivo de imagem .jpg ou .png');
             }
         }
 
@@ -1540,7 +1550,8 @@
 
             if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
             } else {
-                alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                // alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                ipcRenderer.send('send-alert', 'Por favor, selecione um arquivo de imagem .jpg ou .png');
                 return;
             }
 
@@ -1560,7 +1571,8 @@
                 newPathFile += file.name;
                 salvarImagem();
             } else {
-                alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                // alert('Por favor, selecione um arquivo de imagem .jpg ou .png');
+                ipcRenderer.send('send-alert', 'Por favor, selecione um arquivo de imagem .jpg ou .png');
                 return;
             }
 
@@ -1571,7 +1583,8 @@
             nome = document.querySelector('#jogadorNome').value.toString().toUpperCase();
             posicao = document.querySelector('#jogadorPosicao').value.toString().toUpperCase();
             if (camisa == "" || nome == "" || posicao == "") {
-                alert("Por favor, preencha todos os campos!");
+                // alert("Por favor, preencha todos os campos!");
+                ipcRenderer.send('send-alert', 'Por favor, preencha todos os campos!');
                 return;
             }
             addRow(id, time_id, null, camisa, nome, posicao, tabela);

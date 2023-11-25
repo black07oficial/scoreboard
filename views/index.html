@@ -1853,7 +1853,7 @@
         }
         value2 = value_min + ":" + value_sec;
         if (!value1 || !value2) {
-          alert("Preencha todos os campos!");
+          ipcRenderer.send('send-alert-main', "Preencha todos os campos!");
           return;
         }
         if (value1 && value2) {
@@ -1890,7 +1890,7 @@
         }
         value2 = value_min + ":" + value_sec;
         if (!value1 || !value2 || value1 == 0 || value2 == '00:00') {
-          alert("Preencha todos os campos!");
+          ipcRenderer.send('send-alert', 'Preencha todos os campos!');
           return;
         }
         if (value1 && value2) {

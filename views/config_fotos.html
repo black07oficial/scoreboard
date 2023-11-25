@@ -275,7 +275,7 @@
                                 <div class="container-fluid panel-equipe">
                                     <div class="row">
                                         <div class="col-6 panel-equipe-title" style="color: red; margin-top: -24px;">
-                                            Intervalo
+                                            Desconto de Tempo
                                         </div>
                                         <div class="col-6">
                                             <div class="d-flex justify-content-end">
@@ -323,7 +323,7 @@
                                 <div class="container-fluid panel-equipe">
                                     <div class="row">
                                         <div class="col-6 panel-equipe-title" style="color: red;margin-top: -24px;">
-                                            Desconto de tempo
+                                            Intervalo
                                         </div>
                                         <div class="col-6">
                                             <div class="d-flex justify-content-end">
@@ -756,7 +756,7 @@
                 _ = await db.run(query,
                     function (err) {
                         if (err) {
-                            alert("Falha ao salvar configurações, tente novamente.");
+                            ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                             console.error(err);
                             isBuzy = false;
                             reject(err);
@@ -1094,7 +1094,7 @@
             newPathFile += getFileName(caminho_arquivo);
 
             var body = {
-                imagePrefixo: getFileName(caminho_arquivo).toString().replace('.png', '').replace('.jpg', '').replace('.mp4', ''),
+                imagePrefixo: getFileName(caminho_arquivo).toString(),
                 path: caminho_arquivo,
                 newPath: 'images/temp/config_fotos/' + pasta.replace('/', '')
             };
@@ -1242,7 +1242,7 @@
 
 
             } else {
-                alert('Por favor, selecione um arquivo de formato .jpg, .png, .mp4 ou .mov');
+                ipcRenderer.send('send-alert', 'Por favor, selecione um arquivo de formato .jpg, .png, .mp4 ou .mov');
                 return;
             }
         });

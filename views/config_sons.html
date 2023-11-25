@@ -568,7 +568,7 @@
             _ = await db.run(query,
                 function (err) {
                     if (err) {
-                        alert("Falha ao salvar configurações, tente novamente.");
+                        ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                         console.error(err);
                         return;
                     }
@@ -587,14 +587,15 @@
         function fileChange(elem) {
 
             if (!elem.files.length) {
-                alert('Por favor, selecione um arquivo.');
+                ipcRenderer.send('send-alert', 'Por favor, selecione um arquivo');
                 document.querySelector("#" + elem.id.replace('File', '')).value = "Selecione um arquivo";
                 return;
             }
 
             const file = elem.files[0];
             if (!file.type === 'image/mp3') {
-                alert('Por favor, selecione um arquivo de imagem .mp3');
+                // alert('Por favor, selecione um arquivo de imagem .mp3');
+                ipcRenderer.send('send-alert', 'Por favor, selecione um arquivo de .mp3');
                 document.querySelector("#" + elem.id.replace('File', '')).value = "Selecione um arquivo";
                 return;
             }

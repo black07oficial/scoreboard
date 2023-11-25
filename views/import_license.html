@@ -97,23 +97,24 @@
         if (navigator.onLine == false) {
             document.getElementById('internetOn').style.display = 'none';
             document.getElementById('internetOff').style.display = '';
-        }else{
+        } else {
             document.getElementById('internetOn').style.display = '';
             document.getElementById('internetOff').style.display = 'none';
         }
         window.$ = window.jQuery = require('jquery');
         const { ipcRenderer } = require('electron')
         ipcRenderer.on('atualizarLicenca', (event, arg) => {
-            alert(arg);
+            // alert(arg);
+            ipcRenderer.send('send-alert-imp', arg);
             ipcRenderer.send('abrirTelas')
         })
         ipcRenderer.on('encaminhadoEmail', (event, arg) => {
             vue.loading = false;
             vue.email = null;
-            alert(arg);
+            ipcRenderer.send('send-alert-imp', arg);
         })
         ipcRenderer.on('atualizarLicenca-erro', (event, arg) => {
-            alert(arg);
+            ipcRenderer.send('send-alert-imp', arg);
         })
 
         var vue = new Vue({

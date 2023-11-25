@@ -639,7 +639,7 @@
                             });
                         }
                     } catch (error) {
-                        alert('Falha ao salvar configurações, tente novamente.');
+                        ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                     } finally {
                         db.close();
                     }
@@ -649,7 +649,7 @@
                 },
                 async salvar_item() {
                     if (this.edit.width < this.edit.min_width || this.edit.height < this.edit.min_height) {
-                        alert("Dimensões inválidas.");
+                        ipcRenderer.send('send-alert', 'Dimensões inválidas.');
                         return;
                     }
                     let query = `
@@ -675,7 +675,7 @@
                             });
                         });
                     } catch (error) {
-                        alert('Falha ao salvar configurações, tente novamente.');
+                        ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                     } finally {
                         db.close();
                     }

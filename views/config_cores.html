@@ -514,7 +514,8 @@
             _ = await db.run(query,
                 function (err) {
                     if (err) {
-                        alert("Falha ao salvar configurações, tente novamente.");
+                        // alert("Falha ao salvar configurações, tente novamente.");
+                        ipcRenderer.send('send-alert', 'Falha ao salvar configurações, tente novamente.');
                         console.error(err);
                         return;
                     }

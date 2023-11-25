@@ -237,6 +237,33 @@ function createConfigWindow(route) {
     configWindow = null;
   });
 }
+ipcMain.on("send-alert", (event, incomingMessage) => {
+  const options = {
+    type: "none",
+    buttons: ["OK"],
+    title: "Alerta!",
+    message: incomingMessage
+  }
+  dialog.showMessageBox(configWindow, options)
+})
+ipcMain.on("send-alert-imp", (event, incomingMessage) => {
+  const options = {
+    type: "none",
+    buttons: ["OK"],
+    title: "Alerta!",
+    message: incomingMessage
+  }
+  dialog.showMessageBox(importWindow, options)
+})
+ipcMain.on("send-alert-main", (event, incomingMessage) => {
+  const options = {
+    type: "none",
+    buttons: ["OK"],
+    title: "Alerta!",
+    message: incomingMessage
+  }
+  dialog.showMessageBox(firstWindow, options)
+})
 ipcMain.on('closeWindowConfig', (event, arg) => {
   if (arg == true) {
     firstWindow.webContents.reload()
