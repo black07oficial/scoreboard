@@ -1080,7 +1080,11 @@
         function salvarImagem(caminho_arquivo, tabela_id) {
 
             var newPathFile = "C:/scoreboard/resources/assets/images/temp/config_fotos/";
-            // var newPathFile = "../resources/images/temp/config_fotos/";
+            if (caminho_arquivo.includes('hoquei.png')) {
+                var newPathFile = "../resources/images/temp/config_fotos/";
+            }
+            debugger;
+            // 
             var pasta = "";
 
             if (tabela_id === tabelaJogo) {

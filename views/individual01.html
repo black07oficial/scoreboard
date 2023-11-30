@@ -376,7 +376,7 @@
                 });
             });
             _ = await db.serialize(() => {
-                db.all("SELECT * FROM config_equipas_times_jogadores where time_id =" + timeId, (err, rows) => {
+                db.all("SELECT * FROM config_equipas_times_jogadores where time_id =" + timeId+" order by list asc", (err, rows) => {
                     if (err) {
                         console.error(err.message);
                     }

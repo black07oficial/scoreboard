@@ -254,7 +254,8 @@
                                                 <span style="font-weight: bold;">Logo</span>
                                                 <span class="panel-equipe-logo">
                                                     <img id="img-cfg-equipes-t1-logo"
-                                                        src="../resources/images/no-image.jpg" />
+                                                        src="../resources/images/no-image.jpg"
+                                                        style="width: 50px; height: 50px;" />
                                                 </span>
                                                 <div style="width: 100px;">
                                                     <button id="btn-cfg-equipes-t1-importar" class="btn-simples"
@@ -381,7 +382,7 @@
                                                     style="margin-left: 8px; margin-top: -24px; border-radius: 12px;">Exportar</button>
                                                 <button id="btn-equipe-2-import" class="btn-simples"
                                                     style="margin-left: 8px; margin-top: -24px; border-radius: 12px;">Importar</button>
-                                                <input type="file" class="d-none" accept=".txt"
+                                                <input type="file" class="d-none" accept=".json"
                                                     id="input-file-2-import">
                                             </div>
                                         </div>
@@ -393,7 +394,8 @@
                                                 <span style="font-weight: bold;">Logo</span>
                                                 <span class="panel-equipe-logo">
                                                     <img id="img-cfg-equipes-t2-logo"
-                                                        src="../resources/images/no-image.jpg" />
+                                                        src="../resources/images/no-image.jpg"
+                                                        style="width: 50px; height: 50px;" />
                                                 </span>
                                                 <div style="width: 100px;">
                                                     <button id="btn-cfg-equipes-t2-importar" class="btn-simples"
@@ -939,13 +941,14 @@
 
                 const query = `
                     INSERT INTO config_equipas_times_jogadores
-                        (time_id, foto_caminho, nome, camisa, posicao)
+                        (time_id, foto_caminho, nome, camisa, posicao, list)
                     VALUES(
                         ${equipeId},
                         '${foto}',
                         '${nome}',
                         ${camisa},
-                        '${posicao}'
+                        '${posicao}',
+                        '${i}'
                         )`;
 
                 _ = await db.run(query,
@@ -996,7 +999,7 @@
                 });
 
             db.close();
-            ipcRenderer.send('reload');
+            ipcRenderer.send('reload')
         }
 
         document.querySelector('#btn-cfg-equipes-t1-gravar').addEventListener('click', function () {
@@ -1038,6 +1041,7 @@
                 });
             });
             db.close();
+            ipcRenderer.send('reload')
         }
         async function getConfigSetup() {
             var db = new sqlite3.Database('./scoreboard.sqlite');
@@ -1087,7 +1091,9 @@
 
         function loadConfigEquipaGeral() {
             var configuration = configEquipaGeral;
-            document.querySelector('.panel-logo-central img').setAttribute('src', configuration[0]["logo_caminho"]);
+            setTimeout(function () {
+                document.querySelector('.panel-logo-central img').setAttribute('src', configuration[0]["logo_caminho"]);
+            }, 500);
         }
 
         document.querySelector('.panel-logo-central').addEventListener('click', function () {
@@ -1152,9 +1158,9 @@
                                 const file = document.querySelector('#modal-selecionar-logo-central input').files[0];
                                 if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
                                     var newPathFile = "C:/scoreboard/resources/assets/images/temp/config_equipas_geral/";
-                                    newPathFile += file.type === 'image/jpeg' ? "logo.jpg" : "logo.png";
+                                    newPathFile += file.name;
                                     var body = {
-                                        imagePrefixo: 'logo' + file.type === 'image/jpeg' ? "logo.jpg" : "logo.png",
+                                        imagePrefixo: file.name,
                                         path: file.path,
                                         newPath: 'images/temp/config_equipas_geral'
                                     };

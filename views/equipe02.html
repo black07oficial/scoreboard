@@ -582,7 +582,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             adjustStyles();
             adjustZoom();
-            ipcRenderer.send('reload')
+            //ipcRenderer.send('reload')
         });
 
         // Chama a função de ajuste de zoom sempre que a janela for redimensionada
@@ -623,7 +623,7 @@
         }
 
         function loadConfigEquipaTime(equipeId) {
-            document.querySelector("#nome-equipe").value = configEquipaTime[0]["nome"];
+            document.querySelector("#nome-equipe").innerHTML = configEquipaTime[0]["nome"];
             document.querySelector("#img-cfg-equipes-logo").setAttribute('src', configEquipaTime[0]["logo_caminho"]);
         }
 
@@ -637,7 +637,7 @@
         async function getConfigEquipaTimeJogadores(timeId) {
             var db = new sqlite3.Database('./scoreboard.sqlite');
             _ = await db.serialize(() => {
-                db.all("SELECT * FROM config_equipas_times_jogadores where time_id =" + timeId, (err, rows) => {
+                db.all("SELECT * FROM config_equipas_times_jogadores where time_id =" + timeId + " order by list asc", (err, rows) => {
                     if (err) {
                         console.error(err.message);
                     }
@@ -727,28 +727,32 @@
                     let strNome = newStrNome.split(" ");
                     if (strNome.length > 1) {
                         div = `
-                    <div class="row" style="position: absolute; margin-top:-10px;" >
+                    <div class="row" style="position: absolute; margin-top:10px;" >
                         <div class="col-12" style=" font-size:17px; color: yellow;">${camisaTemp}</div>
                         <div class="col-12" style=" font-size:20px; margin-top:2px;">${strNome[0]}</div>
                         <div class="col-12" style=" margin-top:2px;font-size:20px;">${strNome[1]}</div>
                     </div>
                     `
                         nomeFormatado = div;
+                        document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = '';
                         document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = nomeFormatado;
                     } else {
                         div = `
-                    <div class="row" style="position: absolute; margin-top:-10px;">
+                    <div class="row" style="position: absolute; margin-top: 10px;">
                         <div class="col-12" style="font-size:17px; color: yellow;">${camisaTemp}</div>
                         <div class="col-12" style="font-size:20px; margin-top:2px;">${strNome[0]}</div>
                     </div>
                     `
                         nomeFormatado = div;
                         // document.querySelector('#jogador-item-' + index + ' span.player-number').innerHTML = camisa.toString().padStart(2, "0");
+                        document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = '';
                         document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = nomeFormatado;
                     }
 
                     // hasTreinador = true;
                 } else {
+                    document.querySelector('#jogador-item-' + index + ' span.player-number').innerHTML = '';
+                    document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = '';
                     document.querySelector('#jogador-item-' + index + ' span.player-number').innerHTML = camisa.toString().padStart(2, "0");
                     document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = nomeFormatado;
                 }
@@ -815,11 +819,19 @@
 
     <!-- Configuração: Inicio -->
     <script>
+        var TESTE = false;
         ipcRenderer.on('reloadAll', (event, args) => {
+            setTimeout(function () {
+                window.location.reload();
+            }, 100)
             getConfigEquipaTime("2");
             getConfigEquipaTimeJogadores("2");
             getConfigCores();
+            TESTE = true;
         })
+        if (TESTE == true) {
+
+        }
         function StartConfigEquipes() {
             getConfigEquipaTime("2");
         }
@@ -838,4 +850,4 @@
 
 </body>
 
-</html2
+</html>

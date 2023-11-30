@@ -635,7 +635,12 @@
 
             const itemName = getItemName(fileInput.id);
 
-            const audioName = audioDefaultName + ".mp3";
+            var audioName = audioDefaultName;
+            if (audioDefaultName == "horn") {
+                audioName = audioDefaultName + ".wav";
+            } else {
+                audioName = audioDefaultName + ".mp3";
+            }
             inputName.value = audioName;
 
             listaConfiguracoes[itemName]['origem'] = origem_banco;

@@ -108,7 +108,7 @@
         }
 
         #anexoArquivoImagem {
-            width: 80%;
+            width: 100%;
             height: 420px;
         }
 
@@ -383,6 +383,7 @@
 
             // Verifica se o cronômetro chegou ao fim      
             if ((isContagemRegressiva && tempoRestante < 0) || (!isContagemRegressiva && tempoRestante > tempoTotal)) {
+                playAudio('#player-sons', listaConfiguracoesSons['start_timeout']);
                 clearInterval(contador);
                 var min = config_setup_intervalo_min;
                 var seg = config_setup_intervalo_seg;
@@ -392,9 +393,10 @@
                 if (config_setup_intervalo_seg < 10) {
                     seg = "0" + config_setup_intervalo_seg;
                 }
-                playAudio('#player-sons', listaConfiguracoesSons['start_timeout']);
-                document.querySelector('.cronometro').innerHTML = `${min}:${seg}`;
-                ipcRenderer.send("sendCronometroIntervalo", `${min}:${seg}`);
+                setTimeout(function () {
+                    //document.querySelector('.cronometro').innerHTML = `${min}:${seg}`;
+                    ipcRenderer.send("sendCronometroIntervalo", `${min}:${seg}`);
+                }, 2e3);
                 return;
             }
 

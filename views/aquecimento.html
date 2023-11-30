@@ -93,7 +93,7 @@
         }
 
         #anexoArquivoImagem {
-            width: 80%;
+            width: 100%;
             height: 420px;
             object-fit: fill;
             /* height: 90%;
@@ -159,8 +159,21 @@
             </div>
         </div>
     </div>
-
+    <div class="d-none">
+        <audio id="player-sons" controls>
+    </div>
     <script>
+        function playAudio(elemId, filePath) {
+            if (!filePath || typeof filePath === "undefined") {
+                return;
+            }
+            const somAudio = document.querySelector(elemId);
+            somAudio.setAttribute("src", filePath);
+            if (!somAudio.paused) {
+                return;
+            }
+            somAudio.play();
+        }
         setInterval(function () {
             // let painelSuperior = document.querySelector("#painel-superior");
             // let anexoArquivoImagem = document.querySelector("#anexoArquivoImagemSessao");
@@ -288,6 +301,8 @@
         function atualizarCronometro() {
             // Verifica se o cronômetro chegou ao fim      
             if ((isContagemRegressiva && tempoRestante < 0) || (!isContagemRegressiva && tempoRestante > tempoTotal)) {
+                playAudio('#player-sons', listaConfiguracoesSons['start_timeout']);
+
                 clearInterval(contador);
                 var min = config_setup_aquecimento_min
                 var seg = config_setup_aquecimento_seg
@@ -297,9 +312,12 @@
                 if (config_setup_aquecimento_seg < 10) {
                     seg = "0" + config_setup_aquecimento_seg;
                 }
+                setTimeout(function () {
+                    //document.querySelector('.painel-cronometro span.cronometro').innerHTML = `${min}:${seg}`;
+                    ipcRenderer.send("sendCronometroAquecimento", `${min}:${seg}`);
+                }, 2e3)
 
-                document.querySelector('.painel-cronometro span.cronometro').innerHTML = `${min}:${seg}`;
-                ipcRenderer.send("sendCronometroAquecimento", `${min}:${seg}`);
+
                 return;
             }
 
@@ -416,7 +434,37 @@
         }
 
     </script>
+    <script>
+        var listaConfiguracoesSons;
+        async function getConfigSons() {
+            var db = new sqlite3.Database('./scoreboard.sqlite');
+            _ = await db.serialize(() => {
+                db.all("SELECT * FROM config_sons", (err, rows) => {
+                    if (err) {
+                        console.error(err.message);
+                    }
+                    configSons = rows;
+                    setConfigSons();
+                });
+            });
+            db.close();
+        }
 
+        function setConfigSons() {
+
+            listaConfiguracoesSons = {
+                hom: configSons[0]["hom"] ? configSons[0]["hom"] : "",
+                buzzer: configSons[0]["buzzer"] ? configSons[0]["buzzer"] : "",
+                end_period: configSons[0]["end_period"] ? configSons[0]["end_period"] : "",
+                shot_clock: configSons[0]["shot_clock"] ? configSons[0]["shot_clock"] : "",
+                start_timeout: configSons[0]["start_timeout"] ? configSons[0]["start_timeout"] : "",
+                timeout_warning: configSons[0]["timeout_warning"] ? configSons[0]["timeout_warning"] : "",
+                end_timeout: configSons[0]["end_timeout"] ? configSons[0]["end_timeout"] : ""
+            };
+
+            console.log(listaConfiguracoesSons);
+        }
+    </script>
     <!-- Configuracoes: Cores -->
     <script>
 
@@ -574,6 +622,7 @@
             StartConfigEquipes();
             StartConfigCores();
             StartConfigFotos();
+            getConfigSons();
         }
     </script>
 
