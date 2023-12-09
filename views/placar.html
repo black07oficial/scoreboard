@@ -131,7 +131,7 @@
             text-align: center;
             position: absolute;
             padding: 7px;
-            margin-top: 40px;
+            margin-top: 30px;
             border-radius: 10px;
             width: 100px;
         }
@@ -174,8 +174,8 @@
 
         .pontuacao {
             font-family: 'Digital Dismay', sans-serif;
-            font-size: 150px;
-            line-height: 130px;
+            font-size: 180px;
+            line-height: 137px;
             color: #E95023;
         }
 
@@ -271,15 +271,15 @@
 
         .player-number {
             font-family: 'Digital Dismay', sans-serif;
-            font-size: 50px;
-            line-height: 40px;
+            font-size: 70px;
+            line-height: 60px;
             color: white;
         }
 
         .player-hour {
             font-family: 'Digital Dismay', sans-serif;
-            font-size: 50px;
-            line-height: 40px;
+            font-size: 70px;
+            line-height: 60px;
             color: red;
         }
 
@@ -292,7 +292,7 @@
 
         .periodo {
             font-family: 'Digital Display', sans-serif;
-            font-size: 78px;
+            font-size: 84px;
             line-height: 0px;
         }
 
@@ -479,7 +479,7 @@
             </div>
             <div class="d-flex justify-content-center" style="width:33.33333333%; margin-right: 7px; margin-left: 7px;">
                 <div class="d-flex justify-content-center align-items-center" style="width:100%">
-                    <div class="d-flex flex-row justify-content-between" style="width: 100%;">
+                    <div class="d-flex flex-row justify-content-between" style="width: 100%; margin-top: -10px;">
                         <div class="d-flex justify-content-start">
                             <div class="painel-faltas-time-01">
                                 <span class="faltas">00</span>
@@ -487,7 +487,7 @@
                         </div>
                         <div class="painel-periodo d-flex justify-content-center">
                             <div class="periodo-painel">
-                                <div id="label-periodo" class="cobold-bold">Periodo</div>
+                                <div id="label-periodo" class="cobold-bold d-none">Periodo</div>
                                 </br>
                                 <div id="value-periodo" class="periodo" style="text-align: center;">1</div>
                             </div>
@@ -809,26 +809,25 @@
 
                 faltasStyles = {
                     fontFamily: 'Digital Dismay, sans-serif',
-                    fontSize: '80px',
-                    lineHeight: '80px',
+                    fontSize: '97px',
+                    lineHeight: '97px',
                     fontWeight: '100',
                     marginLeft: '4px',
                 };
                 periodoStyles = {
-                    fontSize: "78px",
+                    fontSize: "92px",
                     lineHeight: "0px"
                 }
                 periodoPainelStyles = {
-                    marginTop: "64px"
+                    marginTop: "25px"
                 }
                 painelFaltasStyles = {
-                    backgroundColor: 'rgb(0, 0, 0)',
                     textAlign: 'center',
                     padding: '2px',
                     borderRadius: '5px',
                     marginTop: '70px',
-                    height: '80px',
-                    width: '80px'
+                    height: '100px',
+                    width: '100px'
                 };
                 applyStyles(cronometroElements, cronometroStyles);
                 applyStyles(faltasElements, faltasStyles);
@@ -846,28 +845,27 @@
                     marginBottom: '0px'
                 };
                 periodoStyles = {
-                    fontSize: "100px",
+                    fontSize: "120px",
                     lineHeight: "0px"
                 }
                 periodoPainelStyles = {
-                    marginTop: "54px"
+                    marginTop: "25px"
                 }
                 faltasStyles = {
                     fontFamily: 'Digital Dismay, sans-serif',
-                    fontSize: '100px',
-                    lineHeight: '100px',
+                    fontSize: '110px',
+                    lineHeight: '110px',
                     marginLeft: '4px',
                     fontWeight: '100'
                 };
 
                 painelFaltasStyles = {
-                    backgroundColor: 'rgb(0, 0, 0)',
                     textAlign: 'center',
                     padding: '2px',
                     borderRadius: '5px',
                     marginTop: '60px',
-                    height: '100px',
-                    width: '100px'
+                    height: '110px',
+                    width: '110px'
                 };
                 if (100 / (aspectRatio * 0.5) < 112.6) {
                     applyStyles(cronometroElements, cronometroStyles);
@@ -888,26 +886,25 @@
 
                     faltasStyles = {
                         fontFamily: 'Digital Dismay, sans-serif',
-                        fontSize: '80px',
-                        lineHeight: '80px',
+                        fontSize: '97px',
+                        lineHeight: '97px',
                         marginLeft: '4px',
                         fontWeight: '100'
                     };
                     periodoStyles = {
-                        fontSize: "78px",
+                        fontSize: "92px",
                         lineHeight: "0px"
                     }
                     periodoPainelStyles = {
-                        marginTop: "64px"
+                        marginTop: "25px"
                     }
                     painelFaltasStyles = {
-                        backgroundColor: 'rgb(0, 0, 0)',
                         textAlign: 'center',
                         padding: '2px',
                         borderRadius: '5px',
                         marginTop: '70px',
-                        height: '80px',
-                        width: '80px'
+                        height: '100px',
+                        width: '100px'
                     };
                     applyStyles(cronometroElements, cronometroStyles);
                     applyStyles(faltasElements, faltasStyles);

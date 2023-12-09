@@ -969,7 +969,7 @@
 
         function removerLinha(elem) {
             var rowId = elem.parentElement.parentElement.parentElement.id;
-            if ($('#' + rowId + ' td div div').html() == "hoquei.png") {
+            if ($('#' + rowId + ' td div div').html() == "hoquei.png" || $('#' + rowId + ' td div div').html().includes("ideiasdeletra")) {
                 var jquery = $.confirm({
                     title: 'Atenção!',
                     content: 'Por favor, selecione a senha de administrador para alterar a imagem.' + `

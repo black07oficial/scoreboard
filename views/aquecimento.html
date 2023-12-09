@@ -568,8 +568,10 @@
 
             while (true) {
                 for (let i = 0; i < listaAnexosTemp.length; i++) {
+                    duracao = listaAnexosTemp[i]['duracao'];
                     const anexoAtual = listaAnexosTemp[i];
                     verAnexo(anexoAtual);
+                    console.log(duracao);
                     await sleep(duracao * 1000);
                 }
             }

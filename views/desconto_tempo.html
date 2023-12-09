@@ -427,7 +427,7 @@
                         seg = "0" + config_setup_desconto_seg;
                     }
                     setTimeout(function () {
-                       // document.querySelector('.desconto').innerHTML = `${min}:${seg}`;
+                        // document.querySelector('.desconto').innerHTML = `${min}:${seg}`;
                         ipcRenderer.send("sendCronometroDesconto", `${min}:${seg}`);
                         pausarContagem = true;
                     }, 2e3)
@@ -682,8 +682,10 @@
 
                 while (true) {
                     for (let i = 0; i < listaAnexosTemp.length; i++) {
+                        duracao = listaAnexosTemp[i]['duracao'];
                         const anexoAtual = listaAnexosTemp[i];
                         verAnexo(anexoAtual);
+                        console.log(duracao);
                         await sleep(duracao * 1000);
                     }
                 }

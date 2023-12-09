@@ -1903,83 +1903,100 @@
       document.addEventListener("keydown", function (event) {
 
         if (!event.key || $('#addRowModal1').hasClass('show')) {
+          event.preventDefault();
           return;
         }
 
         if (ckey_team1_score_add_1.includes(event.key)) {
+          event.preventDefault();
           $("#btn-add-gols-time-01").click();
           return;
         }
 
         if (ckey_team1_score_rem_1.includes(event.key)) {
+          event.preventDefault();
           $("#btn-sub-gols-time-01").click();
           return;
         }
 
         if (ckey_team1_fouls_add_1.includes(event.key)) {
+          event.preventDefault();
           $("#btn-add-faltas-time-01").click();
           return;
         }
 
         if (ckey_team1_fouls_rem_1.includes(event.key)) {
+          event.preventDefault();
           $("#btn-sub-faltas-time-01").click();
           return;
         }
 
         if (ckey_shotclock_reset.includes(event.key)) {
+          event.preventDefault();
           resetarTempoAtaque();
           return;
         }
 
         if (ckey_goal_team_1.includes(event.key)) {
+          event.preventDefault();
           return;
         }
 
         if (ckey_goal_team_2.includes(event.key)) {
+          event.preventDefault();
           return;
         }
 
         if (ckey_team2_score_add_1.includes(event.key)) {
+
+          event.preventDefault();
           $("#btn-add-gols-time-02").click();
           return;
         }
 
         if (ckey_team2_score_rem_1.includes(event.key)) {
+          event.preventDefault();
           $("#btn-sub-gols-time-02").click();
           return;
         }
 
         if (ckey_team2_fouls_add_1.includes(event.key)) {
+          event.preventDefault();
           $("#btn-add-faltas-time-02").click();
           return;
         }
 
         if (ckey_team2_fouls_rem_1.includes(event.key)) {
+          event.preventDefault();
           $("#btn-sub-faltas-time-02").click();
           return;
         }
 
         if (ckey_period_add_1.includes(event.key)) {
+          event.preventDefault();
           $("#btn-add-periodo").click();
           return;
         }
 
         if (ckey_period_rem_1.includes(event.key)) {
+          event.preventDefault();
           $("#btn-sub-periodo").click();
           return;
         }
 
         if (ckey_other_clear_value.includes(event.key)) {
+          event.preventDefault();
           return;
         }
 
         if (ckey_other_new_game.includes(event.key)) {
+          event.preventDefault();
           $("#btn-iniciar-partida").click();
           return;
         }
 
         if (ckey_other_hom_sound.includes(event.key)) {
-
+          event.preventDefault();
           if (!listaConfiguracoesSons) {
             return;
           }
@@ -1990,16 +2007,19 @@
         }
 
         if (ckey_other_buzzer_sound.includes(event.key)) {
+          event.preventDefault();
           $("#btn-buzina").click();
           return;
         }
 
         if (ckey_main_start_stop.includes(event.key)) {
+          event.preventDefault();
           $("#btn-start").click();
           return;
         }
 
         if (ckey_main_reset_time.includes(event.key)) {
+          event.preventDefault();
           pausarContagem = false;
           tempoRestante = 0;
           zeraCronometro = true;
@@ -2007,21 +2027,26 @@
         }
 
         if (ckey_main_rem_penalty.includes(event.key)) {
+          event.preventDefault();
           return;
         }
 
         if (ckey_main_timeout_1.includes(event.key)) {
+          event.preventDefault();
           return;
         }
 
         if (ckey_main_timeout_2.includes(event.key)) {
+          event.preventDefault();
           return;
         }
 
         if (ckey_main_show_period.includes(event.key)) {
+          event.preventDefault();
           return;
         }
         if (ckey_visitada_ad.includes(event.key)) {
+          event.preventDefault();
           if (time_1_desconto == 0) {
             $('#check_time1_val1').click();
             return
@@ -2054,6 +2079,7 @@
           return
         }
         if (ckey_visitada_dim.includes(event.key)) {
+          event.preventDefault();
           if (time_1_desconto == 1) {
             if ($('#check_time1_val3').is(':checked')) {
               $('#check_time1_val3').click();
@@ -2102,6 +2128,7 @@
           return
         }
         if (ckey_visitante_ad.includes(event.key)) {
+          event.preventDefault();
           if (time_2_desconto == 0) {
             $('#check_time2_val1').click();
             return
@@ -2134,6 +2161,7 @@
           return
         }
         if (ckey_visitante_dim.includes(event.key)) {
+          event.preventDefault();
           console.log(event.key)
           if (time_2_desconto == 1) {
             if ($('#check_time2_val3').is(':checked')) {
@@ -2379,78 +2407,13 @@
         //   window.tempo_atq_finalizado = false;
         //   tempo_atq = true;
         // }, 150)
-        setInterval(function () {
-          if (pausarContagem) {
-            // console.log(tempoRestante);
-            if (tempoRestante > 59.9) {
-              let minutos = Math.floor(tempoRestante / 60);
-              let segundos = Math.ceil(tempoRestante % 60);
-              if (segundos >= 60 && segundos <= 60.9) {
-                console.log(tempoRestante)
-                minutos++;
-                segundos = 0;
-              }
-              const minutosStr = minutos.toString().padStart(2, "0");
-              const segundosStr = segundos.toString().padStart(2, "0");
-              document.querySelector('.label-time-extra-temp').innerHTML = `${minutosStr}:${segundosStr}`;
-              ipcRenderer.send("alterarCronometro", `${minutosStr}:${segundosStr}`);
-            } else {
-              let segundos = tempoRestante.toFixed(1);
-              const segundosStr = segundos.toString().padStart(2, "0");
-              document.querySelector('.label-time-extra-temp').innerHTML = `${segundosStr.toString().replace('.', ':')}`;
-              ipcRenderer.send("alterarCronometro", `${segundosStr.toString().replace('.', ':')}`);
-            }
-            tempo_atq = false;
-            // if (window.tempo_atq_cont < 10) {
-            tempo_atq_temp = window.tempo_atq_cont;
-            if (window.tempo_atq_cont < 10) {
-              window.tempo_atq_cont = window.tempo_atq_cont.toFixed(1);
-              // if (window.tempo_atq_cont < 10) {
-              $('#label-tempo-ataque').html(window.tempo_atq_cont.toString().replace('.', ':'));
-              $('#input-tempo-ataque').val(window.tempo_atq_cont);
-            } else {
-              tempo_atq_temp = Math.round(window.tempo_atq_cont.toFixed(1)).toFixed(0);
-              // if (window.tempo_atq_cont < 10) {
-              $('#label-tempo-ataque').html(tempo_atq_temp);
-              $('#input-tempo-ataque').val(tempo_atq_temp);
-            }
-            if (window.tempo_atq_cont <= 0) {
-              window.tempo_atq_cont = 0;
-              $('#input-tempo-ataque').val(0);
-              $('#label-tempo-ataque').html('00');
-            }
-            ipcRenderer.send("atualizaAtaque", "aquecimento.html");
 
-            let data = {
-              inputOrigin: '#input-tempo-ataque',
-              pontuacaoFormatada: $('#label-tempo-ataque').html(),
-            }
-            if (secondWindowRoute != "desconto_tempo") {
-              ipcRenderer.send("alterarPontuacaoPlacar", data);
-            }
-          }
-        }, 100)
         contador = setInterval(function () {
           if (zeraCronometro || (isContagemRegressiva && tempoRestante <= 0) || (!isContagemRegressiva && tempoRestante >= tempoTotal)) {
             window.tempo_atq_cont = Math.round(window.tempo_ataque);
             tempoRestante = tempoTotal;
-            if (tempoRestante > 59.9) {
-              let minutos = Math.floor(tempoRestante / 60);
-              let segundos = Math.ceil(tempoRestante % 60);
-              if (segundos >= 60 && segundos <= 60.9) {
-                minutos++;
-                segundos = 0;
-              }
-              const minutosStr = minutos.toString().padStart(2, "0");
-              const segundosStr = segundos.toString().padStart(2, "0");
-              document.querySelector('.label-time-extra-temp').innerHTML = `${minutosStr}:${segundosStr}`;
-              ipcRenderer.send("alterarCronometro", `${minutosStr}:${segundosStr}`);
-            } else {
-              const segundos = tempoRestante.toFixed(1);
-              const segundosStr = segundos.toString().padStart(2, "0");
-              document.querySelector('.label-time-extra-temp').innerHTML = `${segundosStr.toString().replace('.', ':')}`;
-              ipcRenderer.send("alterarCronometro", `${segundosStr.toString().replace('.', ':')}`);
-            }
+            document.querySelector('.label-time-extra-temp').innerHTML = `00:00`;
+            ipcRenderer.send("alterarCronometro", `00:00`);
             console.log(window.tempo_atq_cont);
             $('#label-tempo-ataque').html(window.tempo_ataque);
             $('#input-tempo-ataque').val(window.tempo_ataque);

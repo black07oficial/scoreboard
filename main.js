@@ -582,7 +582,7 @@ ipcMain.on('exportar-t1', async (event, data) => {
   db = new sqlite.Database('scoreboard.sqlite');
   try {
     rows = await new Promise((resolve, reject) => {
-      db.all("SELECT * FROM config_video_foto where tabela_id = 1", (err, rows) => {
+      db.all("SELECT * FROM config_video_foto where tabela_id = 1 order by id", (err, rows) => {
         if (err) {
           reject(err);
         } else {
@@ -609,7 +609,7 @@ ipcMain.on('exportar-t2', async (event, data) => {
   db = new sqlite.Database('scoreboard.sqlite');
   try {
     rows = await new Promise((resolve, reject) => {
-      db.all("SELECT * FROM config_video_foto where tabela_id = 2", (err, rows) => {
+      db.all("SELECT * FROM config_video_foto where tabela_id = 2 order by id", (err, rows) => {
         if (err) {
           reject(err);
         } else {
@@ -636,7 +636,7 @@ ipcMain.on('exportar-t3', async (event, data) => {
   db = new sqlite.Database('scoreboard.sqlite');
   try {
     rows = await new Promise((resolve, reject) => {
-      db.all("SELECT * FROM config_video_foto where tabela_id = 3", (err, rows) => {
+      db.all("SELECT * FROM config_video_foto where tabela_id = 3 order by id", (err, rows) => {
         if (err) {
           reject(err);
         } else {
