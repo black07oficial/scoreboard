@@ -557,7 +557,8 @@ ipcMain.on('exportar-equipe-1', async (event, data) => {
       foto_caminho: element.foto_caminho,
       nome: element.nome,
       camisa: element.camisa,
-      posicao: element.posicao
+      posicao: element.posicao,
+      list: element.list
     }
     json_jogadores.push(dt);
   })
@@ -693,7 +694,8 @@ ipcMain.on('exportar-equipe-2', async (event, data) => {
       foto_caminho: element.foto_caminho,
       nome: element.nome,
       camisa: element.camisa,
-      posicao: element.posicao
+      posicao: element.posicao,
+      list: element.list
     }
     json_jogadores.push(dt);
   })

@@ -639,6 +639,7 @@
         }
 
         function asyncEquipes(equipe, dados) {
+            console.log(dados);
             var sqlite3 = require('sqlite3').verbose();
             var db = new sqlite3.Database('./scoreboard.sqlite');
             var query_times = ``;
@@ -659,30 +660,59 @@
             db.run(query_times, function (err) {
                 console.log(err);
             });
-            dados.jogadores.forEach(item => {
-                var query = `
-                INSERT INTO config_equipas_times_jogadores (
-                    time_id,
-                    foto_caminho,
-                    nome,
-                    camisa,
-                    posicao
-                ) VALUES (
-                    ${id},
-                    '${item.foto_caminho}',
-                    '${item.nome}',
-                    ${item.camisa},
-                    '${item.posicao}'
-                )  
-                `;
-                db.run(query, function (err) {
-                    console.log(err);
-                })
-            });
-            db.close();
-            setTimeout(function () {
-                window.location.reload();
-            }, 500);
+            var finish = 0;
+            const inserirDados = async () => {
+                for (const item of dados.jogadores) {
+                    finish++;
+                    if (!item.list) {
+                        item.list = null;
+                    }
+                    const query = `
+            INSERT INTO config_equipas_times_jogadores (
+                time_id,
+                foto_caminho,
+                nome,
+                camisa,
+                posicao,
+                list
+            ) VALUES (
+                ${id},
+                '${item.foto_caminho}',
+                '${item.nome}',
+                ${item.camisa},
+                '${item.posicao}',
+                ${item.list}
+            )`;
+
+                    console.log(query);
+
+                    try {
+                        await new Promise((resolve, reject) => {
+                            db.run(query, function (err) {
+                                if (err) {
+                                    console.log(err);
+                                    reject(err);
+                                } else {
+                                    resolve();
+                                }
+                            });
+                        });
+                    } catch (error) {
+                        // Trate os erros aqui
+                        console.error(error);
+                    }
+                }
+                if (finish == dados.jogadores.length) {
+                    db.close();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500)
+                }
+            };
+
+            inserirDados();
+            console.log(finish);
+
         }
         var arquivo = document.querySelector('#jogadorFoto');
         var largura = 0;
@@ -940,7 +970,7 @@
                 posicao = removerHtmlSpan(posicao);
 
                 const query = `
-                    INSERT INTO config_equipas_times_jogadores
+                INSERT INTO config_equipas_times_jogadores
                         (time_id, foto_caminho, nome, camisa, posicao, list)
                     VALUES(
                         ${equipeId},
@@ -999,7 +1029,7 @@
                 });
 
             db.close();
-            ipcRenderer.send('reload')
+            ipcRenderer.send('reload');
         }
 
         document.querySelector('#btn-cfg-equipes-t1-gravar').addEventListener('click', function () {
@@ -1041,7 +1071,6 @@
                 });
             });
             db.close();
-            ipcRenderer.send('reload')
         }
         async function getConfigSetup() {
             var db = new sqlite3.Database('./scoreboard.sqlite');
@@ -1086,7 +1115,7 @@
                 });
 
             db.close();
-
+            ipcRenderer.send('reload');
         }
 
         function loadConfigEquipaGeral() {

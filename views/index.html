@@ -1901,101 +1901,101 @@
       });
 
       document.addEventListener("keydown", function (event) {
-
+        console.log(event.key);
         if (!event.key || $('#addRowModal1').hasClass('show')) {
           event.preventDefault();
           return;
         }
 
-        if (ckey_team1_score_add_1.includes(event.key)) {
+        if (ckey_team1_score_add_1.includes(event.key) || ckey_team1_score_add_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-add-gols-time-01").click();
           return;
         }
 
-        if (ckey_team1_score_rem_1.includes(event.key)) {
+        if (ckey_team1_score_rem_1.includes(event.key) || ckey_team1_score_rem_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-sub-gols-time-01").click();
           return;
         }
 
-        if (ckey_team1_fouls_add_1.includes(event.key)) {
+        if (ckey_team1_fouls_add_1.includes(event.key) || ckey_team1_fouls_add_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-add-faltas-time-01").click();
           return;
         }
 
-        if (ckey_team1_fouls_rem_1.includes(event.key)) {
+        if (ckey_team1_fouls_rem_1.includes(event.key) || ckey_team1_fouls_rem_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-sub-faltas-time-01").click();
           return;
         }
 
-        if (ckey_shotclock_reset.includes(event.key)) {
+        if (ckey_shotclock_reset.includes(event.key) || ckey_shotclock_reset.includes(event.key.toLowerCase())) {
           event.preventDefault();
           resetarTempoAtaque();
           return;
         }
 
-        if (ckey_goal_team_1.includes(event.key)) {
+        if (ckey_goal_team_1.includes(event.key) || ckey_goal_team_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           return;
         }
 
-        if (ckey_goal_team_2.includes(event.key)) {
+        if (ckey_goal_team_2.includes(event.key) || ckey_goal_team_2.includes(event.key.toLowerCase())) {
           event.preventDefault();
           return;
         }
 
-        if (ckey_team2_score_add_1.includes(event.key)) {
+        if (ckey_team2_score_add_1.includes(event.key) || ckey_team2_score_add_1.includes(event.key.toLowerCase())) {
 
           event.preventDefault();
           $("#btn-add-gols-time-02").click();
           return;
         }
 
-        if (ckey_team2_score_rem_1.includes(event.key)) {
+        if (ckey_team2_score_rem_1.includes(event.key) || ckey_team2_score_rem_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-sub-gols-time-02").click();
           return;
         }
 
-        if (ckey_team2_fouls_add_1.includes(event.key)) {
+        if (ckey_team2_fouls_add_1.includes(event.key) || ckey_team2_fouls_add_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-add-faltas-time-02").click();
           return;
         }
 
-        if (ckey_team2_fouls_rem_1.includes(event.key)) {
+        if (ckey_team2_fouls_rem_1.includes(event.key) || ckey_team2_fouls_rem_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-sub-faltas-time-02").click();
           return;
         }
 
-        if (ckey_period_add_1.includes(event.key)) {
+        if (ckey_period_add_1.includes(event.key) || ckey_period_add_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-add-periodo").click();
           return;
         }
 
-        if (ckey_period_rem_1.includes(event.key)) {
+        if (ckey_period_rem_1.includes(event.key) || ckey_period_rem_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-sub-periodo").click();
           return;
         }
 
-        if (ckey_other_clear_value.includes(event.key)) {
+        if (ckey_other_clear_value.includes(event.key) || ckey_other_clear_value.includes(event.key.toLowerCase())) {
           event.preventDefault();
           return;
         }
 
-        if (ckey_other_new_game.includes(event.key)) {
+        if (ckey_other_new_game.includes(event.key) || ckey_other_new_game.includes(event.key.toLowerCase())) {
           event.preventDefault();
-          $("#btn-iniciar-partida").click();
+          $("#btn-start").click();
           return;
         }
 
-        if (ckey_other_hom_sound.includes(event.key)) {
+        if (ckey_other_hom_sound.includes(event.key) || ckey_other_hom_sound.includes(event.key.toLowerCase())) {
           event.preventDefault();
           if (!listaConfiguracoesSons) {
             return;
@@ -2006,46 +2006,45 @@
           return;
         }
 
-        if (ckey_other_buzzer_sound.includes(event.key)) {
+        if (ckey_other_buzzer_sound.includes(event.key) || ckey_other_buzzer_sound.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-buzina").click();
           return;
         }
 
-        if (ckey_main_start_stop.includes(event.key)) {
+        if (ckey_main_start_stop.includes(event.key) || ckey_main_start_stop.includes(event.key.toLowerCase())) {
           event.preventDefault();
           $("#btn-start").click();
           return;
         }
 
-        if (ckey_main_reset_time.includes(event.key)) {
+        if (ckey_main_reset_time.includes(event.key) || ckey_main_reset_time.includes(event.key.toLowerCase())) {
           event.preventDefault();
           pausarContagem = false;
-          tempoRestante = 0;
           zeraCronometro = true;
           return;
         }
 
-        if (ckey_main_rem_penalty.includes(event.key)) {
+        if (ckey_main_rem_penalty.includes(event.key) || ckey_main_rem_penalty.includes(event.key.toLowerCase())) {
           event.preventDefault();
           return;
         }
 
-        if (ckey_main_timeout_1.includes(event.key)) {
+        if (ckey_main_timeout_1.includes(event.key) || ckey_main_timeout_1.includes(event.key.toLowerCase())) {
           event.preventDefault();
           return;
         }
 
-        if (ckey_main_timeout_2.includes(event.key)) {
+        if (ckey_main_timeout_2.includes(event.key) || ckey_main_timeout_2.includes(event.key.toLowerCase())) {
           event.preventDefault();
           return;
         }
 
-        if (ckey_main_show_period.includes(event.key)) {
+        if (ckey_main_show_period.includes(event.key) || ckey_main_show_period.includes(event.key.toLowerCase())) {
           event.preventDefault();
           return;
         }
-        if (ckey_visitada_ad.includes(event.key)) {
+        if (ckey_visitada_ad.includes(event.key) || ckey_visitada_ad.includes(event.key.toLowerCase())) {
           event.preventDefault();
           if (time_1_desconto == 0) {
             $('#check_time1_val1').click();
@@ -2078,7 +2077,7 @@
           }
           return
         }
-        if (ckey_visitada_dim.includes(event.key)) {
+        if (ckey_visitada_dim.includes(event.key) || ckey_visitada_dim.includes(event.key.toLowerCase())) {
           event.preventDefault();
           if (time_1_desconto == 1) {
             if ($('#check_time1_val3').is(':checked')) {
@@ -2127,7 +2126,7 @@
           }
           return
         }
-        if (ckey_visitante_ad.includes(event.key)) {
+        if (ckey_visitante_ad.includes(event.key) || ckey_visitante_ad.includes(event.key.toLowerCase())) {
           event.preventDefault();
           if (time_2_desconto == 0) {
             $('#check_time2_val1').click();
@@ -2160,7 +2159,7 @@
           }
           return
         }
-        if (ckey_visitante_dim.includes(event.key)) {
+        if (ckey_visitante_dim.includes(event.key) || ckey_visitante_dim.includes(event.key.toLowerCase())) {
           event.preventDefault();
           console.log(event.key)
           if (time_2_desconto == 1) {
@@ -2340,6 +2339,7 @@
 
       // Define a função que inicia o cronômetro
       function iniciarCronometro(tempo, contagemRegressiva = false) {
+        console.log(tempoRestante);
         pausarContagem = false;
         tempoTotal = tempo;
         isContagemRegressiva = contagemRegressiva;
@@ -2352,9 +2352,8 @@
         }, 700);
         tmp_esp = true;
         if (isContagemRegressiva) {
-          tempoRestante = tempo;
-          if (tempoRestante >= 60) {
-            tempoRestante = tempo;
+          if (tempoRestante <= 0) {
+            tempoRestante = tempo + 10;
           }
         } else {
           tempoRestante = 0;
@@ -2411,7 +2410,7 @@
         contador = setInterval(function () {
           if (zeraCronometro || (isContagemRegressiva && tempoRestante <= 0) || (!isContagemRegressiva && tempoRestante >= tempoTotal)) {
             window.tempo_atq_cont = Math.round(window.tempo_ataque);
-            tempoRestante = tempoTotal;
+            tempoRestante = tempoTotal + 1;
             document.querySelector('.label-time-extra-temp').innerHTML = `00:00`;
             ipcRenderer.send("alterarCronometro", `00:00`);
             console.log(window.tempo_atq_cont);
