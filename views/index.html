@@ -342,6 +342,8 @@
               <div class="text-left d-flex justify-content-around" style="width: 50%;">
                 <button id="btn-add-time-minutes" style="width: 125px; margin-left: -5px; z-index: 99;" type="button"
                   class="custom-button-simple btn-time btn-green bd-r-10"><i class="fa fa-caret-up"></i></button>
+                <button id="btn-add-time-seconds-2" style="width: 125px; margin-left: -5px; z-index: 99;" type="button"
+                  class="custom-button-simple btn-time btn-green bd-r-10"><i class="fa fa-caret-up"></i></button>
                 <button id="btn-add-time-seconds" style="width: 125px; z-index: 99;" type="button"
                   class="custom-button-simple btn-time btn-green bd-r-10"><i class="fa fa-caret-up"></i></button>
               </div>
@@ -396,6 +398,8 @@
             <div class="col-12 d-flex justify-content-center">
               <div class="text-left d-flex justify-content-around" style="width: 50%;">
                 <button id="btn-sub-time-minutes" type="button" class="custom-button-simple btn-time btn-red bd-r-10"
+                  style="width: 125px; margin-left: -5px;"><i class="fa fa-caret-down"></i></button>
+                <button id="btn-sub-time-seconds-2" type="button" class="custom-button-simple btn-time btn-red bd-r-10"
                   style="width: 125px; margin-left: -5px;"><i class="fa fa-caret-down"></i></button>
                 <button id="btn-sub-time-seconds" type="button" style="width: 125px;"
                   class="custom-button-simple btn-time btn-red bd-r-10"><i class="fa fa-caret-down"></i></button>
@@ -1845,6 +1849,10 @@
         }
         value_min = document.getElementById("inputExcMinutos1").value;
         value_sec = document.getElementById("inputExcSegundos1").value;
+        if (value_min === '' || value_sec === '') {
+          ipcRenderer.send('send-alert-main', "Preencha todos os campos!");
+          return;
+        }
         if (value_min < 10) {
           value_min = '0' + value_min;
         }
@@ -1852,7 +1860,7 @@
           value_sec = '0' + value_sec;
         }
         value2 = value_min + ":" + value_sec;
-        if (!value1 || !value2) {
+        if (!value1) {
           ipcRenderer.send('send-alert-main', "Preencha todos os campos!");
           return;
         }
@@ -1887,6 +1895,10 @@
           value_sec = '0' + document.getElementById("inputExcSegundos2").value;
         } else {
           value_sec = document.getElementById("inputExcSegundos2").value;
+        }
+        if (value_min === '' || value_sec === '' || value_min === '0' || value_sec === '0') {
+          ipcRenderer.send('send-alert-main', "Preencha todos os campos!");
+          return;
         }
         value2 = value_min + ":" + value_sec;
         if (!value1 || !value2 || value1 == 0 || value2 == '00:00') {
@@ -2302,6 +2314,25 @@
       document.getElementById('btn-add-time-minutes').addEventListener('click', function () {
 
         tempoRestante += 60;
+        if (pausarContagem) {
+          if (tempoRestante >= 60) {
+            let minutos = Math.floor(tempoRestante / 60);
+            let segundos = Math.floor(tempoRestante % 60);
+            if (segundos >= 60 && segundos <= 60.9) {
+              minutos++;
+              segundos = 0;
+            }
+            const minutosStr = minutos.toString().padStart(2, "0");
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${minutosStr}:${segundosStr}`;
+            ipcRenderer.send("alterarCronometro", `${minutosStr}:${segundosStr}`);
+          } else {
+            const segundos = tempoRestante.toFixed(1);
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${segundosStr.toString().replace('.', ':')}`;
+            ipcRenderer.send("alterarCronometro", `${segundosStr.toString().replace('.', ':')}`);
+          }
+        }
       });
 
       document.getElementById('btn-sub-time-minutes').addEventListener('click', function () {
@@ -2309,10 +2340,48 @@
           return;
         }
         tempoRestante -= 60;
+        if (pausarContagem) {
+          if (tempoRestante >= 60) {
+            let minutos = Math.floor(tempoRestante / 60);
+            let segundos = Math.floor(tempoRestante % 60);
+            if (segundos >= 60 && segundos <= 60.9) {
+              minutos++;
+              segundos = 0;
+            }
+            const minutosStr = minutos.toString().padStart(2, "0");
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${minutosStr}:${segundosStr}`;
+            ipcRenderer.send("alterarCronometro", `${minutosStr}:${segundosStr}`);
+          } else {
+            const segundos = tempoRestante.toFixed(1);
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${segundosStr.toString().replace('.', ':')}`;
+            ipcRenderer.send("alterarCronometro", `${segundosStr.toString().replace('.', ':')}`);
+          }
+        }
       });
 
       document.getElementById('btn-add-time-seconds').addEventListener('click', function () {
         tempoRestante += 1;
+        if (pausarContagem) {
+          if (tempoRestante >= 60) {
+            let minutos = Math.floor(tempoRestante / 60);
+            let segundos = Math.floor(tempoRestante % 60);
+            if (segundos >= 60 && segundos <= 60.9) {
+              minutos++;
+              segundos = 0;
+            }
+            const minutosStr = minutos.toString().padStart(2, "0");
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${minutosStr}:${segundosStr}`;
+            ipcRenderer.send("alterarCronometro", `${minutosStr}:${segundosStr}`);
+          } else {
+            const segundos = tempoRestante.toFixed(1);
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${segundosStr.toString().replace('.', ':')}`;
+            ipcRenderer.send("alterarCronometro", `${segundosStr.toString().replace('.', ':')}`);
+          }
+        }
       });
 
       document.getElementById('btn-sub-time-seconds').addEventListener('click', function () {
@@ -2320,6 +2389,73 @@
           return;
         }
         tempoRestante -= 1;
+        if (pausarContagem) {
+          if (tempoRestante >= 60) {
+            let minutos = Math.floor(tempoRestante / 60);
+            let segundos = Math.floor(tempoRestante % 60);
+            if (segundos >= 60 && segundos <= 60.9) {
+              minutos++;
+              segundos = 0;
+            }
+            const minutosStr = minutos.toString().padStart(2, "0");
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${minutosStr}:${segundosStr}`;
+            ipcRenderer.send("alterarCronometro", `${minutosStr}:${segundosStr}`);
+          } else {
+            const segundos = tempoRestante.toFixed(1);
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${segundosStr.toString().replace('.', ':')}`;
+            ipcRenderer.send("alterarCronometro", `${segundosStr.toString().replace('.', ':')}`);
+          }
+        }
+      });
+      document.getElementById('btn-add-time-seconds-2').addEventListener('click', function () {
+        tempoRestante += 1;
+        if (pausarContagem) {
+          if (tempoRestante >= 60) {
+            let minutos = Math.floor(tempoRestante / 60);
+            let segundos = Math.floor(tempoRestante % 60);
+            if (segundos >= 60 && segundos <= 60.9) {
+              minutos++;
+              segundos = 0;
+            }
+            const minutosStr = minutos.toString().padStart(2, "0");
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${minutosStr}:${segundosStr}`;
+            ipcRenderer.send("alterarCronometro", `${minutosStr}:${segundosStr}`);
+          } else {
+            const segundos = tempoRestante.toFixed(1);
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${segundosStr.toString().replace('.', ':')}`;
+            ipcRenderer.send("alterarCronometro", `${segundosStr.toString().replace('.', ':')}`);
+          }
+        }
+      });
+
+      document.getElementById('btn-sub-time-seconds-2').addEventListener('click', function () {
+        if (tempoRestante <= 0) {
+          return;
+        }
+        tempoRestante -= 1;
+        if (pausarContagem) {
+          if (tempoRestante >= 60) {
+            let minutos = Math.floor(tempoRestante / 60);
+            let segundos = Math.floor(tempoRestante % 60);
+            if (segundos >= 60 && segundos <= 60.9) {
+              minutos++;
+              segundos = 0;
+            }
+            const minutosStr = minutos.toString().padStart(2, "0");
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${minutosStr}:${segundosStr}`;
+            ipcRenderer.send("alterarCronometro", `${minutosStr}:${segundosStr}`);
+          } else {
+            const segundos = tempoRestante.toFixed(1);
+            const segundosStr = segundos.toString().padStart(2, "0");
+            document.querySelector('.label-time-extra-temp').innerHTML = `${segundosStr.toString().replace('.', ':')}`;
+            ipcRenderer.send("alterarCronometro", `${segundosStr.toString().replace('.', ':')}`);
+          }
+        }
       });
 
     </script>
@@ -2341,7 +2477,7 @@
       function iniciarCronometro(tempo, contagemRegressiva = false) {
         console.log(tempoRestante);
         pausarContagem = false;
-        tempoTotal = tempo;
+        tempoRestante = tempo + 1;
         isContagemRegressiva = contagemRegressiva;
         tempo_atq = false;
         tempo_atq_finalizado = false;
@@ -2351,9 +2487,11 @@
           playAudio('#player-sons-at', '../resources/sound/buzzer.mp3', 0.001);
         }, 700);
         tmp_esp = true;
+        console.log('iniciou');
         if (isContagemRegressiva) {
           if (tempoRestante <= 0) {
             tempoRestante = tempo + 10;
+            console.log('tempo restante', tempoRestante);
           }
         } else {
           tempoRestante = 0;
@@ -2362,12 +2500,13 @@
           console.log('dale');
           linhas = document.querySelectorAll('#tableBody1 tr');
           segundos = Array.from(linhas, linha => {
-            var second = formatSecond(linha.children[1].innerHTML)
+            var second = formatSecond(linha.children[1].innerHTML) + 1
             var diferenca = tempoRestante - second;
             console.log(second);
             var decimal = parseFloat('0.' + tempoRestante.toString().split('.')[1]);
             second = Math.round(second);
 
+            console.log('dnfksjd' + second);
             if (tempoRestante == tempo) {
               second = second + decimal + 0.9
             } else {
@@ -2391,7 +2530,7 @@
             second -= 1;
             return second;
           });
-        }, 1e3)
+        }, 0e3)
 
         tempo_atq_temp = window.tempo_atq_cont;
         var decimal = parseFloat('0.' + tempoRestante.toString().split('.')[1]);
@@ -2467,6 +2606,7 @@
           // Calcula os minutos e segundos restantes
           // const minutos = Math.floor(tempoRestante / 60);
           if (tempoRestante >= 60) {
+
             let minutos = Math.floor(tempoRestante / 60);
             let segundos = Math.floor(tempoRestante % 60);
             if (segundos >= 60 && segundos <= 60.9) {
@@ -2485,7 +2625,25 @@
           }
         }
       }
-
+      setInterval(() => {
+        $('#btn-sub-time-seconds-2').css('margin-left', '-200px');
+        $('#btn-add-time-seconds-2').css('margin-left', '-200px');
+        if (tempoRestante < 60) {
+          $('#btn-sub-time-seconds-2').removeClass('d-none');
+          $('#btn-add-time-seconds-2').removeClass('d-none');
+          $('#btn-sub-time-minutes').addClass('d-none');
+          $('#btn-add-time-minutes').addClass('d-none');
+          $('#btn-sub-time-seconds').addClass('d-none');
+          $('#btn-add-time-seconds').addClass('d-none');
+        } else {
+          $('#btn-sub-time-seconds-2').addClass('d-none');
+          $('#btn-add-time-seconds-2').addClass('d-none');
+          $('#btn-sub-time-minutes').removeClass('d-none');
+          $('#btn-add-time-minutes').removeClass('d-none');
+          $('#btn-sub-time-seconds').removeClass('d-none');
+          $('#btn-add-time-seconds').removeClass('d-none');
+        }
+      }, 100);
       function atualizarTempoAtaque() {
         if (!pausarContagem) {
           // if (window.tempo_atq_cont == window.tempo_ataque) {
