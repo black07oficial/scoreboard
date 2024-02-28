@@ -73,6 +73,34 @@
       scrollbar-color: #92652A #EBD7C9;
     }
 
+    @keyframes mover-cima {
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(-100%);
+      }
+    }
+
+    tr.mover-para-cima {
+      animation: mover-cima 0.4s forwards;
+    }
+
+    @keyframes mover-baixo {
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(100%);
+      }
+    }
+
+    tr.mover-para-baixo {
+      animation: mover-baixo 0.4s forwards;
+    }
+
     /* Chrome, Edge and Safari */
     *::-webkit-scrollbar {
       height: 8px;
@@ -529,17 +557,17 @@
                         <div style="text-align: center;"><b>Desconto de Tempo</b></div>
                       </div>
                       <div class="col-12 d-flex " style="gap: 3px; margin-top: 20px;">
-                        <div style="background-color: #148cd1; height: 20px; width: 80%;"></div> <input type="checkbox"
+                        <div style="background-color: #14d15d; height: 20px; width: 80%;"></div> <input type="checkbox"
                           style="accent-color: #000; width: 20px;height: 20px; border-radius:2px;" id="check_time1_val1"
                           onchange="descontoTempo('check_time1_val1', 1);">
                       </div>
                       <div class="col-12 d-flex" style="gap: 3px; margin-top: 20px;">
-                        <div style="background-color: #148cd1;  height: 20px; width: 80%;"></div><input type="checkbox"
+                        <div style="background-color: #14d15d;  height: 20px; width: 80%;"></div><input type="checkbox"
                           style="accent-color: #000; width: 20px;height: 20px; border-radius:2px;" id="check_time1_val2"
                           onchange="descontoTempo('check_time1_val2', 1);">
                       </div>
                       <div class="col-12 d-flex" style="gap: 3px; margin-top: 20px;">
-                        <div style="background-color: #148cd1;  height: 20px; width: 80%;"></div><input type="checkbox"
+                        <div style="background-color: #14d15d;  height: 20px; width: 80%;"></div><input type="checkbox"
                           style="accent-color: #000; width: 20px;height: 20px; border-radius:2px;" id="check_time1_val3"
                           onchange="descontoTempo('check_time1_val3', 1);">
                       </div>
@@ -791,17 +819,17 @@
                     <div class="col-12 d-flex " style="gap: 3px; margin-top: 20px;">
                       <input type="checkbox" style="accent-color: #000; width: 20px;height: 20px; border-radius:2px;"
                         id="check_time2_val1" onchange="descontoTempo('check_time2_val1', 2);">
-                      <div style="background-color: #148cd1; height: 20px; width: 80%;"></div>
+                      <div style="background-color: #14d15d; height: 20px; width: 80%;"></div>
                     </div>
                     <div class="col-12 d-flex" style="gap: 3px; margin-top: 20px;">
                       <input type="checkbox" style="accent-color: #000; width: 20px;height: 20px; border-radius:2px;"
                         id="check_time2_val2" onchange="descontoTempo('check_time2_val2', 2);">
-                      <div style="background-color: #148cd1;  height: 20px; width: 80%;"></div>
+                      <div style="background-color: #14d15d;  height: 20px; width: 80%;"></div>
                     </div>
                     <div class="col-12 d-flex" style="gap: 3px; margin-top: 20px;">
                       <input type="checkbox" style="accent-color: #000; width: 20px;height: 20px; border-radius:2px;"
                         id="check_time2_val3" onchange="descontoTempo('check_time2_val3', 2);">
-                      <div style="background-color: #148cd1;  height: 20px; width: 80%;"></div>
+                      <div style="background-color: #14d15d;  height: 20px; width: 80%;"></div>
                     </div>
                   </div>
                 </div>
@@ -871,10 +899,10 @@
               <label for="value2" class="form-label">Tempo</label>
               <div class="row">
                 <div class="col">
-                  <input type="number" class="form-control" id="inputExcMinutos1" min="0">
+                  <input type="number" class="form-control" id="inputExcMinutos1" min="0" value="0">
                 </div>
                 <div class="col">
-                  <input type="number" class="form-control" id="inputExcSegundos1" min="0">
+                  <input type="number" class="form-control" id="inputExcSegundos1" min="0" value="0">
                 </div>
               </div>
             </div>
@@ -1427,6 +1455,32 @@
         exclusoesLista1 = [];
         document.querySelectorAll('#tableBody1 tr').forEach((row) => {
           let id = 'tableBody1';
+          if (formatSecond(row.children[1].innerHTML) == 0) {
+            rowId = row.id,
+              $("#" + rowId).remove();
+            var indexToRemove = -1;
+            for (let i = 0; i < exclusoesLista1.length; i++) {
+              let excAtual = exclusoesLista1[i];
+              if (excAtual['exclusoes']['tabela'] != listaTabela) {
+                continue;
+              }
+
+              if (excAtual['exclusoes']['rowId'] === rowId) {
+                indexToRemove = i;
+              }
+            }
+            if (indexToRemove != -1) {
+              exclusoesLista1.splice(indexToRemove, 1);
+            }
+
+            let response = {
+              tabela: listaTabela,
+              lista: exclusoesLista1
+            }
+
+            ipcRenderer.send("sendNovaExclusao", response);
+            return
+          }
           let body = [];
           body['exclusoes'] = {
             jogador: row.children[0].innerHTML,
@@ -1445,7 +1499,35 @@
       setInterval(() => {
         exclusoesLista2 = [];
         document.querySelectorAll('#tableBody2 tr').forEach((row) => {
+
           let id = 'tableBody2';
+          
+          if (formatSecond(row.children[1].innerHTML) == 0) {
+            rowId = row.id,
+              $("#" + rowId).remove();
+            var indexToRemove = -1;
+            for (let i = 0; i < exclusoesLista2.length; i++) {
+              let excAtual = exclusoesLista2[i];
+              if (excAtual['exclusoes']['tabela'] != listaTabela) {
+                continue;
+              }
+
+              if (excAtual['exclusoes']['rowId'] === rowId) {
+                indexToRemove = i;
+              }
+            }
+            if (indexToRemove != -1) {
+              exclusoesLista2.splice(indexToRemove, 1);
+            }
+
+            let response = {
+              tabela: listaTabela,
+              lista: exclusoesLista2
+            }
+
+            ipcRenderer.send("sendNovaExclusao", response);
+            return
+          }
           let body = [];
           body['exclusoes'] = {
             jogador: row.children[0].innerHTML,
@@ -1759,22 +1841,44 @@
       let itemsExclusoesTotal1 = 0;
       let itemsExclusoesTotal2 = 0;
       let exclusoesLista = [];
-
       function addRow(table, value1, value2) {
-        // const newRow = document.getElementById(table).insertRow();
-
         var table = document.getElementById(table);
+        var rows = Array.from(table.querySelectorAll("tr"));
         var listaTabela = table.id === "tableBody1" ? "lista-time-1" : "lista-time-2";
         var prefixoLinha = table.id === "tableBody1" ? "excList1Row_" : "excList2Row_";
-
         var novoId = table.id === "tableBody1" ? itemsExclusoesTotal1 : itemsExclusoesTotal2;
 
-        var newRow = table.insertRow();
+        // Cria uma nova linha
+        var newRow = document.createElement('tr');
         newRow.id = prefixoLinha + novoId;
-
-        // Adiciona as células com os valores
         newRow.insertCell(0).innerText = value1;
         newRow.insertCell(1).innerText = value2;
+
+        // Se a tabela estiver vazia, adiciona a nova linha
+        if (rows.length === 0) {
+          table.appendChild(newRow);
+        } else {
+          // Encontra a linha com o maior valor
+
+          let minValue = parseFloat(formatSecond(rows[0].cells[1].innerText));
+          let minRow = rows[0];
+
+          for (let i = 1; i < rows.length; i++) {
+            let rowValue = parseFloat(formatSecond(rows[i].cells[1].innerText));
+            if (formatSecond(rowValue) < formatSecond(minValue)) {
+              minValue = formatSecond(rowValue);
+              minRow = rows[i];
+            }
+          }
+
+          // Se o valor da nova linha for menor que o valor mínimo atual, insere a nova linha antes da linha com o valor mínimo
+          if (formatSecond(value2) < minValue) {
+            table.insertBefore(newRow, minRow);
+          } else {
+            // Caso contrário, adiciona a nova linha no final
+            table.appendChild(newRow);
+          }
+        }
 
         let body = [];
         body['exclusoes'] = {
@@ -1792,8 +1896,14 @@
 
         ipcRenderer.send("sendNovaExclusao", response);
 
+        const div5 = newRow.insertCell(2).innerHTML = `
+            <container class="d-flex flex-column" style="margin-top:-5px">
+                <i class="up fa fa-caret-up" style="font-size: 25px; text-align: center; color: #254f9d; cursor: pointer;" onclick="moverParaCima(this.parentNode.parentNode.parentNode)"></i>
+                <i class="down fa fa-caret-down" style="font-size: 25px; margin-top:-10px; text-align: center;color: #254f9d; cursor: pointer;" onclick="moverParaBaixo(this.parentNode.parentNode.parentNode)"></i>
+            </container>
+        `
         // Adiciona o ícone de excluir e o evento para excluir a linha
-        const deleteCell = newRow.insertCell(2);
+        const deleteCell = newRow.insertCell(3);
         deleteCell.innerHTML = '<button class="btn btn-danger" onclick="removerLinha(this)" style="padding: 1px 8px; font-size: 15px !important; margin-top:-5px;"><i class="fa fa-trash"></i></button>';
 
         if (table.id === "tableBody1") {
@@ -1801,9 +1911,51 @@
         } else {
           itemsExclusoesTotal2++;
         }
-
-        // deleteCell.firstChild.addEventListener("click", () => newRow.remove());
       }
+      // function addRow(table, value1, value2) {
+      //   // const newRow = document.getElementById(table).insertRow();
+
+      //   var table = document.getElementById(table);
+      //   var listaTabela = table.id === "tableBody1" ? "lista-time-1" : "lista-time-2";
+      //   var prefixoLinha = table.id === "tableBody1" ? "excList1Row_" : "excList2Row_";
+
+      //   var novoId = table.id === "tableBody1" ? itemsExclusoesTotal1 : itemsExclusoesTotal2;
+
+      //   var newRow = table.insertRow();
+      //   newRow.id = prefixoLinha + novoId;
+
+      //   // Adiciona as células com os valores
+      //   newRow.insertCell(0).innerText = value1;
+      //   newRow.insertCell(1).innerText = value2;
+
+      //   let body = [];
+      //   body['exclusoes'] = {
+      //     jogador: value1,
+      //     tempo: value2,
+      //     rowId: prefixoLinha + novoId,
+      //     tabela: listaTabela
+      //   };
+
+      //   exclusoesLista.push(body);
+      //   let response = {
+      //     tabela: listaTabela,
+      //     lista: exclusoesLista
+      //   }
+
+      //   ipcRenderer.send("sendNovaExclusao", response);
+
+      //   // Adiciona o ícone de excluir e o evento para excluir a linha
+      //   const deleteCell = newRow.insertCell(2);
+      //   deleteCell.innerHTML = '<button class="btn btn-danger" onclick="removerLinha(this)" style="padding: 1px 8px; font-size: 15px !important; margin-top:-5px;"><i class="fa fa-trash"></i></button>';
+
+      //   if (table.id === "tableBody1") {
+      //     itemsExclusoesTotal1++;
+      //   } else {
+      //     itemsExclusoesTotal2++;
+      //   }
+
+      //   // deleteCell.firstChild.addEventListener("click", () => newRow.remove());
+      // }
 
       function removerLinha(elem) {
         var rowId = elem.parentElement.parentElement.id;
@@ -1912,7 +2064,12 @@
         }
       });
 
+
+
       document.addEventListener("keydown", function (event) {
+        if ($('.modal').hasClass('show')) {
+          return;
+        }
         console.log(event.key);
         if (!event.key || $('#addRowModal1').hasClass('show')) {
           event.preventDefault();
@@ -2221,6 +2378,8 @@
         }
       });
 
+
+
     </script>
 
     <script>
@@ -2230,8 +2389,8 @@
         cronometroAtualModal = cronometroAtualModal.replaceAll(" ", "");
         cronometroAtualModal = cronometroAtualModal.split(":");
 
-        $(elemMinutos).val('');
-        $(elemSegundos).val('');
+        $(elemMinutos).val(0);
+        $(elemSegundos).val(0);
       }
 
       document.getElementById("btn-start").addEventListener("click", async () => {
@@ -2584,7 +2743,31 @@
 
 
       }
+      function moverParaCima(linha) {
+        var anterior = linha.previousElementSibling;
+        if (anterior) {
+          linha.classList.add('mover-para-cima');
+          anterior.classList.add('mover-para-baixo');
+          setTimeout(function () {
+            linha.parentNode.insertBefore(linha, anterior);
+            linha.classList.remove('mover-para-cima');
+            anterior.classList.remove('mover-para-baixo');
+          }, 400);
+        }
+      }
 
+      function moverParaBaixo(linha) {
+        var proximo = linha.nextElementSibling;
+        if (proximo) {
+          linha.classList.add('mover-para-baixo');
+          proximo.classList.add('mover-para-cima');
+          setTimeout(function () {
+            linha.parentNode.insertBefore(proximo, linha);
+            linha.classList.remove('mover-para-baixo');
+            proximo.classList.remove('mover-para-cima');
+          }, 400);
+        }
+      }
       // Define a função que atualiza o cronômetro a cada segundo
       function atualizarCronometroDec() {
         // Verifica se o cronômetro chegou ao fim 

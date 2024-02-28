@@ -381,7 +381,7 @@
         }
 
         .lista-azul {
-            background-color: #148cd1;
+            background-color: #14d15d;
             height: 20px;
             margin-top: 5px;
             width: 60px;
@@ -1073,17 +1073,16 @@
             var tabela = arg['tabela'] === "lista-time-1" ? ".painel-exclusoes-time-01 table" : ".painel-exclusoes-time-02 table";
 
             apagarLinhas(tabela);
-            for (let i = 0; i < arg['lista'].length; i++) {
-
-                let excAtual = arg['lista'][i]['exclusoes'];
-                if (excAtual['tabela'] != arg['tabela']) {
-                    continue;
+            for (let i = 0; i < 2; i++) {
+                if (arg['lista'][i] === undefined) {
+                    return;
                 }
-
-                id = excAtual['rowId'];
+                let excAtual = arg['lista'][i]['exclusoes'];
+                if (excAtual['rowId'] !== undefined) {
+                    id = excAtual['rowId'];
+                }
                 jogador = excAtual['jogador'];
                 tempo = excAtual['tempo'];
-
                 addRow(id, jogador, tempo, tabela);
                 // adjustStyles();
             }
@@ -1112,8 +1111,6 @@
             const table = document.querySelector(tabela);
             const rows = table.querySelectorAll("tr");
             const maxRows = 2;
-
-            // se ainda não tiver 3 linhas, adiciona uma nova no final
             if (rows.length < maxRows) {
                 const newRow = createRow(id, jogador, tempo, tabela);
                 table.querySelector("tbody").appendChild(newRow);
@@ -1123,7 +1120,6 @@
                 const newRow = createRow(id, jogador, tempo, tabela);
                 table.querySelector("tbody").appendChild(newRow);
                 table.querySelector("tbody").removeChild(firstRow);
-                // adjustStyles();
             }
         }
 

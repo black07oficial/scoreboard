@@ -29,7 +29,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
         integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <!-- Configuration Css -->
     <link rel="stylesheet" href="../resources/css/configuration.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
@@ -496,16 +499,147 @@
                 ativaDesativa(value) {
                     if (value == 1) {
                         this.config_monitor_1.show_monitor = !this.config_monitor_1.show_monitor
+                        this.salvar();
                     } else if (value == 2) {
                         this.config_monitor_2.show_monitor = !this.config_monitor_2.show_monitor
                     } else if (value == 3) {
-                        this.config_monitor_3.show_monitor = !this.config_monitor_3.show_monitor
+                        vue.config_monitor_3.show_monitor = !vue.config_monitor_3.show_monitor
+                        var jquery = $.confirm({
+                            title: 'Atenção!',
+                            content: 'Por favor, selecione a senha de administrador para alterar a imagem.' + `
+                                <div style="padding: 4px;">
+                                    <div class="form-group mt-2">
+                                        <input type="password" placeholder="Senha" class="pass form-control" required />
+                                    </div>
+                                </div>`,
+                            type: 'red',
+                            buttons: {
+                                cancel: {
+                                    text: 'Cancelar',
+                                    btnClass: 'btn-danger',
+                                    action: function () {
+                                        vue.config_monitor_3.show_monitor = !vue.config_monitor_3.show_monitor
+                                    }
+                                },
+                                confirm: {
+                                    text: 'Confirmar',
+                                    btnClass: 'btn-success',
+                                    action: function () {
+                                        var alerta = null;
+                                        const pass = document.querySelector('.pass').value
+                                        ipcRenderer.send('validPassword', pass);
+                                        ipcRenderer.on('validPassword', (event, valid) => {
+                                            ipcRenderer.removeAllListeners('validPassword');
+                                            if (valid) {
+                                                vue.config_monitor_3.show_monitor = vue.config_monitor_3.show_monitor
+                                                this.salvar();
+                                                return;
+                                            } else {
+                                                debugger
+                                                alerta = $.alert({
+                                                    title: 'Atenção!',
+                                                    content: 'Senha Incorreta',
+                                                })
+                                                vue.config_monitor_3.show_monitor = !vue.config_monitor_3.show_monitor
+                                            }
+                                        })
+                                    },
+                                },
+                            }
+                        })
                     } else if (value == 4) {
-                        this.config_monitor_4.show_monitor = !this.config_monitor_4.show_monitor
+                        vue.config_monitor_4.show_monitor = !vue.config_monitor_4.show_monitor
+                        var jquery = $.confirm({
+                            title: 'Atenção!',
+                            content: 'Por favor, selecione a senha de administrador para alterar a imagem.' + `
+                                <div style="padding: 4px;">
+                                    <div class="form-group mt-2">
+                                        <input type="password" placeholder="Senha" class="pass form-control" required />
+                                    </div>
+                                </div>`,
+                            type: 'red',
+                            buttons: {
+                                cancel: {
+                                    text: 'Cancelar',
+                                    btnClass: 'btn-danger',
+                                    action: function () {
+                                        vue.config_monitor_4.show_monitor = !vue.config_monitor_4.show_monitor
+                                    }
+                                },
+                                confirm: {
+                                    text: 'Confirmar',
+                                    btnClass: 'btn-success',
+                                    action: function () {
+                                        var alerta = null;
+                                        const pass = document.querySelector('.pass').value
+                                        ipcRenderer.send('validPassword', pass);
+                                        ipcRenderer.on('validPassword', (event, valid) => {
+                                            ipcRenderer.removeAllListeners('validPassword');
+                                            if (valid) {
+                                                vue.config_monitor_4.show_monitor = vue.config_monitor_4.show_monitor
+                                                this.salvar();
+                                                return;
+                                            } else {
+                                                debugger
+                                                alerta = $.alert({
+                                                    title: 'Atenção!',
+                                                    content: 'Senha Incorreta',
+                                                })
+                                                vue.config_monitor_4.show_monitor = !vue.config_monitor_4.show_monitor
+                                            }
+                                        })
+                                    },
+                                },
+                            }
+                        })
                     } else if (value == 5) {
                         this.config_monitor_5.show_monitor = !this.config_monitor_5.show_monitor
+                        var jquery = $.confirm({
+                            title: 'Atenção!',
+                            content: 'Por favor, selecione a senha de administrador para alterar a imagem.' + `
+                                <div style="padding: 4px;">
+                                    <div class="form-group mt-2">
+                                        <input type="password" placeholder="Senha" class="pass form-control" required />
+                                    </div>
+                                </div>`,
+                            type: 'red',
+                            buttons: {
+                                cancel: {
+                                    text: 'Cancelar',
+                                    btnClass: 'btn-danger',
+                                    action: function () {
+                                        vue.config_monitor_5.show_monitor = !vue.config_monitor_5.show_monitor
+                                    }
+                                },
+                                confirm: {
+                                    text: 'Confirmar',
+                                    btnClass: 'btn-success',
+                                    action: function () {
+                                        var alerta = null;
+                                        const pass = document.querySelector('.pass').value
+                                        ipcRenderer.send('validPassword', pass);
+                                        ipcRenderer.on('validPassword', (event, valid) => {
+                                            ipcRenderer.removeAllListeners('validPassword');
+                                            if (valid) {
+                                                vue.config_monitor_5.show_monitor = vue.config_monitor_5.show_monitor
+                                                this.salvar();
+                                                return;
+                                            } else {
+                                                debugger
+                                                alerta = $.alert({
+                                                    title: 'Atenção!',
+                                                    content: 'Senha Incorreta',
+                                                })
+                                                vue.config_monitor_5.show_monitor = !vue.config_monitor_5.show_monitor
+                                            }
+                                        })
+                                    },
+                                },
+                            }
+                        })
+
                     }
-                    this.salvar();
+
                 },
                 changeTela(i, tipo = false) {
                     if (tipo == true) {
