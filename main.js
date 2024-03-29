@@ -7,7 +7,8 @@ let configSerial;
 const path = require('path');
 const url = require('url');
 const fs = require('fs-extra');
-
+const moment = require('moment');
+const crypto = require('crypto');
 var isDebug = false;
 var activeReload = false;
 
@@ -71,6 +72,14 @@ serialNumber(async function (err, value) {
     if (license) {
       json = JSON.parse(license)[0];
       console.log(json);
+    }
+    if (json.data_expiration != undefined && json.data_expiration != null) {
+      var md5 = crypto.createHash('md5');
+      md5.update(moment().format('YYYY-MM-DD HH:mm:ss'));
+      data_atual = md5.digest('hex');
+      if (json.data_expiration === data_atual && json.data_expiration !== configSerial.data_expiration) {
+        app.exit();
+      }
     }
     if (json.serial != configSerial.serial && json.password != configSerial.senha && numero_serial != json.serial) {
       app.exit();
@@ -479,6 +488,9 @@ ipcMain.on("importarLicenca", async (event, data) => {
     }
     if (configLicense.senha === null) {
       db.run(`UPDATE config_serial SET senha = '${json[0].password}'`);
+      if (configLicense.data_expiration === null && json[0].data_expiration !== null && json[0].data_expiration !== undefined && json[0].data_expiration !== '') {
+        db.run(`UPDATE config_serial SET data_expiration = '${json[0].data_expiration}'`);
+      }
       db.close();
       importWindow.webContents.send('atualizarLicenca', 'Licença importada com sucesso!');
     }
