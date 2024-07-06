@@ -78,10 +78,12 @@ serialNumber(async function (err, value) {
       md5.update(moment().format('YYYY-MM-DD HH:mm:ss'));
       data_atual = md5.digest('hex');
       if (configSerial.data_expiration_conf != null && configSerial.data_expiration_conf === json.data_expiration) {
+        dialog.showErrorBox('Alerta!', 'Licença expirada!');
         app.exit();
       }
       if (json.data_expiration === data_atual && json.data_expiration !== configSerial.data_expiration) {
         db.run(`UPDATE config_serial SET data_expiration_conf = '${json.data_expiration}'`);
+        dialog.showErrorBox('Alerta!', 'Licença expirada!');
         app.exit();
       }
     }
