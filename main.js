@@ -74,15 +74,9 @@ serialNumber(async function (err, value) {
       console.log(json);
     }
     if (json.data_expiration != undefined && json.data_expiration != null) {
-      var md5 = crypto.createHash('md5');
-      md5.update(moment().format('YYYY-MM-DD HH:mm:ss'));
-      data_atual = md5.digest('hex');
-      if (configSerial.data_expiration_conf != null && configSerial.data_expiration_conf === json.data_expiration) {
-        dialog.showErrorBox('Alerta!', 'Licença expirada!');
-        app.exit();
-      }
-      if (json.data_expiration === data_atual && json.data_expiration !== configSerial.data_expiration) {
-        db.run(`UPDATE config_serial SET data_expiration_conf = '${json.data_expiration}'`);
+      data_atual = moment();
+      data_vencimento = moment(json.data_expiration);
+      if (data_atual.isSame(data_vencimento) || data_atual.isAfter(data_vencimento)) {
         dialog.showErrorBox('Alerta!', 'Licença expirada!');
         app.exit();
       }
@@ -437,12 +431,12 @@ ipcMain.on("solicitarLicenca", async (event, data) => {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: 'allmodetecnologias@gmail.com',
-      pass: 'olxgortoymyijmpk ',
+      user: 'ideiasdeletra@gmail.com',
+      pass: 'jdgnujxoojrbidex',
     },
   });
   const mailOptions = {
-    from: 'allmodetecnologias@gmail.com',
+    from: 'ideiasdeletra@gmail.com',
     to: 'vitor@ideiasdeletra.com',
     subject: 'Número de Serial',
     text: `Olá, segue a solicitação da licença do scoreboard.
