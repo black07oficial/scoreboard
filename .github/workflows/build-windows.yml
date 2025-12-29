@@ -25,6 +25,9 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Rebuild Native Modules
+        run: npx electron-builder install-app-deps
+
       - name: Build Windows Executable
         run: npm run build
         env:
