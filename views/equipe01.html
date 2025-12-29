@@ -4,850 +4,333 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scoreboard - Ecran Público</title>
+    <title>Scoreboard - Apresentação Equipa 1</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- Custom Css -->
-    <link rel="stylesheet" href="../resources/css/custom.css">
-
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
         crossorigin="anonymous"></script>
 
-    <!-- Popper -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
-        integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.4.js"
-        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
-
     <style>
-        @font-face {
-            font-family: 'Digital Display';
-            src: url('../resources/fonts/digital_display.ttf') format('truetype');
-        }
-
         @font-face {
             font-family: 'Digital Dismay';
             src: url('../resources/fonts/digital_dismay.otf') format('truetype');
         }
 
+        @font-face {
+            font-family: 'Gobold';
+            src: url('../resources/fonts/gobold_bold.otf') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
         body {
-            background-color: black !important;
-            font-family: Gobold;
-        }
-
-        #painel-superior {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             background-color: black;
-            min-height: 100px;
+            font-family: Gobold, Arial, sans-serif;
         }
 
-        .icone-time {
-            height: 70px;
-            margin-top: 12px;
+        .main-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Linha horizontal - centro exato */
+        .horizontal-line {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #555;
+            z-index: 100;
+        }
+
+        /* Linha vertical - centro exato */
+        .vertical-line {
+            position: fixed;
+            left: 50%;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: #555;
+            z-index: 100;
+        }
+
+        /* Logo e nome da equipa - canto superior esquerdo */
+        .team-info {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 25%;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .team-logo {
+            max-width: 60%;
+            max-height: 50%;
+            object-fit: contain;
+        }
+
+        .team-name {
+            font-size: 2.5vw;
+            font-weight: bold;
+            color: white;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        /* Números dos jogadores - entre logo e linha vertical (superior) */
+        .numbers-group-1 {
+            position: fixed;
+            top: 0;
+            left: 25%;
+            width: 25%;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 20px;
+            padding-right: 30px;
+        }
+
+        /* Números dos jogadores - entre logo e linha vertical (inferior) */
+        .numbers-group-2 {
+            position: fixed;
+            top: 50%;
+            left: 25%;
+            width: 25%;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 20px;
+            padding-right: 30px;
+        }
+
+        /* Nomes dos jogadores - à direita da linha vertical (superior) */
+        .names-group-1 {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            right: 0;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
+            padding-left: 30px;
+        }
+
+        /* Nomes dos jogadores - à direita da linha vertical (inferior) */
+        .names-group-2 {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            right: 0;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
+            padding-left: 30px;
         }
 
         .player-number {
             font-family: 'Digital Dismay', sans-serif;
-            font-size: 78px;
-            line-height: 78px;
-            color: yellow;
-        }
-
-        .cronometro {
-            font-family: 'Digital Dismay', sans-serif;
-            font-size: 68px;
-            color: red;
+            font-size: 4.5vw;
+            line-height: 1.5;
+            color: #FFD700;
+            text-align: right;
         }
 
         .player-name {
-            font-size: 28px;
-            line-height: 22px;
+            font-size: 3.5vw;
+            line-height: 1.5;
             color: white;
+            font-family: Gobold, Arial, sans-serif;
         }
-
-        .coach-name {
-            font-size: 28px;
-            color: white;
-            font-weight: bold;
-        }
-
-        .coach-name span {
-            color: yellow;
-        }
-
-        #treinador {
-            color: white !important;
-            padding-left: 4px;
-        }
-
-        /* @media (max-width: 1200px) {
-            .cronometro {
-                font-family: 'Digital Dismay', sans-serif;
-                font-size: 55px;
-                line-height: 55px;
-            }
-
-            .player-name {
-                font-size: 18px;
-                line-height: 12px;
-                color: white;
-            }
-        } */
     </style>
-
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div id="painel-superior" class="row">
-            <div class="col-12">
-                <div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="d-flex justify-content-center align-items-center" style="gap: 20px">
-                                <img id="img-cfg-equipes-logo" class="icone-time" alt="Imagem" />
-                                <span id="nome-equipe"
-                                    style="font-size: 40px !important; font-weight: bold; color: white; font-family: Gobold;">TESTE</span>
-                            </div>
-                        </div>
-                        <div class="col-4 d-flex justify-content-start d-none" style="text-align: center;">
-                            <span class="cronometro">00:00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="main-wrapper">
+        <!-- Linhas da cruz -->
+        <div class="horizontal-line"></div>
+        <div class="vertical-line"></div>
+
+        <!-- Logo e nome da equipa -->
+        <div class="team-info">
+            <img id="img-cfg-equipes-logo" class="team-logo" alt="Logo" src="" />
+            <div id="nome-equipe" class="team-name">EQUIPA</div>
         </div>
-        <div class="row">
-            <div class="col-12" id="jogadores">
-                <div>
 
-                    <div class="row">
-                        <div id="jogador-item-1" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-7" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-13" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        <!-- Números grupo 1 (à esquerda da linha vertical, em cima) -->
+        <div class="numbers-group-1" id="numbers-1"></div>
 
-                    <div class="row">
-                        <div id="jogador-item-2" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-8" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-14" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        <!-- Nomes grupo 1 (à direita da linha vertical, em cima) -->
+        <div class="names-group-1" id="names-1"></div>
 
-                    <div class="row">
-                        <div id="jogador-item-3" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-9" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-15" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        <!-- Números grupo 2 (à esquerda da linha vertical, em baixo) -->
+        <div class="numbers-group-2" id="numbers-2"></div>
 
-                    <div class="row">
-                        <div id="jogador-item-4" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-10" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-16" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div id="jogador-item-5" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-11" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-17" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div id="jogador-item-6" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="jogador-item-12" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number"></span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- <div id="jogador-item-18" class="col-4 d-flex justify-content-start">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="player-number">00</span>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 10px;">
-                                                <span class="player-name">
-                                                    Leandro</br>Felisberto
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> -->
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 d-flex justify-content-center">
-                            <span class="coach-name"><span>Treinador</span><span id="treinador"></span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Nomes grupo 2 (à direita da linha vertical, em baixo) -->
+        <div class="names-group-2" id="names-2"></div>
     </div>
 
     <script>
         window.$ = window.jQuery = require('jquery');
-        function proportionSet(prop, min) {
-            const windowWidth = 720;
-            const windowHeight = 520;
-            const referenceWidth = 1024;
-            const referenceHeight = 768;
-            let proportion1 = windowWidth / referenceWidth;
-            if (windowWidth > 1200 || windowHeight > 800) {
-                proportion1 = windowWidth / (referenceWidth + referenceWidth - 1350);
-            }
-            var widthIncreaseCount = Math.floor((windowWidth - 1200) / 100);
-            var heightIncreaseCount = Math.floor((windowHeight - 800) / 100);
-            var totalReduction = (widthIncreaseCount + heightIncreaseCount) * 9.5;
-            // Se a largura for significativamente maior que a altura, reduza a proporção
-            if (windowWidth > windowHeight * 1.2) {
-                totalReduction += (windowWidth - windowHeight) / 100;
-            }
-            if (totalReduction > 0) {
-                proportion1 -= (totalReduction / 100);
-            }
-            let proportion2 = windowHeight / referenceHeight - 0.4;
-
-            let result = prop * proportion1 * proportion2;
-            result = Math.max(result, min);
-            return result;
-        }
-        function adjustStyles() {
-            const painelSuperior = document.querySelector("#painel-superior");
-            const mtt = document.querySelectorAll(".mtt");
-            const iconeTime = document.querySelectorAll(".icone-time")
-            const playerNumber = document.querySelectorAll(".player-number");
-            const playerName = document.querySelectorAll(".player-name");
-            const cronometro = document.querySelector(".cronometro");
-            const coachName = document.querySelector(".coach-name");
-            const windowWidth = 720;
-            const windowHeight = 540;
-            const referenceWidth = 1224;
-            const referenceHeight = 768;
-            const proportion = windowWidth / referenceWidth;
-            const proportion2 = windowHeight / referenceHeight;
-            painelSuperiorSize = proportionSet(100, 100);
-            cronometroFontSize = proportionSet(60, 50);
-            iconeTimeSize = proportionSet(80, 70);
-            playerNumberSize = proportionSet(60, 48);
-            playerNameSize = proportionSet(20, 25);
-            coachNameSize = proportionSet(25, 24);
-            mttSize = proportionSet(6, 1);
-            if (windowWidth > 3000) {
-                mttSize = proportionSet(5, 1);
-            }
-            if (windowWidth > 7000) {
-                mttSize = proportionSet(4, 1);
-            }
-            mtt.forEach((item) => {
-                // item.style.marginTop = mttSize + "%";
-            })
-            // if (windowWidth > 6000) {
-            //     painelSuperiorSize = proportionSet(150, 100);
-            //     cronometroFontSize = proportionSet(80, 50);
-            //     iconeTimeSize = proportionSet(100, 70);
-            //     playerNumberSize = proportionSet(70, 78);
-            //     playerNameSize = proportionSet(20, 28);
-            //     coachNameSize = proportionSet(40, 28);
-            // }
-            cronometro.style.fontSize = cronometroFontSize + "px";
-            painelSuperior.style.height = painelSuperiorSize + "px";
-            coachName.style.fontSize = coachNameSize + "px";
-            playerNumber.forEach((item) => {
-                item.style.fontSize = playerNumberSize + "px";
-                item.style.lineHeight = playerNumberSize + "px";
-            });
-            playerName.forEach((item) => {
-                item.style.fontSize = playerNameSize + "px";
-            });
-            iconeTime.forEach((item) => {
-                item.style.height = iconeTimeSize + "px";
-            });
-            iconeTime.forEach((item) => {
-                item.style.height = iconeTimeSize + "px";
-            });
-        }
-
-        // Chama a função de ajuste de estilos quando a janela for redimensionada
-        function adjustZoom() {
-            const baseWidth = 720;
-            const baseHeight = 520;
-            const aspectRatio = window.innerWidth / window.innerHeight;
-            const baseAspectRatio = baseWidth / baseHeight;
-            let scale
-            if (aspectRatio < baseAspectRatio) {
-                scale = window.innerWidth / baseWidth;
-                document.body.style.width = '100%';
-            } else {
-                scale = window.innerHeight / baseHeight;
-                document.body.style.width = (100 / (aspectRatio * 0.7)) + '%'; // Ajuste o valor 0.5 conforme necessário
-            }
-            document.body.style.zoom = scale;
-            document.body.style.height = (window.innerHeight / scale) + 'px';
-            document.querySelector('html').style.display = 'flex';
-            document.querySelector('html').style.justifyContent = 'center';
-            // document.body.style.display = "flex";
-            // document.body.style.alignItems = "center";
-        }
-
-
-        // Chama a função de ajuste de zoom quando o DOM estiver pronto
-        document.addEventListener("DOMContentLoaded", function () {
-            adjustStyles();
-            adjustZoom();
-            //ipcRenderer.send('reload')
-        });
-
-        // Chama a função de ajuste de zoom sempre que a janela for redimensionada
-        window.addEventListener("resize", function () {
-            adjustZoom();
-        });
         const { ipcRenderer } = require('electron');
+        const sqlite3 = require('sqlite3').verbose();
 
-        ipcRenderer.on('updateCronometro', function (event, time) {
-            console.log(time);
-            document.querySelector(".cronometro").innerHTML = time;
+        var configEquipaTime = null;
+        var configEquipaJogadores = [];
+
+        function getConfigEquipaTime(id) {
+            var db = new sqlite3.Database('./scoreboard.sqlite');
+            db.all("SELECT * FROM config_equipas_times where id =" + id, function (err, rows) {
+                if (err) {
+                    console.error('Erro ao carregar equipa:', err.message);
+                    db.close();
+                    return;
+                }
+                configEquipaTime = rows;
+                loadConfigEquipaTime();
+                db.close();
+            });
+        }
+
+        function loadConfigEquipaTime() {
+            if (configEquipaTime && configEquipaTime[0]) {
+                var nome = configEquipaTime[0]["abreviatura"] || configEquipaTime[0]["nome"] || "EQUIPA";
+                document.getElementById("nome-equipe").textContent = nome;
+                var logo = configEquipaTime[0]["logo_caminho"];
+                if (logo) {
+                    document.getElementById("img-cfg-equipes-logo").src = logo;
+                }
+            }
+        }
+
+        function getConfigEquipaTimeJogadores(timeId) {
+            var db = new sqlite3.Database('./scoreboard.sqlite');
+            db.all("SELECT * FROM config_equipas_times_jogadores where time_id =" + timeId + " order by id asc", function (err, rows) {
+                if (err) {
+                    console.error('Erro ao carregar jogadores:', err.message);
+                    db.close();
+                    return;
+                }
+                configEquipaJogadores = rows || [];
+                loadConfigEquipaTimeJogadores();
+                db.close();
+            });
+        }
+
+        function loadConfigEquipaTimeJogadores() {
+            var numbers1 = document.getElementById('numbers-1');
+            var names1 = document.getElementById('names-1');
+            var numbers2 = document.getElementById('numbers-2');
+            var names2 = document.getElementById('names-2');
+
+            numbers1.innerHTML = '';
+            names1.innerHTML = '';
+            numbers2.innerHTML = '';
+            names2.innerHTML = '';
+
+            var jogadores = [];
+            for (var i = 0; i < configEquipaJogadores.length; i++) {
+                var j = configEquipaJogadores[i];
+                var pos = (j.posicao || '').toString().toUpperCase().trim();
+                if (pos !== 'TREINADOR' && pos !== 'TÉCNICO' && pos !== 'TECNICO') {
+                    jogadores.push(j);
+                }
+            }
+
+            var total = jogadores.length;
+
+            if (total === 0) {
+                return;
+            }
+
+            // Máximo 7 jogadores: 4 em cima, 3 em baixo
+            if (total > 7) {
+                jogadores = jogadores.slice(0, 7);
+                total = 7;
+            }
+
+            // Primeiros 4 vão para cima, resto vai para baixo
+            var group1Players = jogadores.slice(0, Math.min(4, total));
+            var group2Players = total > 4 ? jogadores.slice(4) : [];
+
+            // Grupo 1 (em cima)
+            for (var i = 0; i < group1Players.length; i++) {
+                numbers1.appendChild(createNumberElement(group1Players[i]));
+                names1.appendChild(createNameElement(group1Players[i]));
+            }
+
+            // Grupo 2 (em baixo)
+            for (var i = 0; i < group2Players.length; i++) {
+                numbers2.appendChild(createNumberElement(group2Players[i]));
+                names2.appendChild(createNameElement(group2Players[i]));
+            }
+        }
+
+        function createNumberElement(jogador) {
+            var div = document.createElement('div');
+            div.className = 'player-number';
+            var camisa = jogador.camisa ? jogador.camisa.toString() : '00';
+            div.textContent = camisa.padStart(2, '0');
+            return div;
+        }
+
+        function createNameElement(jogador) {
+            var div = document.createElement('div');
+            div.className = 'player-name';
+
+            var nomeCompleto = jogador.nome || '';
+            // Mostrar nome completo, capitalizado
+            var nomeFormatado = nomeCompleto.toLowerCase().replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+
+            div.textContent = nomeFormatado;
+            return div;
+        }
+
+        ipcRenderer.on('reloadAll', function (event, args) {
+            getConfigEquipaTime("1");
+            getConfigEquipaTimeJogadores("1");
         });
 
-    </script>
-
-    <!-- Configurações: Variáveis -->
-    <script>
-        const sqlite3 = require('sqlite3').verbose();
-    </script>
-
-    <!-- Configurações: Equipe -->
-    <script>
-
-        var configEquipaTime;
-        async function getConfigEquipaTime(id) {
-            var db = new sqlite3.Database('./scoreboard.sqlite');
-            _ = await db.serialize(() => {
-                db.all("SELECT * FROM config_equipas_times where id =" + id, (err, rows) => {
-                    if (err) {
-                        console.error(err.message);
-                    }
-                    console.log(rows);
-                    configEquipaTime = rows;
-                    loadConfigEquipaTime(id);
-                });
-            });
-            db.close();
-        }
-
-        function loadConfigEquipaTime(equipeId) {
-            document.querySelector("#nome-equipe").innerHTML = configEquipaTime[0]["nome"];
-            document.querySelector("#img-cfg-equipes-logo").setAttribute('src', configEquipaTime[0]["logo_caminho"]);
-        }
-
-    </script>
-
-    <!-- Configuracoes: Equipas/Jogadores -->
-    <script>
-
-        var configEquipaJogadores;
-
-        async function getConfigEquipaTimeJogadores(timeId) {
-            var db = new sqlite3.Database('./scoreboard.sqlite');
-            _ = await db.serialize(() => {
-                db.all("SELECT * FROM config_equipas_times_jogadores where time_id =" + timeId + " order by list asc", (err, rows) => {
-                    if (err) {
-                        console.error(err.message);
-                    }
-                    console.log(rows);
-                    configEquipaJogadores = rows;
-                    loadConfigEquipaTimeJogadores(timeId);
-                });
-            });
-            db.close();
-        }
-
-        function loadConfigEquipaTimeJogadores(equipeId) {
-
-            var hasTreinador = false;
-            let arr_ = configEquipaJogadores;
-            let indexToMove = -1;
-            for (let i = 0; i < arr_.length; i++) {
-                let jogadorAtual = arr_[i];
-
-                id = jogadorAtual['id'];
-                time_id = jogadorAtual['time_id'];
-                foto_caminho = jogadorAtual['foto_caminho'];
-                camisa = jogadorAtual['camisa'];
-                // if (camisa.toString().length == 1) {
-                //     camisa = '00' + camisa;
-                // }
-                // if (camisa.toString().length == 2) {
-                //     camisa = '0' + camisa;
-                // }
-                nome = jogadorAtual['nome'];
-                posicao = jogadorAtual['posicao'];
-                let index = i + 1;
-                let nomeFormatado = '';
-                let partesNome = nome.split(" ");
-                let camisaTemp = posicao.toString().toUpperCase().trim();
-                if (!hasTreinador && (camisaTemp === 'TREINADOR' || camisaTemp === 'TÉCNICO' || camisaTemp === 'TECNICO')) {
-                    indexToMove = i;
-                    break;
-                }
-            }
-            if (indexToMove !== -1) {
-                const jogadorToMove = arr_.splice(indexToMove, 1)[0];
-                arr_.push(jogadorToMove);
-            }
-            if (arr_.length > 12) {
-                $('#jogadores').addClass('d-flex');
-                $('#jogadores').addClass('justify-content-center');
-            } else {
-                $('#jogadores').removeClass('d-flex');
-                $('#jogadores').removeClass('justify-content-center');
-            }
-            for (let i = 0; i < arr_.length; i++) {
-
-                let jogadorAtual = arr_[i];
-
-                id = jogadorAtual['id'];
-                time_id = jogadorAtual['time_id'];
-                foto_caminho = jogadorAtual['foto_caminho'];
-                camisa = jogadorAtual['camisa'];
-                // if (camisa.toString().length == 1) {
-                //     camisa = '00' + camisa;
-                // }
-                // if (camisa.toString().length == 2) {
-                //     camisa = '0' + camisa;
-                // }
-                nome = jogadorAtual['nome'];
-                posicao = jogadorAtual['posicao'];
-                let index = i + 1;
-                let nomeFormatado = '';
-                let partesNome = nome.split(" ");
-                let camisaTemp = posicao.toString().toUpperCase().trim();
-
-                if (partesNome.length > 1) {
-                    div = `
-                    <div class="row">
-                        <div class="col-12" style="font-size:15px;">${partesNome[0]}</div>
-                        <div class="col-12" style="margin-top:-5px;font-size:15px;">${partesNome[1]}</div>
-                    </div>
-                    `
-                    nomeFormatado = div;
-                } else {
-                    nomeFormatado = partesNome[0];
-                }
-                if (!hasTreinador && (camisaTemp === 'TREINADOR' || camisaTemp === 'TÉCNICO' || camisaTemp === 'TECNICO')) {
-                    let newStrNome = nome.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
-
-                    let strNome = newStrNome.split(" ");
-                    if (strNome.length > 1) {
-                        div = `
-                    <div class="row" style="position: absolute; margin-top:10px;" >
-                        <div class="col-12" style=" font-size:17px; color: yellow;">${camisaTemp}</div>
-                        <div class="col-12" style=" font-size:20px; margin-top:2px;">${strNome[0]}</div>
-                        <div class="col-12" style=" margin-top:2px;font-size:20px;">${strNome[1]}</div>
-                    </div>
-                    `
-                        nomeFormatado = div;
-                        document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = '';
-                        document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = nomeFormatado;
-                    } else {
-                        div = `
-                    <div class="row" style="position: absolute; margin-top: 10px;">
-                        <div class="col-12" style="font-size:17px; color: yellow;">${camisaTemp}</div>
-                        <div class="col-12" style="font-size:20px; margin-top:2px;">${strNome[0]}</div>
-                    </div>
-                    `
-                        nomeFormatado = div;
-                        // document.querySelector('#jogador-item-' + index + ' span.player-number').innerHTML = camisa.toString().padStart(2, "0");
-                        document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = '';
-                        document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = nomeFormatado;
-                    }
-
-                    // hasTreinador = true;
-                } else {
-                    document.querySelector('#jogador-item-' + index + ' span.player-number').innerHTML = '';
-                    document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = '';
-                    document.querySelector('#jogador-item-' + index + ' span.player-number').innerHTML = camisa.toString().padStart(2, "0");
-                    document.querySelector('#jogador-item-' + index + ' span.player-name').innerHTML = nomeFormatado;
-                }
-
-            }
-
-            if (!hasTreinador) {
-                document.querySelector('.coach-name').style.display = "none";
-            }
-
-        }
-
-    </script>
-
-    <!-- Configuracoes: Cores -->
-    <script>
-
-        var configCores;
-        async function getConfigCores() {
-            var db = new sqlite3.Database('./scoreboard.sqlite');
-            _ = await db.serialize(() => {
-                db.all("SELECT * FROM config_cores", (err, rows) => {
-                    if (err) {
-                        console.error(err.message);
-                    }
-                    configCores = rows;
-                    setConfigCores();
-                });
-            });
-            db.close();
-        }
-
-        function setConfigCores() {
-
-            console.log(configCores);
-
-            ccores_background = configCores[0]["background"] ? configCores[0]["background"] : "";
-            ccores_number_background = configCores[0]["number_background"] ? configCores[0]["number_background"] : "";
-            ccores_text_borders = configCores[0]["text_borders"] ? configCores[0]["text_borders"] : "";
-            ccores_team1_name = configCores[0]["team1_name"] ? configCores[0]["team1_name"] : "";
-            ccores_team2_name = configCores[0]["team2_name"] ? configCores[0]["team2_name"] : "";
-            ccores_main_clock = configCores[0]["main_clock"] ? configCores[0]["main_clock"] : "";
-            ccores_shot_clock = configCores[0]["shot_clock"] ? configCores[0]["shot_clock"] : "";
-            ccores_shot_clock_expiration_border = configCores[0]["shot_clock_expiration_border"] ? configCores[0]["shot_clock_expiration_border"] : "";
-            ccores_scores = configCores[0]["scores"] ? configCores[0]["scores"] : "";
-            ccores_period = configCores[0]["period"] ? configCores[0]["period"] : "";
-            ccores_shots_on_goal = configCores[0]["shots_on_goal"] ? configCores[0]["shots_on_goal"] : "";
-            ccores_fouls = configCores[0]["fouls"] ? configCores[0]["fouls"] : "";
-            ccores_penalty_player = configCores[0]["penalty_player"] ? configCores[0]["penalty_player"] : "";
-            ccores_penalty_time = configCores[0]["penalty_time"] ? configCores[0]["penalty_time"] : "";
-            ccores_display_screen_active_field = configCores[0]["display_screen_active_field"] ? configCores[0]["display_screen_active_field"] : "";
-
-            document.querySelector(".cronometro").style.color = ccores_main_clock;
-
-            // document.querySelector(".time-01 span.gols").style.color = ccores_scores;
-            // document.querySelector(".time-02 span.gols").style.color = ccores_scores;
-
-            // document.querySelector(".time-01 span.faltas").style.color = ccores_fouls;
-            // document.querySelector(".time-02 span.faltas").style.color = ccores_fouls;
-
-        }
-
-    </script>
-
-    <!-- Configuração: Inicio -->
-    <script>
-        var TESTE = false;
-        ipcRenderer.on('reloadAll', (event, args) => {
-            setTimeout(function () {
-                window.location.reload();
-            }, 100)
-            getConfigEquipaTime("1");
-            getConfigEquipaTimeJogadores("1");
-            getConfigCores();
-            TESTE = true;
-        })
-        if (TESTE == true) {
-
-        }
-        function StartConfigEquipes() {
-            getConfigEquipaTime("1");
-        }
-        function StartConfigCores() {
-            getConfigCores();
-        }
-        function StartConfigEquipesJogadores() {
-            getConfigEquipaTimeJogadores("1");
-        }
         window.onload = function () {
-            StartConfigEquipes();
-            StartConfigCores();
-            StartConfigEquipesJogadores();
-        }
+            getConfigEquipaTime("1");
+            getConfigEquipaTimeJogadores("1");
+        };
     </script>
-
 </body>
 
 </html>

@@ -376,7 +376,7 @@
                 });
             });
             _ = await db.serialize(() => {
-                db.all("SELECT * FROM config_equipas_times_jogadores where time_id =" + timeId+" order by list asc", (err, rows) => {
+                db.all("SELECT * FROM config_equipas_times_jogadores where time_id =" + timeId + " order by id asc", (err, rows) => {
                     if (err) {
                         console.error(err.message);
                     }
@@ -388,59 +388,121 @@
             db.close();
         }
         ipcRenderer.send('reload');
-        async function loadConfigEquipaTimeJogadores(equipeId) {
 
-            while (true) {
+        // Variáveis de controle da apresentação
+        let isPaused = false;
+        let currentIndex = 0;
+        let navigationCommand = null; // 'prev', 'next', ou null
 
-                for (let i = 0; i < configEquipaJogadores.length; i++) {
+        // Handlers IPC para controles de apresentação
+        ipcRenderer.on('presentation-pause', (event) => {
+            isPaused = !isPaused;
+            sendPresentationStatus();
+        });
 
-                    let jogadorAtual = configEquipaJogadores[i];
+        ipcRenderer.on('presentation-prev', (event) => {
+            navigationCommand = 'prev';
+        });
 
-                    id = jogadorAtual['id'];
-                    time_id = jogadorAtual['time_id'];
-                    foto_caminho = jogadorAtual['foto_caminho'];
-                    camisa = jogadorAtual['camisa'];
-                    nome = jogadorAtual['nome'];
-                    posicao = jogadorAtual['posicao'];
+        ipcRenderer.on('presentation-next', (event) => {
+            navigationCommand = 'next';
+        });
 
-                    let index = i + 1;
+        function sendPresentationStatus() {
+            if (configEquipaJogadores) {
+                ipcRenderer.send('presentation-status', {
+                    currentIndex: currentIndex + 1,
+                    total: configEquipaJogadores.length,
+                    isPaused: isPaused,
+                    currentPlayer: configEquipaJogadores[currentIndex]?.nome || '',
+                    teamId: '1'
+                });
+            }
+        }
 
-                    posicao = posicao.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
-                    nome = nome.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
-                    let nomeFormatado = "";
-                    let partesNome = nome.split(" ");
-                    if (partesNome.length > 1) {
-                        nomeFormatado = partesNome[0] + "<div style='margin-top: 5px;'>" + partesNome[1] + "</div>";
-                    } else {
-                        nomeFormatado = nome;
-                    }
+        function displayPlayer(index) {
+            if (!configEquipaJogadores || index < 0 || index >= configEquipaJogadores.length) return;
 
-                    let camisaTemp = posicao.toString().toUpperCase().trim();
-                    camisa = camisa.toString();
-                    if (
-                        camisa.substring(0, 2) == '00' ||
-                        camisa == '' ||
-                        camisa == null ||
-                        camisa == undefined
-                    ) {
-                        document.querySelector('#camisa').style.display = 'none';
-                    } else {
-                        document.querySelector('#camisa').style.display = 'block';
-                    }
-                    document.querySelector('#img-jogador-foto').setAttribute("src", foto_caminho);
-                    document.querySelector('#camisa').innerHTML = camisa;
-                    document.querySelector('#nome').innerHTML = nomeFormatado;
-                    document.querySelector('#posicao').innerHTML = posicao;
-                    tempoSlide = 3 * 1000;
-                    if (config[0].slide_tempo) {
-                        tempoSlide = config[0].slide_tempo * 1000;
-                    }
-                    await sleep(tempoSlide);
+            let jogadorAtual = configEquipaJogadores[index];
 
-                }
+            let foto_caminho = jogadorAtual['foto_caminho'];
+            let camisa = jogadorAtual['camisa'];
+            let nome = jogadorAtual['nome'];
+            let posicao = jogadorAtual['posicao'];
 
+            posicao = posicao.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+            nome = nome.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+            let nomeFormatado = "";
+            let partesNome = nome.split(" ");
+            if (partesNome.length > 1) {
+                nomeFormatado = partesNome[0] + "<div style='margin-top: 5px;'>" + partesNome[1] + "</div>";
+            } else {
+                nomeFormatado = nome;
             }
 
+            camisa = camisa.toString();
+            if (
+                camisa.substring(0, 2) == '00' ||
+                camisa == '' ||
+                camisa == null ||
+                camisa == undefined
+            ) {
+                document.querySelector('#camisa').style.display = 'none';
+            } else {
+                document.querySelector('#camisa').style.display = 'block';
+            }
+            document.querySelector('#img-jogador-foto').setAttribute("src", foto_caminho);
+            document.querySelector('#camisa').innerHTML = camisa;
+            document.querySelector('#nome').innerHTML = nomeFormatado;
+            document.querySelector('#posicao').innerHTML = posicao;
+
+            sendPresentationStatus();
+        }
+
+        async function loadConfigEquipaTimeJogadores(equipeId) {
+            currentIndex = 0;
+
+            // Notificar que apresentação iniciou
+            ipcRenderer.send('presentation-started', { teamId: '1', total: configEquipaJogadores.length });
+
+            while (true) {
+                // Exibir jogador atual
+                displayPlayer(currentIndex);
+
+                // Calcular tempo do slide
+                let tempoSlide = 3 * 1000;
+                if (config[0].slide_tempo) {
+                    tempoSlide = config[0].slide_tempo * 1000;
+                }
+
+                // Esperar com verificação de controles
+                let elapsed = 0;
+                const checkInterval = 100;
+
+                while (elapsed < tempoSlide || isPaused) {
+                    await sleep(checkInterval);
+
+                    // Verificar comandos de navegação
+                    if (navigationCommand === 'prev') {
+                        currentIndex = (currentIndex - 1 + configEquipaJogadores.length) % configEquipaJogadores.length;
+                        navigationCommand = null;
+                        break;
+                    } else if (navigationCommand === 'next') {
+                        currentIndex = (currentIndex + 1) % configEquipaJogadores.length;
+                        navigationCommand = null;
+                        break;
+                    }
+
+                    if (!isPaused) {
+                        elapsed += checkInterval;
+                    }
+                }
+
+                // Se não houve navegação manual, avançar automaticamente
+                if (navigationCommand === null && !isPaused) {
+                    currentIndex = (currentIndex + 1) % configEquipaJogadores.length;
+                }
+            }
         }
 
     </script>

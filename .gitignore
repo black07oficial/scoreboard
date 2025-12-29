@@ -1,4 +1,9 @@
 node_modules/
-node_modules/yauzl/
-node_modules/yauzl/package.json
+dist/
+release/
+build/
+*.sqlite
+*.log
+.env
+.DS_Store
 Scoreboard-win32-x64/

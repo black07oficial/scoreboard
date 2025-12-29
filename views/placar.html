@@ -117,7 +117,7 @@
             min-height: 120px;
             background-color: black;
             text-align: center;
-            padding-top: 60px;
+            padding-top: 30px;
             -webkit-border-bottom-right-radius: 10px;
             -webkit-border-bottom-left-radius: 10px;
             -moz-border-radius-bottomright: 10px;
@@ -437,8 +437,15 @@
                 <p id="edit-cfg-equipes-t1-nome" class="gobold-bold"></p>
             </div>
             <div class="" style="width: 33.33333333%; margin-right: 7px; margin-left: 7px;">
-                <div class="painel-cronometro">
-                    <span class="cronometro">00:00</span>
+                <div class="painel-cronometro" style="overflow: hidden;">
+                    <div class="cronometro-container"
+                        style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                        <span class="cronometro cronometro-minutos"
+                            style="text-align: right; width: 50%; display: inline-block;">00</span>
+                        <span class="cronometro cronometro-separador" style="text-align: center; width: auto;">:</span>
+                        <span class="cronometro cronometro-segundos"
+                            style="text-align: left; width: 50%; display: inline-block;">00</span>
+                    </div>
                 </div>
                 <div class="d-flex justify-content-center" id="ataque">
                     <div class="painel-tempo-ataque">
@@ -1013,7 +1020,16 @@
         });
 
         ipcRenderer.on('updateCronometro', function (event, time) {
-            document.querySelector(".painel-cronometro span.cronometro").innerHTML = time
+            // Separar minutos e segundos para manter os dois pontos fixos no centro
+            const parts = time.split(':');
+            if (parts.length === 2) {
+                document.querySelector(".cronometro-minutos").innerHTML = parts[0];
+                document.querySelector(".cronometro-segundos").innerHTML = parts[1];
+            } else {
+                // Fallback caso o formato seja diferente
+                document.querySelector(".cronometro-minutos").innerHTML = time.substring(0, 2);
+                document.querySelector(".cronometro-segundos").innerHTML = time.substring(3, 5);
+            }
         });
         ipcRenderer.on('atualizaDesconto', function (event, data) {
             for (var i = 1; i <= 3; i++) {
@@ -1066,18 +1082,29 @@
             carregouInfoPartida = true;
         });
 
+        // Converte tempo "MM:SS" para segundos
+        function parseTimeToSeconds(tempo) {
+            const parts = tempo.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
         ipcRenderer.on('addNovaExclusao', function (event, arg) {
             // console.log(arg);
             // return;
 
             var tabela = arg['tabela'] === "lista-time-1" ? ".painel-exclusoes-time-01 table" : ".painel-exclusoes-time-02 table";
 
+            // Ordenar lista por tempo (menor primeiro)
+            const listaOrdenada = arg['lista'].slice().sort((a, b) => {
+                return parseTimeToSeconds(a.exclusoes.tempo) - parseTimeToSeconds(b.exclusoes.tempo);
+            });
+
             apagarLinhas(tabela);
             for (let i = 0; i < 2; i++) {
-                if (arg['lista'][i] === undefined) {
+                if (listaOrdenada[i] === undefined) {
                     return;
                 }
-                let excAtual = arg['lista'][i]['exclusoes'];
+                let excAtual = listaOrdenada[i]['exclusoes'];
                 if (excAtual['rowId'] !== undefined) {
                     id = excAtual['rowId'];
                 }

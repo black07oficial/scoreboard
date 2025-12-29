@@ -499,8 +499,8 @@
                                 <input type="number" class="form-control" id="jogadorCamisa" min="0">
                             </div>
                             <div class="col">
-                                <label for="jogadorPosicao" class="form-label">Posição</label>
-                                <input type="text" class="form-control" id="jogadorPosicao" value="JOGADOR">
+                                <label for="jogadorPosicao" class="form-label">Posição (opcional)</label>
+                                <input type="text" class="form-control" id="jogadorPosicao" placeholder="Ex: JOGADOR">
                                 <!-- <select class="form-select" id="jogadorPosicao">
                                     <option value="JOGADOR">JOGADOR</option>
                                     <option value="TÉCNICO">TÉCNICO</option>
@@ -969,14 +969,13 @@
 
                 const query = `
                 INSERT INTO config_equipas_times_jogadores
-                        (time_id, foto_caminho, nome, camisa, posicao, list)
+                        (time_id, foto_caminho, nome, camisa, posicao)
                     VALUES(
                         ${equipeId},
                         '${foto}',
                         '${nome}',
                         ${camisa},
-                        '${posicao}',
-                        '${i}'
+                        '${posicao}'
                         )`;
 
                 _ = await db.run(query,
@@ -1554,9 +1553,6 @@
         function salvarImagem() {
             const file = document.querySelector('#jogadorFoto').files[0];
             if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
-                var newPathFile = "C:/scoreboard/resources/assets/images/temp/config_equipas_times_jogadores/";
-                newPathFile += origemModalJogador === "time01" ? "time_01/" : "time_02/";
-                newPathFile += file.name;
                 var body = {
                     imagePrefixo: file.name.toString(),
                     path: file.path,
@@ -1599,7 +1595,8 @@
 
             var newPathFile = "";
             if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
-                newPathFile = "C:/scoreboard/resources/assets/images/temp/config_equipas_times_jogadores/";
+                // Usar caminho relativo compatível com qualquer sistema
+                newPathFile = "../resources/assets/images/temp/config_equipas_times_jogadores/";
                 newPathFile += origemModalJogador === "time01" ? "time_01/" : "time_02/";
                 newPathFile += file.name;
                 salvarImagem();
@@ -1615,9 +1612,9 @@
             camisa = document.querySelector('#jogadorCamisa').value.toString().toUpperCase();
             nome = document.querySelector('#jogadorNome').value.toString().toUpperCase();
             posicao = document.querySelector('#jogadorPosicao').value.toString().toUpperCase();
-            if (camisa == "" || nome == "" || posicao == "") {
+            if (camisa == "" || nome == "") {
                 // alert("Por favor, preencha todos os campos!");
-                ipcRenderer.send('send-alert', 'Por favor, preencha todos os campos!');
+                ipcRenderer.send('send-alert', 'Por favor, preencha o número da camisola e o nome!');
                 return;
             }
             addRow(id, time_id, null, camisa, nome, posicao, tabela);

@@ -11,8 +11,10 @@ files:
       - assets/**/*
 win:
   target: nsis
+  icon: icon.ico
 mac:
   target: dmg
+  icon: icon.ico
 linux:
   target: AppImage
-electronVersion: 23.2.1
+electronVersion: 23.3.13

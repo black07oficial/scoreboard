@@ -58,10 +58,10 @@
 
         .cronometro {
             font-family: 'Digital Dismay', sans-serif;
-            font-size: 280px;
-            line-height: 280px;
+            font-size: 40px;
+            line-height: 140px;
             color: rgb(255, 255, 255) !important;
-            margin-top: 32px;
+            margin-top: 16px;
         }
 
         #fundo-ataque {
@@ -142,21 +142,21 @@
             // Calcule a proporção atual em relação ao tamanho de referência
             const proportion = windowWidth / referenceWidth;
             const proportion2 = windowHeight / referenceHeight;
-            cronometroFontSize = proportionSet(80, 170);
+            cronometroFontSize = proportionSet(80, 80);
             fundoAtaqueSize = proportionSet(180, 320);
             fundoAtaqueFontSize = proportionSet(200, 400);
             if (windowWidth > 1720) {
-                cronometroFontSize = proportionSet(60, 170);
+                cronometroFontSize = proportionSet(60, 80);
                 fundoAtaqueSize = proportionSet(120, 320);
                 fundoAtaqueFontSize = proportionSet(100, 280);
             }
             if (windowWidth > 3200) {
-                cronometroFontSize = proportionSet(40, 170);
+                cronometroFontSize = proportionSet(40, 80);
                 fundoAtaqueSize = proportionSet(100, 320);
                 fundoAtaqueFontSize = proportionSet(80, 280);
             }
             if (windowWidth > 4813) {
-                cronometroFontSize = proportionSet(30, 170);
+                cronometroFontSize = proportionSet(30, 80);
                 fundoAtaqueSize = proportionSet(80, 320);
                 fundoAtaqueFontSize = proportionSet(60, 280);
             }

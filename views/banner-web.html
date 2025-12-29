@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard - Banner Web</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Socket.IO Client -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'Digital Display';
+            src: url('/resources/fonts/digital_display.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Digital Dismay';
+            src: url('/resources/fonts/digital_dismay.otf') format('truetype');
+        }
+
+        body {
+            background-color: #129647;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            width: 100% !important;
+        }
+
+        html {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container-fluid {
+            max-width: 900px !important;
+            min-width: 900px !important;
+            overflow-x: hidden;
+        }
+
+        #cronometro {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 52px;
+            line-height: 52px;
+            color: white;
+            margin-top: 32px;
+            margin-left: 16px;
+        }
+
+        #tempo-ataque {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 42px;
+            line-height: 32px;
+            color: #EAE1D0;
+            background-color: #3C3C3B;
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        #periodo {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 28px;
+            line-height: 28px;
+            color: #EAE1D0;
+            margin-left: 4px;
+            margin-top: 8px;
+        }
+
+        .pontuacao {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 48px;
+            line-height: 52px;
+            color: orange;
+        }
+
+        .abreviatura {
+            font-size: 38px;
+            line-height: 48px;
+            color: #EAE1D0;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .faltas {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 48px;
+            line-height: 30px;
+            color: yellow;
+        }
+
+        #fundo-ataque {
+            font-family: 'Digital Dismay', sans-serif;
+            background-color: red;
+            color: white;
+            font-size: 286px;
+            line-height: 286px;
+            border-radius: 8px;
+            height: 300px;
+            width: 100%;
+            padding-top: 22px;
+        }
+
+        #gestor-logo {
+            background-color: white;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+        }
+
+        #logo-time-01 {
+            background-color: transparent;
+            padding: 6px;
+            width: 100px;
+            height: 88px;
+            margin-left: 0px;
+            border: 1px solid transparent;
+            -webkit-border-top-right-radius: 20px;
+            -webkit-border-bottom-right-radius: 20px;
+            -moz-border-radius-topright: 20px;
+            -moz-border-radius-bottomright: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            object-fit: contain;
+            box-sizing: border-box;
+        }
+
+        #logo-time-02 {
+            background-color: transparent;
+            padding: 6px;
+            width: 100px;
+            height: 88px;
+            margin-left: 0px;
+            float: right;
+            border: 1px solid transparent;
+            -webkit-border-top-left-radius: 20px;
+            -webkit-border-bottom-left-radius: 20px;
+            -moz-border-radius-topleft: 20px;
+            -moz-border-radius-bottomleft: 20px;
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+            object-fit: contain;
+            box-sizing: border-box;
+        }
+
+        .fundo-conteudo {
+            background-color: #231F20;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        /* Estilos para exclusões no banner */
+        .banner-exclusoes {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 80px;
+        }
+
+        .banner-exclusao-item {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .banner-player-number {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 28px;
+            line-height: 28px;
+            color: white;
+        }
+
+        .banner-player-time {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 28px;
+            line-height: 28px;
+            color: red;
+        }
+
+        /* Ajuste das linhas */
+        .row-top {
+            margin-bottom: 0px;
+        }
+
+        .row-bottom {
+            margin-top: -5px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="d-flex justify-content-center align-items-center"
+        style="width: 100%; height: 100%; margin: 0px; padding: 0px;">
+        <div class="container-fluid">
+            <div class="row" style="padding: 14px 8px;">
+                <div class="col-2 d-flex justify-content-start">
+                    <div style="width: 100px; height: 100px; overflow: hidden; border-radius: 50%;">
+                        <img id="gestor-logo" src="/resources/images/icon.png" />
+                    </div>
+                </div>
+                <div class="col-9 fundo-conteudo" id="fundo-conteudo-1">
+                    <div class="d-flex justify-content-start">
+                        <img id="logo-time-01" src="/resources/images/no-image.jpg" />
+                        <div class="container" style="margin-right:36px;">
+                            <div class="row row-top">
+                                <div class="col-2">
+                                    <span id="sigla-time1" class="abreviatura">N/D</span>
+                                </div>
+                                <div class="col-2 d-flex justify-content-end">
+                                    <span id="pontuacao-time1" class="pontuacao">00</span>
+                                </div>
+                                <div class="col-4">
+                                    <span id="cronometro">0 1:00</span>
+                                </div>
+                                <div class="col-2 d-flex justify-content-start">
+                                    <span id="pontuacao-time2" class="pontuacao">00</span>
+                                </div>
+                                <div class="col-2 d-flex justify-content-end">
+                                    <span id="sigla-time2" class="abreviatura">N/D</span>
+                                </div>
+                            </div>
+                            <div class="row row-bottom">
+                                <div class="col-4" style="margin-left: -8px;">
+                                    <!-- Exclusões Time 1 + Faltas na mesma linha -->
+                                    <div class="d-flex justify-content-end align-items-start">
+                                        <div class="banner-exclusoes" id="banner-exclusoes-time1"
+                                            style="margin-right: 15px;">
+                                        </div>
+                                        <span id="faltas-time1" class="faltas">00</span>
+                                    </div>
+                                </div>
+                                <div class="col-4 d-flex justify-content-center">
+                                    <span id="tempo-ataque">40</span>
+                                    <span id="periodo">1º</span>
+                                </div>
+                                <div class="col-4">
+                                    <!-- Exclusões Time 2 + Faltas na mesma linha -->
+                                    <div class="d-flex justify-content-start align-items-start">
+                                        <span id="faltas-time2" class="faltas">00</span>
+                                        <div class="banner-exclusoes" id="banner-exclusoes-time2"
+                                            style="margin-left: 15px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1 d-flex justify-content-end fundo-conteudo" id="fundo-conteudo-2">
+                    <div>
+                        <img id="logo-time-02" src="/resources/images/no-image.jpg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Conectar ao Socket.IO
+        const socket = io();
+
+        socket.on('connect', () => {
+            console.log('Conectado ao servidor de streaming');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Desconectado do servidor');
+        });
+
+        // Receber estado completo inicial
+        socket.on('fullState', (state) => {
+            console.log('Estado recebido:', state);
+            applyFullState(state);
+        });
+
+        function applyFullState(state) {
+            console.log('Aplicando estado completo:', state);
+
+            document.querySelector("#cronometro").innerHTML = state.cronometro;
+            document.querySelector("#periodo").innerHTML = state.periodo + 'º';
+            document.querySelector("#pontuacao-time1").innerHTML = state.time01.gols;
+            document.querySelector("#pontuacao-time2").innerHTML = state.time02.gols;
+            document.querySelector("#faltas-time1").innerHTML = state.time01.faltas;
+            document.querySelector("#faltas-time2").innerHTML = state.time02.faltas;
+            document.querySelector("#tempo-ataque").innerHTML = state.tempoAtaque;
+
+            // Visibilidade do tempo de ataque
+            if (typeof state.mostrarAtaque !== 'undefined') {
+                document.querySelector("#tempo-ataque").style.display = state.mostrarAtaque ? '' : 'none';
+            }
+
+            // Siglas dos times
+            if (state.time01.sigla) {
+                document.querySelector("#sigla-time1").innerHTML = state.time01.sigla;
+            }
+            if (state.time02.sigla) {
+                document.querySelector("#sigla-time2").innerHTML = state.time02.sigla;
+            }
+
+            // Logo do gestor
+            if (state.gestorLogo) {
+                document.querySelector("#gestor-logo").src = state.gestorLogo.startsWith('/') ? state.gestorLogo : '/config-logos' + state.gestorLogo;
+            }
+            // Cor de fundo do gestor logo
+            if (state.gestorFundoColor) {
+                document.querySelector("#gestor-logo").style.backgroundColor = state.gestorFundoColor;
+            }
+
+            // Logos dos times
+            if (state.time01.logo) {
+                document.querySelector("#logo-time-01").src = state.time01.logo.startsWith('/') ? state.time01.logo : '/config-logos' + state.time01.logo;
+            }
+            if (state.time02.logo) {
+                document.querySelector("#logo-time-02").src = state.time02.logo.startsWith('/') ? state.time02.logo : '/config-logos' + state.time02.logo;
+            }
+
+            // Cores das camisas (aplica como background e border)
+            if (state.camisaVisitadaColor) {
+                const logo1 = document.querySelector("#logo-time-01");
+                logo1.style.backgroundColor = state.camisaVisitadaColor;
+                logo1.style.borderColor = state.camisaVisitadaColor;
+                console.log('Aplicando cor time 1:', state.camisaVisitadaColor);
+            }
+            if (state.camisaVisitanteColor) {
+                const logo2 = document.querySelector("#logo-time-02");
+                logo2.style.backgroundColor = state.camisaVisitanteColor;
+                logo2.style.borderColor = state.camisaVisitanteColor;
+                console.log('Aplicando cor time 2:', state.camisaVisitanteColor);
+            }
+
+            // Atualizar exclusões
+            updateBannerExclusoes('banner-exclusoes-time1', state.exclusoesTime1);
+            updateBannerExclusoes('banner-exclusoes-time2', state.exclusoesTime2);
+        }
+
+        // Atualizações em tempo real
+        socket.on('updateCronometro', (time) => {
+            document.querySelector("#cronometro").innerHTML = time;
+        });
+
+        socket.on('updatePontuacao', (data) => {
+            switch (data.inputOrigin) {
+                case "#input-periodo":
+                    document.querySelector("#periodo").innerHTML = data.pontuacao + "º";
+                    break;
+                case "#input-gols-time-01":
+                    document.querySelector("#pontuacao-time1").innerHTML = data.pontuacaoFormatada;
+                    break;
+                case "#input-gols-time-02":
+                    document.querySelector("#pontuacao-time2").innerHTML = data.pontuacaoFormatada;
+                    break;
+                case "#input-faltas-time-01":
+                    document.querySelector("#faltas-time1").innerHTML = data.pontuacaoFormatada;
+                    break;
+                case "#input-faltas-time-02":
+                    document.querySelector("#faltas-time2").innerHTML = data.pontuacaoFormatada;
+                    break;
+                case "#input-tempo-ataque":
+                    document.querySelector("#tempo-ataque").innerHTML = data.pontuacaoFormatada.toString().replace('.', ":");
+                    break;
+            }
+        });
+
+        socket.on('updateExclusao', (data) => {
+            console.log('Exclusão recebida:', data);
+            const containerId = data.tabela === "lista-time-1"
+                ? "banner-exclusoes-time1"
+                : "banner-exclusoes-time2";
+            updateBannerExclusoes(containerId, data.lista);
+        });
+
+        socket.on('updateTeamInfo', (data) => {
+            const suffix = data.teamId === '1' ? '1' : '2';
+            if (data.data.sigla) {
+                document.querySelector("#sigla-time" + suffix).innerHTML = data.data.sigla;
+            }
+            if (data.data.logo) {
+                document.querySelector("#logo-time-0" + suffix).src = data.data.logo;
+            }
+        });
+
+        socket.on('updateConfig', (data) => {
+            if (data.type === 'cores') {
+                if (data.data.camisa_visitada_color) {
+                    document.querySelector("#logo-time-01").style.backgroundColor = data.data.camisa_visitada_color;
+                }
+                if (data.data.camisa_visitante_color) {
+                    document.querySelector("#logo-time-02").style.backgroundColor = data.data.camisa_visitante_color;
+                }
+            }
+        });
+
+        // Atualiza visibilidade do tempo de ataque
+        socket.on('updateMostrarAtaque', (mostrar) => {
+            document.querySelector("#tempo-ataque").style.display = mostrar ? '' : 'none';
+        });
+
+        // Recebe configurações completas (logos, cores, siglas)
+        socket.on('updateFullConfig', (config) => {
+            console.log('Config completa recebida:', config);
+
+            // Função para resolver caminho da logo
+            function resolvePath(path) {
+                if (!path) return '';
+                // Se já começa com /, usar diretamente
+                if (path.startsWith('/')) return path;
+                // Senão, adicionar prefixo
+                return '/config-logos' + path;
+            }
+
+            // Logo do gestor
+            if (config.gestorLogo) {
+                document.querySelector("#gestor-logo").src = resolvePath(config.gestorLogo);
+            }
+            // Cor de fundo do gestor logo
+            if (config.gestorFundoColor) {
+                document.querySelector("#gestor-logo").style.backgroundColor = config.gestorFundoColor;
+            }
+
+            // Time 1
+            if (config.time01) {
+                if (config.time01.sigla) {
+                    document.querySelector("#sigla-time1").innerHTML = config.time01.sigla;
+                }
+                if (config.time01.logo) {
+                    document.querySelector("#logo-time-01").src = resolvePath(config.time01.logo);
+                }
+            }
+
+            // Time 2
+            if (config.time02) {
+                if (config.time02.sigla) {
+                    document.querySelector("#sigla-time2").innerHTML = config.time02.sigla;
+                }
+                if (config.time02.logo) {
+                    document.querySelector("#logo-time-02").src = resolvePath(config.time02.logo);
+                }
+            }
+
+            // Cores das camisas (aplicar como borda E background)
+            if (config.camisaVisitadaColor) {
+                const logo1 = document.querySelector("#logo-time-01");
+                logo1.style.backgroundColor = config.camisaVisitadaColor;
+                logo1.style.borderColor = config.camisaVisitadaColor;
+            }
+            if (config.camisaVisitanteColor) {
+                const logo2 = document.querySelector("#logo-time-02");
+                logo2.style.backgroundColor = config.camisaVisitanteColor;
+                logo2.style.borderColor = config.camisaVisitanteColor;
+            }
+        });
+
+        // Função para atualizar exclusões
+        function parseTimeToSeconds(tempo) {
+            const parts = tempo.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+        function updateBannerExclusoes(containerId, lista) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            if (!lista || lista.length === 0) return;
+
+            // Ordenar por tempo (menor primeiro)
+            const listaOrdenada = lista.slice().sort((a, b) => {
+                return parseTimeToSeconds(a.exclusoes.tempo) - parseTimeToSeconds(b.exclusoes.tempo);
+            });
+
+            // Mostrar apenas 1 exclusão (a com menor tempo)
+            if (listaOrdenada.length > 0 && listaOrdenada[0]?.exclusoes) {
+                const exc = listaOrdenada[0].exclusoes;
+                const item = document.createElement('div');
+                item.className = 'banner-exclusao-item';
+                item.innerHTML = `
+                    <span class="banner-player-number">${exc.jogador}</span>
+                    <span class="banner-player-time">${exc.tempo}</span>
+                `;
+                container.appendChild(item);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

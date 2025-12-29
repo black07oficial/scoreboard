@@ -140,10 +140,10 @@
 
         #logo-time-01 {
             background-color: transparent;
-            padding: 12px;
+            padding: 6px;
             width: 100px;
             height: 88px;
-            background-color: #129647;
+            background-color: transparent;
             margin-left: 0px;
             -webkit-border-top-right-radius: 20px;
             -webkit-border-bottom-right-radius: 20px;
@@ -155,10 +155,10 @@
 
         #logo-time-02 {
             background-color: transparent;
-            padding: 12px;
+            padding: 6px;
             width: 100px;
             height: 88px;
-            background-color: #129647;
+            background-color: transparent;
             margin-left: 0px;
             float: right;
             -webkit-border-top-left-radius: 20px;
@@ -175,22 +175,32 @@
             padding-right: 0px;
         }
 
-        .camisa-icone-left {
-            background-color: aqua;
-            border-radius: 10px;
-            height: 18px;
-            width: 18px;
-            float: left;
-            position: absolute;
+        /* Estilos para exclusões no banner */
+        .banner-exclusoes {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 80px;
         }
 
-        .camisa-icone-right {
-            background-color: aqua;
-            border-radius: 10px;
-            height: 18px;
-            width: 18px;
-            float: right;
-            position: absolute;
+        .banner-exclusao-item {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .banner-player-number {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 28px;
+            line-height: 28px;
+            color: white;
+        }
+
+        .banner-player-time {
+            font-family: 'Digital Dismay', sans-serif;
+            font-size: 28px;
+            line-height: 28px;
+            color: red;
         }
     </style>
 
@@ -230,15 +240,12 @@
                             </div>
                             <div class="row">
                                 <div class="col-4" style="margin-left: -8px;">
-                                    <div class="row">
-                                        <div class="col-10 d-flex justify-content-center">
-                                            <div class="camisa-icone-left"></div>
+                                    <!-- Exclusões Time 1 + Faltas na mesma linha -->
+                                    <div class="d-flex justify-content-end align-items-start">
+                                        <div class="banner-exclusoes" id="banner-exclusoes-time1"
+                                            style="margin-right: 15px;">
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 d-flex justify-content-end">
-                                            <span id="faltas-time1" class="faltas">00</span>
-                                        </div>
+                                        <span id="faltas-time1" class="faltas">00</span>
                                     </div>
                                 </div>
                                 <div class="col-4 d-flex justify-content-center">
@@ -246,12 +253,13 @@
                                     <span id="periodo">1º</span>
                                 </div>
                                 <div class="col-4">
-                                    <div class="row">
-                                        <div class="col-10 d-flex justify-content-end">
-                                            <div class="camisa-icone-right"></div>
+                                    <!-- Exclusões Time 2 + Faltas na mesma linha -->
+                                    <div class="d-flex justify-content-start align-items-start">
+                                        <span id="faltas-time2" class="faltas">00</span>
+                                        <div class="banner-exclusoes" id="banner-exclusoes-time2"
+                                            style="margin-left: 15px;">
                                         </div>
                                     </div>
-                                    <span id="faltas-time2" class="faltas" style="margin-right: 8px;">00</span>
                                 </div>
                             </div>
                         </div>
@@ -351,6 +359,45 @@
         ipcRenderer.on('updateCronometro', function (event, time) {
             document.querySelector("#cronometro").innerHTML = time;
         });
+
+        // Converte tempo "MM:SS" para segundos
+        function parseTimeToSeconds(tempo) {
+            const parts = tempo.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+        // Handler para exclusões
+        ipcRenderer.on('addNovaExclusao', function (event, arg) {
+            var containerId = arg['tabela'] === "lista-time-1"
+                ? "banner-exclusoes-time1"
+                : "banner-exclusoes-time2";
+
+            updateBannerExclusoes(containerId, arg['lista']);
+        });
+
+        function updateBannerExclusoes(containerId, lista) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            // Ordenar lista por tempo (menor primeiro)
+            const listaOrdenada = lista.slice().sort((a, b) => {
+                return parseTimeToSeconds(a.exclusoes.tempo) - parseTimeToSeconds(b.exclusoes.tempo);
+            });
+
+            // Mostrar apenas 1 exclusão (a com menor tempo)
+            if (listaOrdenada.length > 0 && listaOrdenada[0]?.exclusoes) {
+                const exc = listaOrdenada[0].exclusoes;
+                const item = document.createElement('div');
+                item.className = 'banner-exclusao-item';
+                item.innerHTML = `
+                    <span class="banner-player-number">${exc.jogador}</span>
+                    <span class="banner-player-time">${exc.tempo}</span>
+                `;
+                container.appendChild(item);
+            }
+        }
 
     </script>
 
@@ -501,8 +548,9 @@
             document.querySelector("#sigla-time1").style.color = configBannerCores[0]["equipa_nome_color"] ? configBannerCores[0]["equipa_nome_color"] : "";
             document.querySelector("#sigla-time2").style.color = configBannerCores[0]["equipa_nome_color"] ? configBannerCores[0]["equipa_nome_color"] : "";
 
-            document.querySelector(".camisa-icone-left").style.backgroundColor = configBannerCores[0]["camisa_visitada_color"] ? configBannerCores[0]["camisa_visitada_color"] : "";
-            document.querySelector(".camisa-icone-right").style.backgroundColor = configBannerCores[0]["camisa_visitante_color"] ? configBannerCores[0]["camisa_visitante_color"] : "";
+            // Cores no fundo dos containers de logo (substitui a área verde pela cor do time)
+            document.querySelector("#logo-time-01").style.backgroundColor = configBannerCores[0]["camisa_visitada_color"] ? configBannerCores[0]["camisa_visitada_color"] : "transparent";
+            document.querySelector("#logo-time-02").style.backgroundColor = configBannerCores[0]["camisa_visitante_color"] ? configBannerCores[0]["camisa_visitante_color"] : "transparent";
 
             document.querySelector("#pontuacao-time1").style.color = configBannerCores[0]["golos_color"] ? configBannerCores[0]["golos_color"] : "";
             document.querySelector("#pontuacao-time2").style.color = configBannerCores[0]["golos_color"] ? configBannerCores[0]["golos_color"] : "";

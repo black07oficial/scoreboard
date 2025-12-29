@@ -460,6 +460,10 @@
                     <td><button id="btn-intervalo" type="button"
                         class="custom-button-simple btn-dark-purple ft-size-12 pd-5 bd-r-10 ml-20"
                         style="min-width: 150px;">Intervalo</button></td>
+                    <td><button id="btn-musica" type="button" data-bs-toggle="modal" data-bs-target="#musicModal"
+                        class="custom-button-simple btn-dark-purple ft-size-12 pd-5 bd-r-10 ml-20"
+                        style="min-width: 100px; background-color: #1A4B5A;"><i class="fa fa-music"></i> Música</button>
+                    </td>
                   </tr>
                   <tr id="painel-more-time">
                     <td style="text-align: center;"><span id="time-aquecimento">00:00</span></td>
@@ -946,6 +950,78 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <button type="button" class="btn btn-primary" id="addRowBtn2">Adicionar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Música -->
+    <div class="modal fade" id="musicModal" tabindex="-1" aria-labelledby="musicModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background-color: #C6C5C3; color: #333;">
+          <div class="modal-header" style="border-bottom: 1px solid #B2804A; background-color: #28235B;">
+            <h5 class="modal-title" id="musicModalLabel" style="color: white;"><i class="fa fa-music"></i> Player de
+              Música</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+              aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Controles do Player -->
+            <div class="d-flex align-items-center justify-content-between mb-3 p-3"
+              style="background-color: #EAE1D0; border-radius: 10px; border: 1px solid #B2804A;">
+              <div style="flex: 1;">
+                <div id="music-title" style="font-size: 18px; font-weight: bold; color: #28235B;">Nenhuma música</div>
+                <div id="music-artist" style="font-size: 14px; color: #925F39;">Selecione uma pasta</div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button onclick="previousMusic()" class="btn btn-sm"
+                  style="background-color: #28235B; color: white; border: none;"><i
+                    class="fa fa-step-backward"></i></button>
+                <button id="btn-play-music" onclick="togglePlayMusic()" class="btn"
+                  style="background-color: #0D6635; color: white; border: none; width: 50px; height: 50px; border-radius: 50%;"><i
+                    class="fa fa-play"></i></button>
+                <button onclick="nextMusic()" class="btn btn-sm"
+                  style="background-color: #28235B; color: white; border: none;"><i
+                    class="fa fa-step-forward"></i></button>
+              </div>
+              <div class="d-flex align-items-center gap-2" style="margin-left: 20px;">
+                <button onclick="shuffleMusic()" class="btn btn-sm"
+                  style="background-color: transparent; border: none;"><i class="fa fa-random"
+                    style="color: #925F39;"></i></button>
+                <button onclick="repeatMusic()" class="btn btn-sm"
+                  style="background-color: transparent; border: none;"><i class="fa fa-repeat"
+                    style="color: #925F39;"></i></button>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <input type="range" id="music-progress" min="0" max="100" value="0"
+                style="width: 100%; accent-color: #92652A;">
+            </div>
+
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <i class="fa fa-volume-down" style="color: #925F39;"></i>
+              <input type="range" id="music-volume" min="0" max="100" value="100" oninput="setVolume(this.value)"
+                style="width: 120px; accent-color: #92652A;">
+              <span id="volume-label" style="color: #925F39; font-size: 12px;">100%</span>
+            </div>
+
+            <!-- Botão Selecionar Pasta -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <strong style="color: #28235B;">Lista de Músicas</strong>
+              <button onclick="selectMusicFolder()" class="btn btn-sm"
+                style="background-color: #0D6635; color: white;"><i class="fa fa-folder-open"></i> Selecionar
+                Pasta</button>
+            </div>
+
+            <!-- Lista de Músicas -->
+            <div id="music-list-container"
+              style="max-height: 300px; overflow-y: auto; background-color: #EAE1D0; border-radius: 10px; padding: 10px; border: 1px solid #B2804A;">
+              <div id="music-list" style="display: flex; flex-direction: column; gap: 5px;">
+                <div style="color: #925F39; text-align: center; padding: 20px;">Nenhuma música carregada. Clique em
+                  "Selecionar Pasta" para escolher uma pasta com músicas.</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1501,7 +1577,7 @@
         document.querySelectorAll('#tableBody2 tr').forEach((row) => {
 
           let id = 'tableBody2';
-          
+
           if (formatSecond(row.children[1].innerHTML) == 0) {
             rowId = row.id,
               $("#" + rowId).remove();
@@ -3445,8 +3521,207 @@
 
         // alert("Atenção!\n\nAntes de iniciar uma nova partida, verifique\nas configurações atuais salvas.")
       }
+
+      // ======== Music Player ========
+      let musicPlayer = {
+        audio: new Audio(),
+        playlist: [],
+        currentIndex: 0,
+        isPlaying: false,
+        isShuffled: false,
+        isRepeat: false,
+        folderPath: localStorage.getItem('musicFolderPath') || null
+      };
+
+      // Carregar playlist salva
+      if (musicPlayer.folderPath) {
+        loadMusicFromFolder(musicPlayer.folderPath);
+      }
+
+      function selectMusicFolder() {
+        ipcRenderer.send('select-music-folder');
+      }
+
+      ipcRenderer.on('music-folder-selected', (event, folderPath) => {
+        if (folderPath) {
+          musicPlayer.folderPath = folderPath;
+          localStorage.setItem('musicFolderPath', folderPath);
+          loadMusicFromFolder(folderPath);
+        }
+      });
+
+      ipcRenderer.on('music-files-loaded', (event, files) => {
+        musicPlayer.playlist = files;
+        if (files.length > 0) {
+          musicPlayer.currentIndex = 0;
+          updateMusicDisplay();
+          document.getElementById('music-artist').textContent = files.length + ' músicas encontradas';
+          renderMusicList();
+        } else {
+          document.getElementById('music-title').textContent = 'Nenhuma música';
+          document.getElementById('music-artist').textContent = 'Pasta vazia';
+          document.getElementById('music-list').innerHTML = '<div style="color: #888; text-align: center; padding: 20px;">Pasta vazia ou sem arquivos de áudio.</div>';
+        }
+      });
+
+      function loadMusicFromFolder(folderPath) {
+        ipcRenderer.send('load-music-files', folderPath);
+      }
+
+      function updateMusicDisplay() {
+        if (musicPlayer.playlist.length > 0) {
+          const currentFile = musicPlayer.playlist[musicPlayer.currentIndex];
+          const fileName = currentFile.split(/[/\\]/).pop().replace(/\.[^/.]+$/, '');
+          document.getElementById('music-title').textContent = fileName;
+        }
+      }
+
+      function renderMusicList() {
+        const listContainer = document.getElementById('music-list');
+        if (!listContainer) return;
+
+        listContainer.innerHTML = '';
+
+        musicPlayer.playlist.forEach((filePath, index) => {
+          const fileName = filePath.split(/[/\\]/).pop().replace(/\.[^/.]+$/, '');
+          const isCurrentSong = index === musicPlayer.currentIndex;
+
+          const item = document.createElement('div');
+          item.id = 'music-item-' + index;
+          item.style.cssText = `
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background-color: ${isCurrentSong ? '#0D6635' : '#C6C5C3'};
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: 1px solid #B2804A;
+          `;
+          item.onmouseover = function () { if (!isCurrentSong) this.style.backgroundColor = '#EAE1D0'; };
+          item.onmouseout = function () { if (!isCurrentSong) this.style.backgroundColor = '#C6C5C3'; };
+          item.onclick = function () { playMusicByIndex(index); };
+
+          item.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px; overflow: hidden;">
+              <span style="color: #925F39; font-size: 12px; min-width: 25px;">${(index + 1).toString().padStart(2, '0')}</span>
+              <span style="color: ${isCurrentSong ? 'white' : '#28235B'}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${fileName}</span>
+            </div>
+            <button onclick="event.stopPropagation(); playMusicByIndex(${index});" class="btn btn-sm" style="background-color: transparent; border: none; color: ${isCurrentSong ? 'white' : '#0D6635'};">
+              <i class="fa ${isCurrentSong && musicPlayer.isPlaying ? 'fa-pause' : 'fa-play'}"></i>
+            </button>
+          `;
+
+          listContainer.appendChild(item);
+        });
+      }
+
+      function playMusicByIndex(index) {
+        musicPlayer.currentIndex = index;
+        playCurrentTrack();
+        renderMusicList();
+      }
+
+      function togglePlayMusic() {
+        if (musicPlayer.playlist.length === 0) {
+          selectMusicFolder();
+          return;
+        }
+        if (musicPlayer.isPlaying) {
+          musicPlayer.audio.pause();
+          musicPlayer.isPlaying = false;
+          document.querySelector('#btn-play-music i').className = 'fa fa-play';
+        } else {
+          if (!musicPlayer.audio.src || musicPlayer.audio.ended) {
+            musicPlayer.audio.src = 'file://' + musicPlayer.playlist[musicPlayer.currentIndex];
+          }
+          musicPlayer.audio.play();
+          musicPlayer.isPlaying = true;
+          document.querySelector('#btn-play-music i').className = 'fa fa-pause';
+        }
+      }
+
+      function previousMusic() {
+        if (musicPlayer.playlist.length === 0) return;
+        musicPlayer.currentIndex = (musicPlayer.currentIndex - 1 + musicPlayer.playlist.length) % musicPlayer.playlist.length;
+        playCurrentTrack();
+      }
+
+      function nextMusic() {
+        if (musicPlayer.playlist.length === 0) return;
+        if (musicPlayer.isShuffled) {
+          musicPlayer.currentIndex = Math.floor(Math.random() * musicPlayer.playlist.length);
+        } else {
+          musicPlayer.currentIndex = (musicPlayer.currentIndex + 1) % musicPlayer.playlist.length;
+        }
+        playCurrentTrack();
+      }
+
+      function playCurrentTrack() {
+        musicPlayer.audio.src = 'file://' + musicPlayer.playlist[musicPlayer.currentIndex];
+        musicPlayer.audio.play();
+        musicPlayer.isPlaying = true;
+        document.querySelector('#btn-play-music i').className = 'fa fa-pause';
+        updateMusicDisplay();
+        renderMusicList();
+      }
+
+      function shuffleMusic() {
+        musicPlayer.isShuffled = !musicPlayer.isShuffled;
+        document.querySelector('[onclick="shuffleMusic()"] i').style.color = musicPlayer.isShuffled ? '#007bff' : '#333';
+      }
+
+      function repeatMusic() {
+        musicPlayer.isRepeat = !musicPlayer.isRepeat;
+        musicPlayer.audio.loop = musicPlayer.isRepeat;
+        document.querySelector('[onclick="repeatMusic()"] i').style.color = musicPlayer.isRepeat ? '#007bff' : '#333';
+      }
+
+      // Volume control functions
+      function setVolume(value) {
+        musicPlayer.audio.volume = value / 100;
+        document.getElementById('music-volume').value = value;
+        document.getElementById('volume-label').textContent = value + '%';
+      }
+
+      function increaseVolume() {
+        let currentVolume = Math.round(musicPlayer.audio.volume * 100);
+        let newVolume = Math.min(currentVolume + 10, 100);
+        setVolume(newVolume);
+      }
+
+      function decreaseVolume() {
+        let currentVolume = Math.round(musicPlayer.audio.volume * 100);
+        let newVolume = Math.max(currentVolume - 10, 0);
+        setVolume(newVolume);
+      }
+
+      // Progress bar update
+      musicPlayer.audio.addEventListener('timeupdate', () => {
+        if (musicPlayer.audio.duration) {
+          const progress = (musicPlayer.audio.currentTime / musicPlayer.audio.duration) * 100;
+          document.getElementById('music-progress').value = progress;
+        }
+      });
+
+      // Progress bar seek
+      document.getElementById('music-progress')?.addEventListener('input', (e) => {
+        if (musicPlayer.audio.duration) {
+          musicPlayer.audio.currentTime = (e.target.value / 100) * musicPlayer.audio.duration;
+        }
+      });
+
+      // Auto next track
+      musicPlayer.audio.addEventListener('ended', () => {
+        if (!musicPlayer.isRepeat) {
+          nextMusic();
+        }
+      });
     </script>
 
+    <!-- Controles de Apresentação de Jogadores -->
+    <script src="../resources/js/presentation-controls.js"></script>
 
 </body>
 
